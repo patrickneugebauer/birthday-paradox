@@ -1,0 +1,12 @@
+c/loops.out
+crystal/loops
+csharp/bin
+csharp/obj
+fsharp/bin
+fsharp/obj
+haskell/loops
+haskell/loops.hi
+haskell/loops.o
+java/Loops.class
+typescript/loops.js
+.vscode

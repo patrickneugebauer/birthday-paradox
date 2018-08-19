@@ -1,0 +1,18 @@
+# list of repls
+
+# bash: bash
+# c: ???
+# crystal: ???
+# csharp: csharp (mono)
+# dart: ???
+# fsharp: fsharpi (mono)
+# haskell: ghci
+# java: jshell (java 9+)
+# javascript: node
+# julia: julia
+# ocaml: ocaml
+# powershell: pwsh-preview
+# python: python
+# python3: python3
+# ruby: irb
+# typescript: ts-node (npm package)

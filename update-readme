@@ -1,0 +1,36 @@
+#!/bin/bash
+
+readme=README.md
+regexp="seconds:\s+\K[\d.]+"
+arr=(
+  "bash|bash/loops.sh"
+  "c|c/loops.out"
+  "crystal|crystal/loops"
+  "csharp|dotnet csharp/bin/Debug/netcoreapp2.1/loops.dll"
+  "haskell|haskell/loops"
+  "java|java -cp java Loops"
+  "javascript|node javascript/loops.js"
+  "julia|julia julia/loops.jl"
+  "powershell|pwsh-preview powershell/loops.ps1"
+  "python|python python/loops.py"
+  "python3|python3 python3/loops.py"
+  "ruby|ruby ruby/loops.rb"
+  "typescript|node typescript/loops.js"
+)
+
+echo "#### Birthday Paradox - Monte Carlo simulations
+
+* iterations: 100,000
+* sample-size: 23
+
+language | time (seconds)
+|--|--|" > $readme
+
+for x in "${arr[@]}"
+do
+  lang=${x%|*} # remove after last | from right
+  command=${x#*|} # remove before first | from left
+  results=$($command)
+  time=$(grep -oP "$regexp" <<< "$results")
+  echo "$lang|$time" >> $readme
+done
