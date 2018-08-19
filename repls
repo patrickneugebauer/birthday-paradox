@@ -10,6 +10,7 @@
 # java: jshell (java 9+)
 # javascript: node
 # julia: julia
+# kotlin: kotlinc
 # ocaml: ocaml
 # powershell: pwsh-preview
 # python: python
