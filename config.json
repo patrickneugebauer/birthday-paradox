@@ -29,9 +29,8 @@
     "repl": "csharp"
   }, {
     "name": "dart",
-    "ignore": true,
     "isScript": true,
-    "run": ""
+    "run": "dart dart/loops.dart"
     }, {
     "name": "fsharp",
     "ignore": true,
