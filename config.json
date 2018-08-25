@@ -2,60 +2,105 @@
   "languages": [{
     "name": "bash",
     "isScript": true,
-    "run": "bash/loops.sh"
+    "run": "bash/loops.sh",
+    "repl": "bash"
   }, {
     "name": "c",
     "isScript": false,
-    "bin": "c/loops.out",
     "build": "cc c/loops.c -O3 -o c/loops.out",
     "run": "c/loops.out"
   }, {
+    "name": "clojure",
+    "ignore": true,
+    "isScript": false,
+    "build": "",
+    "run": "",
+    "repl": "clojure"
+  }, {
     "name": "crystal",
     "isScript": false,
-    "bin": "crystal/loops",
     "build": "crystal build crystal/loops.cr -o crystal/loops",
     "run": "crystal/loops"
   }, {
     "name": "csharp",
     "isScript": false,
-    "bin": "csharp/bin/Debug/netcoreapp2.1/loops.dll",
     "build": "dotnet build csharp",
-    "run": "dotnet csharp/bin/Debug/netcoreapp2.1/loops.dll"
+    "run": "dotnet csharp/bin/Debug/netcoreapp2.1/loops.dll",
+    "repl": "csharp"
+  }, {
+    "name": "dart",
+    "ignore": true,
+    "isScript": true,
+    "run": ""
+    }, {
+    "name": "fsharp",
+    "ignore": true,
+    "isScript": false,
+    "build": "dotnet build fsharp",
+    "run": "dotnet fsharp/bin/Debug/netcoreapp2.1/loops.dll",
+    "repl": "fsharpi"
   }, {
     "name": "haskell",
     "isScript": false,
-    "bin": "haskell/loops",
     "build": "ghc haskell/loops.hs -o haskell/loops",
-    "run": "haskell/loops"
+    "run": "haskell/loops",
+    "repl": "ghci"
   }, {
     "name": "java",
     "isScript": false,
-    "bin": "java/Loops.class",
     "build": "javac -d java java/Loops.java",
-    "run": "java -cp java Loops"
+    "run": "java -cp java Loops",
+    "repl": "jshell"
   }, {
     "name": "javascript",
     "isScript": true,
-    "run": "node javascript/loops.js"
+    "run": "node javascript/loops.js",
+    "repl": "node"
   }, {
     "name": "julia",
     "isScript": true,
-    "run": "julia julia/loops.jl"
+    "run": "julia julia/loops.jl",
+    "repl": "julia"
   }, {
+    "name": "kotlin",
+    "ignore": true,
+    "isScript": false,
+    "build": "",
+    "run": "",
+    "repl": "kotlinc"
+  }, {
+    "name": "ocaml",
+    "ignore": true,
+    "isScript": false,
+    "build": "",
+    "run": "",
+    "repl": "ocaml"
+    }, {
     "name": "powershell",
     "isScript": true,
-    "run": "pwsh-preview powershell/loops.ps1"
+    "run": "pwsh-preview powershell/loops.ps1",
+    "repl": "pwsh-preview"
   }, {
     "name": "python",
     "isScript": true,
-    "run": "python python/loops.py"
+    "run": "python python/loops.py",
+    "repl": "python"
   }, {
     "name": "python3",
     "isScript": true,
-    "run": "python3 python3/loops.py"
+    "run": "python3 python3/loops.py",
+    "repl": "python3"
   }, {
     "name": "ruby",
     "isScript": true,
-    "run": "ruby ruby/loops.rb"
+    "run": "ruby ruby/loops.rb",
+    "repl": "irb"
+  }, {
+    "name": "typescript",
+    "ignore": true,
+    "isScript": false,
+    "build": "tsc typescript/loops.ts --out typescript/loops.js --target esnext",
+    "run": "node typescript/loops.js",
+    "repl": "ts-node"
   }]
 }

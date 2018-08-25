@@ -123,9 +123,9 @@ README = 'README.md'
 // paths
 
 function getConfig() {
-  return readFile(CONFIG)
-    .then(JSON.parse)
-    .then(x => x.languages)
+  return readFile(CONFIG).then(
+    x => JSON.parse(x).languages
+  );
 }
 
 function build(xs) {
@@ -146,6 +146,10 @@ function run(xs) {
     ).then(xs => sortBy(x => x.speed, xs).reverse());
 }
 
+function filter(xs) {
+  return xs.filter(x => !x.ignore);
+}
+
 function readme(xs) {
   console.log('\nreadme:');
   const sampleSize = average(xs.map(x => parseFloat(x['sample-size'])));
@@ -163,11 +167,16 @@ ${tableData}`;
   return writeFile(README, fileData);
 }
 
-const paths = {
-  build: () => getConfig().then(build),
-  run: () => getConfig().then(build).then(run),
-  readme: () => getConfig().then(build).then(run).then(readme),
+const paths = new function() {
+  this.config = () => getConfig();
+  this.build = () => this.config().then(filter).then(build);
+  this.run = () => this.build().then(run);
+  this.readme = () => this.run().then(readme);
+  this.repl = lang => this.config().then(
+    xs => xs.find(x => x.name == lang)
+  ).then(x => x && x.repl || `echo repl: '${lang}' not found`);
 };
+
 const commands = `[${Object.keys(paths).join(', ')}]`;
 
 // main
