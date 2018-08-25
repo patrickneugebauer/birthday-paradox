@@ -5,15 +5,15 @@
 
 language | iterations/sec
 |--|--|
-c|2,506,265
-csharp|1,210,653
-javascript|1,109,877
-java|987,166
-crystal|347,222
-ruby|194,552
-julia|123,152
-haskell|86,430
+c|2,512,562
+csharp|1,201,923
+javascript|1,106,194
+java|996,015
+crystal|326,797
+ruby|191,570
+julia|123,762
+haskell|85,836
 python|42,194
-python3|25,316
-bash|3,703
-powershell|355
+python3|23,923
+bash|3,773
+powershell|347

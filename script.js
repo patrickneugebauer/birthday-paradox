@@ -3,20 +3,10 @@ const child_process = require('child_process');
 const util = require('util');
 
 // promisify
-function exec(command) {
-  console.log(command);
-  return new Promise((resolve, reject) => {
-    child_process.exec(command, (err, stdOut, stdErr) => {
-      if (err) {
-        reject(err);
-      } else if (stdErr) {
-        reject(stdErr);
-      } else {
-        resolve(stdOut);
-      }
-    });
-  });
-}
+const exec = x => {
+  console.log(x);
+  return util.promisify(child_process.exec)(x)
+};
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 
@@ -27,14 +17,12 @@ const asyncMap = (fn, arr) => arr.reduce(
 );
 
 // utils
-function fromPairs(pairs) {
-  return pairs.reduce(
-    (acc, [k,v]) => Object.assign({}, acc, ({ [k]:v })),
-    {}
-  );
-}
+const fromPairs = xs => xs.reduce(
+  (acc, [k,v]) => Object.assign({}, acc, ({ [k]:v })),
+  {}
+);
 
-function textToHash(text) {
+const textToHash = text => {
   const lines = text
     .split('\n')
     .filter(Boolean);
@@ -46,11 +34,9 @@ function textToHash(text) {
   return hash;
 }
 
-function addKey(key, fn) {
-  return x => Object.assign({}, x, { [key]: fn(x) });
-}
+const addKey = (key, fn) => x => Object.assign({}, x, { [key]: fn(x) });
 
-function compare(a, b) {
+const compare = (a, b) => {
   if (a > b) {
     return 1;
   } else if (a == b) {
@@ -60,48 +46,38 @@ function compare(a, b) {
   }
 }
 
-function sort(fn) {
-  return xs => xs.slice().sort(fn);
-}
+const sort = fn => xs => xs.slice().sort(fn);
+const sortBy = fn => sort((a, b) => compare(fn(a), fn(b)));
+const filter = fn => xs => xs.filter(fn);
+const find = fn => xs => xs.find(fn);
 
-function sortBy(fn) {
-  return sort((a, b) => compare(fn(a), fn(b)));
-}
-
-function filter(fn) {
-  return xs => xs.filter(fn);
-}
-
-function find(fn) {
-  return xs => xs.find(fn);
-}
-
-function average(xs) {
+const average = xs => {
   return xs.reduce((acc, x) => acc + x, 0) / xs.length;
 }
 
 // constants
-CONFIG = 'config.json';
-README = 'README.md'
+const CONFIG = 'config.json';
+const README = 'README.md'
 
 // commands
-function getConfig() {
+const getConfig = () => {
   return readFile(CONFIG).then(
     x => JSON.parse(x).languages
   );
 }
 
-function build(xs) {
+const build = xs => {
   console.log('\nbuilding...');
   return Promise.all(xs.map(
       x => x.build ? exec(x.build).then(() => x) : Promise.resolve(x)
     ));
 }
 
-function run(xs) {
+const run = xs => {
   console.log('\nrunning...');
   return asyncMap(
       lang => exec(lang.run)
+        .then(x => x.stdout)
         .then(textToHash)
         .then(addKey('name', () => lang.name))
         .then(addKey('speed', x => parseInt(x.iterations / x.seconds))),
@@ -110,7 +86,7 @@ function run(xs) {
     .then(x => x.reverse());
 }
 
-function readme(xs) {
+const readme = xs => {
   const sampleSize = average(xs.map(x => parseFloat(x['sample-size'])));
   const percent = average(xs.map(x => parseFloat(x.percent))).toFixed(2);
   const tableData = xs.map(x => `${x.name}|${x.speed.toLocaleString()}`).join('\n');
