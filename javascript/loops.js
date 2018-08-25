@@ -1,6 +1,6 @@
 function simulate() {
   var start = new Date().getTime()
-  var iterations = 100 * 1000
+  var iterations = 1000 * 1000
   var sampleSize = 23
 
   var count = 0

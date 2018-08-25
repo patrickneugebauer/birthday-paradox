@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function simulate {
-  iterations=100000
+  iterations=1000
   sample_size=23
   start=$(($(date +%s%N)/1000000))
 
@@ -20,7 +20,7 @@ function simulate {
   done
 
   echo "iterations: $iterations"
-  echo "sample_size: $sample_size"
+  echo "sample-size: $sample_size"
   percent_x100=$((count*100*100/iterations))
   percent=$((percent_x100/100))
   percent_decimal=$((percent_x100-percent*100))

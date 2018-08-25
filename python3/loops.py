@@ -3,7 +3,7 @@ import time
 
 def simulate():
     start = time.time()
-    iterations = 100 * 1000
+    iterations = 10 * 1000
     sample_size = 23
 
     count = 0
@@ -18,7 +18,7 @@ def simulate():
             else:
                 data.append(rand)
 
-    print("interations:", iterations)
+    print("iterations:", iterations)
     print("sample-size:", sample_size)
     results = round(count / iterations * 100, 2);
     print("percent:", results)

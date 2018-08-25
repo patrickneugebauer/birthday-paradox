@@ -47,6 +47,6 @@ main = do
   let results = (/ (fromIntegral iterations)) . fromIntegral . simulate' iterations $ gen
   putStrLn . ("iterations: " ++) . show $ iterations
   putStrLn . ("sample-size: " ++) . show $ 23
-  putStrLn . ("percent: " ++) . show . roundTo 2 $ results
+  putStrLn . ("percent: " ++) . show . roundTo 2 . (*100) $ results
   end <- getTimeMillis
   putStrLn . ("seconds: " ++) . show . (/1000) . fromIntegral $ (end - start)

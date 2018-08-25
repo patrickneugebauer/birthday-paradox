@@ -20,7 +20,7 @@ function simulate()
   end
   println("iterations: ", iterations)
   println("sample-size: ", sample_size)
-  percent = count / iterations
+  percent = count / iterations * 100
   println("percent: ", round(percent,digits=2))
   finish = Dates.now()
   diff = (finish - start) |> Dates.value |> x->x/1000

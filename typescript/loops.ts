@@ -1,6 +1,6 @@
 function simulate() {
   const start = new Date().getTime();
-  const iterations = 100_000;
+  const iterations = 1_000_000;
   const sampleSize = 23;
 
   let count = 0;

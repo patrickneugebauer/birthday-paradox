@@ -7,7 +7,7 @@ class Program {
   }
   static void Simulate() {
     DateTime start = DateTime.Now;
-    int iterations = 100000;
+    int iterations = 1000000;
     int sampleSize = 23;
     int count = 0;
     Random rnd = new Random();

@@ -1,6 +1,6 @@
 function simulate {
   $start = Get-Date
-  $iterations = 100000
+  $iterations = 100
   $sample_size = 23
   $count = 0
 
@@ -17,7 +17,7 @@ function simulate {
     }
   }
   Write-Host "iterations: $iterations "
-  Write-Host "sample_size: $sample_size"
+  Write-Host "sample-size: $sample_size"
   $percent = $count / $iterations * 100
   Write-Host "percent: $percent"
   $end = Get-Date

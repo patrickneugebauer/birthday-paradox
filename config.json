@@ -1,0 +1,61 @@
+{
+  "languages": [{
+    "name": "bash",
+    "isScript": true,
+    "run": "bash/loops.sh"
+  }, {
+    "name": "c",
+    "isScript": false,
+    "bin": "c/loops.out",
+    "build": "cc c/loops.c -O3 -o c/loops.out",
+    "run": "c/loops.out"
+  }, {
+    "name": "crystal",
+    "isScript": false,
+    "bin": "crystal/loops",
+    "build": "crystal build crystal/loops.cr -o crystal/loops",
+    "run": "crystal/loops"
+  }, {
+    "name": "csharp",
+    "isScript": false,
+    "bin": "csharp/bin/Debug/netcoreapp2.1/loops.dll",
+    "build": "dotnet build csharp",
+    "run": "dotnet csharp/bin/Debug/netcoreapp2.1/loops.dll"
+  }, {
+    "name": "haskell",
+    "isScript": false,
+    "bin": "haskell/loops",
+    "build": "ghc haskell/loops.hs -o haskell/loops",
+    "run": "haskell/loops"
+  }, {
+    "name": "java",
+    "isScript": false,
+    "bin": "java/Loops.class",
+    "build": "javac -d java java/Loops.java",
+    "run": "java -cp java Loops"
+  }, {
+    "name": "javascript",
+    "isScript": true,
+    "run": "node javascript/loops.js"
+  }, {
+    "name": "julia",
+    "isScript": true,
+    "run": "julia julia/loops.jl"
+  }, {
+    "name": "powershell",
+    "isScript": true,
+    "run": "pwsh-preview powershell/loops.ps1"
+  }, {
+    "name": "python",
+    "isScript": true,
+    "run": "python python/loops.py"
+  }, {
+    "name": "python3",
+    "isScript": true,
+    "run": "python3 python3/loops.py"
+  }, {
+    "name": "ruby",
+    "isScript": true,
+    "run": "ruby ruby/loops.rb"
+  }]
+}
