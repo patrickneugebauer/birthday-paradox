@@ -1,20 +1,8 @@
 const fs = require('fs');
 const child_process = require('child_process');
+const util = require('util');
 
 // promisify
-
-function access(file) {
-  return new Promise((resolve, reject) => {
-    fs.access(file, err => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(file);
-      }
-    });
-  });
-}
-
 function exec(command) {
   console.log(command);
   return new Promise((resolve, reject) => {
@@ -29,52 +17,21 @@ function exec(command) {
     });
   });
 }
-
-function readFile(file) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(file, 'utf8', (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(data);
-      }
-    });
-  });
-}
-
-function writeFile(file, data) {
-  return new Promise((resolve, reject) => {
-    fs.writeFile(file, data, err => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(data);
-      }
-    });
-  });
-}
+const readFile = util.promisify(fs.readFile);
+const writeFile = util.promisify(fs.writeFile);
 
 // async
-
 const asyncMap = (fn, arr) => arr.reduce(
   (prev, curr) => prev.then(arr => fn(curr).then(res => arr.concat(res))),
   Promise.resolve([])
 );
 
 // utils
-
 function fromPairs(pairs) {
   return pairs.reduce(
     (acc, [k,v]) => Object.assign({}, acc, ({ [k]:v })),
     {}
   );
-}
-
-function runLanguage(lang) {
-  return new Promise((res, rej) => lang.isScript ? res() : rej())
-    .catch(() => access(lang.bin))
-    .catch(() => exec(lang.build))
-    .then(() => exec(lang.run));
 }
 
 function textToHash(text) {
@@ -89,8 +46,8 @@ function textToHash(text) {
   return hash;
 }
 
-function addKey(hash, key, fn) {
-  return Object.assign({}, hash, { [key]: fn(hash) });
+function addKey(key, fn) {
+  return x => Object.assign({}, x, { [key]: fn(x) });
 }
 
 function compare(a, b) {
@@ -103,12 +60,20 @@ function compare(a, b) {
   }
 }
 
-function sort(fn, arr) {
-  return arr.slice().sort(fn);
+function sort(fn) {
+  return xs => xs.slice().sort(fn);
 }
 
-function sortBy(fn, arr) {
-  return sort((a, b) => compare(fn(a), fn(b)), arr);
+function sortBy(fn) {
+  return sort((a, b) => compare(fn(a), fn(b)));
+}
+
+function filter(fn) {
+  return xs => xs.filter(fn);
+}
+
+function find(fn) {
+  return xs => xs.find(fn);
 }
 
 function average(xs) {
@@ -116,12 +81,10 @@ function average(xs) {
 }
 
 // constants
-
 CONFIG = 'config.json';
 README = 'README.md'
 
-// paths
-
+// commands
 function getConfig() {
   return readFile(CONFIG).then(
     x => JSON.parse(x).languages
@@ -131,7 +94,7 @@ function getConfig() {
 function build(xs) {
   console.log('\nbuilding...');
   return Promise.all(xs.map(
-      x => x.build ? exec(x.build).then(() => x) : new Promise(res => res(x))
+      x => x.build ? exec(x.build).then(() => x) : Promise.resolve(x)
     ));
 }
 
@@ -140,18 +103,14 @@ function run(xs) {
   return asyncMap(
       lang => exec(lang.run)
         .then(textToHash)
-        .then(x => addKey(x, 'name', () => lang.name))
-        .then(x => addKey(x, 'speed', x => parseInt(x.iterations / x.seconds))),
+        .then(addKey('name', () => lang.name))
+        .then(addKey('speed', x => parseInt(x.iterations / x.seconds))),
       xs
-    ).then(xs => sortBy(x => x.speed, xs).reverse());
-}
-
-function filter(xs) {
-  return xs.filter(x => !x.ignore);
+    ).then(sortBy(x => x.speed))
+    .then(x => x.reverse());
 }
 
 function readme(xs) {
-  console.log('\nreadme:');
   const sampleSize = average(xs.map(x => parseFloat(x['sample-size'])));
   const percent = average(xs.map(x => parseFloat(x.percent))).toFixed(2);
   const tableData = xs.map(x => `${x.name}|${x.speed.toLocaleString()}`).join('\n');
@@ -164,17 +123,17 @@ function readme(xs) {
 language | iterations/sec
 |--|--|
 ${tableData}`;
-  return writeFile(README, fileData);
+  return writeFile(README, fileData).then(() => fileData);
 }
 
 const paths = new function() {
   this.config = () => getConfig();
-  this.build = () => this.config().then(filter).then(build);
+  this.build = () => this.config().then(filter(x => !x.ignore)).then(build);
   this.run = () => this.build().then(run);
   this.readme = () => this.run().then(readme);
-  this.repl = lang => this.config().then(
-    xs => xs.find(x => x.name == lang)
-  ).then(x => x && x.repl || `echo repl: '${lang}' not found`);
+  this.repl = lang => this.config()
+    .then(find(x => x.name == lang))
+    .then(x => x && x.repl || `echo repl: '${lang}' not found`);
 };
 
 const commands = `[${Object.keys(paths).join(', ')}]`;
@@ -183,6 +142,6 @@ const commands = `[${Object.keys(paths).join(', ')}]`;
 (() => {
   const [,,path, ...args] = process.argv;
   paths[path] ?
-    paths[path](...args).then(console.log) :
+    paths[path](...args).then(x => console.log('\nresults:\n',x)) :
     console.log(`command: '${path}' failed\nlist of commands: ${commands}`);
 })()
