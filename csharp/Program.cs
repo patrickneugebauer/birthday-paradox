@@ -13,14 +13,14 @@ class Program {
     Random rnd = new Random();
 
     for (int i=0; i < iterations; i++) {
-      List<int> data = new List<int>();
+      int[] data = new int[365];
       for (int l=0; l < sampleSize; l++) {
-        int num = rnd.Next(0, 364);
-        if (data.Contains(num)) {
+        int num = rnd.Next(0, 365);
+        if (data[num] == 1) {
           count++;
           break;
         } else {
-          data.Add(num);
+          data[num] = 1;
         }
       }
     }

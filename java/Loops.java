@@ -14,14 +14,14 @@ public class Loops {
 
     int duplicates = 0;
       for (long x=0; x < ITERATIONS; x++) {
-      List<Integer> data = new ArrayList<>();
+      int data[] = new int[365];
       for (int i=0; i < SAMPLE_SIZE; i++) {
-        int number = (int) Math.round(Math.random() * 365);
-        if (data.contains(number)) {
+        int number = (int) Math.floor(Math.random() * 365);
+        if (data[number] == 1) {
           duplicates++;
           break;
         } else {
-          data.add(number);
+          data[number] = 1;
         }
       }
     }
