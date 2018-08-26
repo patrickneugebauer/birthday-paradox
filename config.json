@@ -33,7 +33,6 @@
     "run": "dart dart/loops.dart"
     }, {
     "name": "fsharp",
-    "ignore": true,
     "isScript": false,
     "build": "dotnet build fsharp",
     "run": "dotnet fsharp/bin/Debug/netcoreapp2.1/loops.dll",
