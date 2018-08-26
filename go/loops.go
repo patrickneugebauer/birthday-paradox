@@ -18,10 +18,10 @@ func simulate() {
 
 	count := 0
 	for i := 0; i < iterations; i++ {
-		var data = make(map[int]int)
+		var data [365]int
 		for n := 0; n < sampleSize; n++ {
 			number := rand.Intn(365)
-			if data[number] != 0 {
+			if data[number] == 1 {
 				count++
 				break
 			} else {
