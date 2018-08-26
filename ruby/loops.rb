@@ -5,15 +5,15 @@ def simulate
 
   count = 0
   iterations.times do |l|
-    data = []
+    data = Array.new(365)
 
     sample_size.times do |i|
       num = rand(365)
-      if data.include? num
+      if data[num] == 1
         count += 1
         break
       else
-        data[i] = num
+        data[num] = 1
       end
     end
 

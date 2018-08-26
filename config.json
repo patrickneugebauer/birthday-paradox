@@ -19,7 +19,7 @@
   }, {
     "name": "crystal",
     "isScript": false,
-    "build": "crystal build crystal/loops.cr -o crystal/loops",
+    "build": "crystal build crystal/loops.cr -o crystal/loops --release",
     "run": "crystal/loops"
   }, {
     "name": "csharp",
