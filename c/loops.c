@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <sys/time.h>
 
-#define iterations 1000000
+#define iterations 10000000
 #define sampleSize 23
 
 void simulate();
@@ -20,19 +20,20 @@ void simulate() {
 
   int duplicates = 0;
   for (int x=0; x < iterations; x++) {
-    int data[sampleSize];
+    int data[365] = {};
     for (int i=0; i < sampleSize; i++) {
       int number = (float) rand() / RAND_MAX * 365;
       // check for number in array
-      bool inArray = false;
-      for (int c=0; c<i; c++) {
-        if (data[c] == number) inArray = true;
-      }
-      if (inArray) {
+      // bool inArray = false;
+      // for (int c=0; c<i; c++) {
+      //   if (data[c] == number) inArray = true;
+      // }
+      if (data[number] == 1) {
+        // printf("dupe\n");
         duplicates++;
         break;
       } else {
-        data[i] = number;
+        data[number] = 1;
       }
     }
   }
