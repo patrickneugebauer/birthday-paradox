@@ -1,0 +1,14 @@
+[package]
+name = "rust"
+version = "0.1.0"
+authors = ["patrickneugebauer <patrickneugebauer@users.noreply.github.com>"]
+
+[dependencies]
+rand = "0.5"
+time = "0.1"
+
+[profile.dev]
+opt-level = 3
+
+[profile.release]
+opt-level = 3
