@@ -11,7 +11,6 @@ fn main() {
 
   let mut count = 0;
   for i in 0..iterations {
-    // let mut data: Vec<i32> = Vec::new();
     let mut data = [0; 365];
     for n in 0..sample_size {
       let num = random.gen_range(0, 365);
