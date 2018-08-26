@@ -12,14 +12,14 @@ void simulate() {
   var count = 0;
   final random = new Random();
   for (var i=0; i < iterations; i++) {
-    final arr = [];
+    final arr = new List(365);
     for (var j=0; j < sampleSize; j++) {
       final number = random.nextInt(365);
-      if (arr.contains(number)) {
+      if (arr[number] == 1) {
         count++;
         break;
       } else {
-        arr.add(number);
+        arr[number] = 1;
       }
     }
   }

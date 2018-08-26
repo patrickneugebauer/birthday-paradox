@@ -5,14 +5,14 @@ function simulate() {
 
   var count = 0
   for (var i=0; i < iterations; i++) {
-    var arr = []
+    var arr = new Array(365)
     for (var j=0; j < sampleSize; j++) {
       var rand = Math.floor(Math.random()*365)
-      if (arr.includes(rand)) {
+      if (arr[rand]) {
         count++
         break
       } else {
-        arr[j] = rand
+        arr[rand] = 1
       }
     }
   }
