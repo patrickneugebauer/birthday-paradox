@@ -1,6 +1,6 @@
 function simulate {
   $start = Get-Date
-  $iterations = 100
+  $iterations = 1000
   $sample_size = 23
   $count = 0
 
