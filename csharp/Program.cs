@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 class Program {
@@ -7,7 +7,7 @@ class Program {
   }
   static void Simulate() {
     DateTime start = DateTime.Now;
-    int iterations = 1000000;
+    int iterations = 10_000_000;
     int sampleSize = 23;
     int count = 0;
     Random rnd = new Random();

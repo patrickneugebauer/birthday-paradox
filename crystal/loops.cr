@@ -1,6 +1,6 @@
 def simulate
   start = Time.new
-  iterations = 100 * 1000
+  iterations = 10_000_000
   sample_size = 23
 
   count = 0
@@ -23,7 +23,8 @@ def simulate
   results = (count.to_f / iterations * 100).round(2)
   puts "percent: #{results}"
   fin = Time.new
-  diff = (fin - start).milliseconds.try { |x| x / 1000.0 }
+  time_diff = (fin - start)
+  diff = time_diff.seconds + time_diff.milliseconds / 1000.0
   puts "seconds: #{diff}"
 end
 

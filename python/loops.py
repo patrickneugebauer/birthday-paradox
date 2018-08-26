@@ -3,7 +3,7 @@ import time
 
 def simulate():
     start = time.time()
-    iterations = 10 * 1000
+    iterations = 100000
     sample_size = 23
 
     count = 0

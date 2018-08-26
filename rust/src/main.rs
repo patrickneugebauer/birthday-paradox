@@ -5,7 +5,7 @@ use rand::Rng;
 
 fn main() {
   let start = time::get_time();
-  let iterations = 1_000_000;
+  let iterations = 10_000_000;
   let sample_size = 23;
   let mut random = rand::thread_rng();
 

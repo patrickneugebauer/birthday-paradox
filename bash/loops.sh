@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function simulate {
-  iterations=1000
+  iterations=10000
   sample_size=23
   start=$(($(date +%s%N)/1000000))
 
