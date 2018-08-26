@@ -14,7 +14,7 @@ void simulate() {
   for (var i=0; i < iterations; i++) {
     final arr = [];
     for (var j=0; j < sampleSize; j++) {
-      final number = random.nextInt(364);
+      final number = random.nextInt(365);
       if (arr.contains(number)) {
         count++;
         break;

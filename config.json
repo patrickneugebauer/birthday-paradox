@@ -39,6 +39,10 @@
     "run": "dotnet fsharp/bin/Debug/netcoreapp2.1/loops.dll",
     "repl": "fsharpi"
   }, {
+    "name": "go",
+    "isScript": true,
+    "run": "go run go/loops.go"
+  }, {
     "name": "haskell",
     "isScript": false,
     "build": "ghc haskell/loops.hs -o haskell/loops",
