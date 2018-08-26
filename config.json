@@ -94,6 +94,11 @@
     "run": "python3 python3/loops.py",
     "repl": "python3"
   }, {
+    "name": "R",
+    "isScript": true,
+    "run": "Rscript r/loops.r",
+    "repl": "R"
+  }, {
     "name": "ruby",
     "isScript": true,
     "run": "ruby ruby/loops.rb",
