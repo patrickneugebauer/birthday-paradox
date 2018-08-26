@@ -45,7 +45,7 @@
   }, {
     "name": "haskell",
     "isScript": false,
-    "build": "ghc haskell/loops.hs -o haskell/loops",
+    "build": "rm haskell/loops.hi haskell/loops.o && ghc haskell/loops.hs -o haskell/loops -optc-O3",
     "run": "haskell/loops",
     "repl": "ghci"
   }, {
