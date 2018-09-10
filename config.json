@@ -30,7 +30,8 @@
   }, {
     "name": "dart",
     "isScript": true,
-    "run": "dart dart/loops.dart"
+    "run": "dart dart/loops.dart",
+    "repl": "dart_repl"
     }, {
     "name": "fsharp",
     "isScript": false,
@@ -65,10 +66,9 @@
     "repl": "julia"
   }, {
     "name": "kotlin",
-    "ignore": true,
     "isScript": false,
-    "build": "",
-    "run": "",
+    "build": "kotlinc kotlin/loops.kt -d kotlin/loops.jar",
+    "run": "kotlin -classpath kotlin/loops.jar LoopsKt",
     "repl": "kotlinc"
   }, {
     "name": "ocaml",
@@ -107,7 +107,7 @@
     "isScript": false,
     "build": "cd rust && cargo build && cd ..",
     "run": "rust/target/debug/rust",
-    "repl": "irb"
+    "repl": "rusti"
   }, {
     "name": "typescript",
     "ignore": true,

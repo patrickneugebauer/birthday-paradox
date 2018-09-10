@@ -8,6 +8,7 @@ fsharp/obj
 haskell/*
 !haskell/loops.hs
 java/Loops.class
+kotlin/loops.jar
 rust/*
 !rust/src
 !rust/Cargo.toml
