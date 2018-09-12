@@ -1,5 +1,4 @@
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Random;
 
 public class Loops {
 
@@ -11,12 +10,13 @@ public class Loops {
     long start = System.currentTimeMillis();
     final long ITERATIONS = 1_000_000;
     final int SAMPLE_SIZE = 23;
-
+    Random rand = new Random();
+    rand.setSeed(start);
     int duplicates = 0;
       for (long x=0; x < ITERATIONS; x++) {
       int data[] = new int[365];
       for (int i=0; i < SAMPLE_SIZE; i++) {
-        int number = (int) Math.floor(Math.random() * 365);
+        int number = rand.nextInt(365);
         if (data[number] == 1) {
           duplicates++;
           break;
