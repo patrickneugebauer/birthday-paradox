@@ -77,7 +77,12 @@
     "build": "",
     "run": "",
     "repl": "ocaml"
-    }, {
+  }, {
+    "name": "php",
+    "isScript": true,
+    "run": "php php/loops.php",
+    "repl": "php -a"
+  }, {
     "name": "powershell",
     "isScript": true,
     "run": "pwsh-preview powershell/loops.ps1",
