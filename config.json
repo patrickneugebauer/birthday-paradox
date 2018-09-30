@@ -43,6 +43,10 @@
     "isScript": true,
     "run": "go run go/loops.go"
   }, {
+    "name": "hack",
+    "isScript": true,
+    "run": "hhvm hack/loops.hh"
+  }, {
     "name": "haskell",
     "isScript": false,
     "build": "rm haskell/loops.hi haskell/loops.o && ghc haskell/loops.hs -o haskell/loops -optc-O3",

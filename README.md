@@ -1,26 +1,27 @@
 #### Birthday Paradox - Monte Carlo simulations
 
 * sample-size: 23
-* probability: 50.66
+* probability: 50.78
 
 language | iterations/sec
 |--|--|
-c|4,037,141
-crystal|2,673,082
+c|4,043,671
+crystal|2,639,915
 csharp|2,375,296
-rust|2,143,163
-java|1,996,007
-kotlin|1,964,636
-dart|1,626,016
-go|1,326,259
-javascript|1,272,264
-php|464,684
-ruby|235,849
-julia|125,000
-haskell|96,153
-fsharp|66,755
-python|45,126
-python3|35,765
-R|9,165
-bash|3,840
-powershell|409
+rust|2,144,082
+kotlin|2,044,989
+java|1,953,125
+dart|1,620,745
+go|1,344,086
+javascript|1,287,001
+php|468,384
+hack|308,356
+ruby|239,808
+julia|126,903
+haskell|96,246
+fsharp|66,934
+python|46,104
+python3|36,683
+R|9,157
+bash|3,907
+powershell|416
