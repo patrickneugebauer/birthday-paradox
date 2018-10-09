@@ -32,7 +32,7 @@
     "isScript": true,
     "run": "dart dart/loops.dart",
     "repl": "dart_repl"
-    }, {
+  }, {
     "name": "fsharp",
     "isScript": false,
     "build": "dotnet build fsharp",
@@ -81,6 +81,10 @@
     "build": "",
     "run": "",
     "repl": "ocaml"
+  }, {
+    "name": "perl",
+    "isScript": true,
+    "run": "perl/loops"
   }, {
     "name": "php",
     "isScript": true,

@@ -1,0 +1,33 @@
+#!/usr/bin/perl
+
+use Time::HiRes qw/gettimeofday/;
+
+sub simulate {
+  $start = gettimeofday();
+  $iterations = 100000;
+  $sample_size = 23;
+  $count = 0;
+
+  outer: for ($i = 0; $i < $iterations; $i++) {
+    @data = ();
+    inner: for ($n = 0; $n < $sample_size; $n++) {
+      $number = int(rand(365));
+      if ($data[$number] == 1) {
+        $count++;
+        last inner;
+      } else {
+        $data[$number] = 1;
+      }
+    }
+  }
+
+  print "iterations: $iterations\n";
+  print "sample-size: $sample_size\n";
+  $percent = $count / $iterations * 100;
+  printf("percent: %.2f\n", $percent);
+  $end = gettimeofday();
+  $diff = $end - $start;
+  printf("seconds: %.3f\n", $diff);
+}
+
+simulate();
