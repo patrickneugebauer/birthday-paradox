@@ -86,6 +86,11 @@
     "isScript": true,
     "run": "perl/loops"
   }, {
+    "name": "perl6",
+    "isScript": true,
+    "run": "perl6 perl6/loops.p6",
+    "repl": "perl6"
+  }, {
     "name": "php",
     "isScript": true,
     "run": "php php/loops.php",
