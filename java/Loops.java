@@ -8,7 +8,7 @@ public class Loops {
 
   private static void simulate() {
     long start = System.currentTimeMillis();
-    final long ITERATIONS = 1_000_000;
+    final long ITERATIONS = 2_000_000;
     final int SAMPLE_SIZE = 23;
     Random rand = new Random();
     rand.setSeed(start);

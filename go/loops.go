@@ -13,7 +13,7 @@ func main() {
 
 func simulate() {
 	start := time.Now().UnixNano()
-	iterations := 1000000
+	iterations := 1000 * 1000
 	sampleSize := 23
 
 	count := 0

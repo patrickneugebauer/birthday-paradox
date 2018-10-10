@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <sys/time.h>
 
-#define iterations 10000000
+#define iterations 5000000
 #define sampleSize 23
 
 void simulate();

@@ -1,6 +1,6 @@
 def simulate
   start = Time.new
-  iterations = 10_000_000
+  iterations = 2_000_000
   sample_size = 23
 
   count = 0

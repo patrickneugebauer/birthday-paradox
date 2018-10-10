@@ -15,7 +15,7 @@ let inline println s i =
 
 let simulate =
   let start = DateTime.Now
-  let iterations = 100000
+  let iterations = 50 * 1000
   let sampleSize = 23
   let mutable count = 0
   for i in 1..iterations do

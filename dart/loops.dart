@@ -6,7 +6,7 @@ void main() {
 
 void simulate() {
   final start = new DateTime.now().millisecondsSinceEpoch;
-  const iterations = 1000 * 1000;
+  const iterations = 2 * 1000 * 1000;
   const sampleSize = 23;
 
   var count = 0;

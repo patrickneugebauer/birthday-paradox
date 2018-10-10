@@ -6,7 +6,7 @@ fun main(args: Array<String>) {
 
 fun simulate() {
   val start = System.currentTimeMillis();
-  val iterations = 1000000
+  val iterations = 2000 * 1000
   val sample_size = 23
   val random = Random()
 

@@ -1,7 +1,7 @@
 <?php
   function simulate() {
     $start = microtime(true);
-    $iterations = 1000000;
+    $iterations = 500 * 1000;
     $sample_size = 23;
 
     $count = 0;
