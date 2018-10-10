@@ -98,7 +98,7 @@ const readme = xs => {
 
 language | iterations/sec
 |--|--|
-${tableData}`;
+${tableData}\n`;
   return writeFile(README, fileData).then(() => fileData);
 }
 
