@@ -28,4 +28,4 @@ perl6|4,269
 bash|4,025
 powershell|410
 
-thanks [Anthony Robinson](https://github.com/anthonycrobinson) for tip about randint and random speed in python
+thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about randint and random speed in python

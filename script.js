@@ -100,7 +100,7 @@ language | iterations/sec
 |--|--|
 ${tableData}
 
-thanks [Anthony Robinson](https://github.com/anthonycrobinson) for tip about randint and random speed in python\n`;
+thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about randint and random speed in python\n`;
   return writeFile(README, fileData).then(() => fileData);
 }
 
