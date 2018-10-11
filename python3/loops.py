@@ -1,9 +1,9 @@
-from random import randint
+from random import random
 import time
 
 def simulate():
     start = time.time()
-    iterations = 50_000
+    iterations = 100_000
     sample_size = 23
 
     count = 0
@@ -11,7 +11,7 @@ def simulate():
         data = []
 
         for i in range(sample_size):
-            rand = randint(1, 365)
+            rand = int(random() * 365)
             if rand in data:
                 count += 1;
                 break
