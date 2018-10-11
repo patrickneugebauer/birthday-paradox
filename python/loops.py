@@ -8,15 +8,15 @@ def simulate():
 
     count = 0
     for x in range(iterations):
-        data = []
+        data = [0] * 365
 
         for i in range(sample_size):
             rand = int(random() * 365)
-            if rand in data:
+            if data[rand] == 1:
                 count += 1;
                 break
             else:
-                data.append(rand)
+                data[rand] = 1;
 
     print "iterations:", iterations
     print "sample-size:", sample_size
