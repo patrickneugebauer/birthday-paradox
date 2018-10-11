@@ -1,29 +1,31 @@
 #### Birthday Paradox - Monte Carlo simulations
 
 * sample-size: 23
-* probability: 50.61
+* probability: 50.81
 
 language | iterations/sec
 |--|--|
-c|4,019,292
-crystal|2,560,819
-csharp|2,364,066
-java|2,181,025
-kotlin|2,166,847
-rust|2,129,925
-dart|1,626,016
-go|1,347,708
-javascript|1,290,322
-php|463,392
-hack|305,997
-ruby|238,095
-python|170,068
-python3|162,866
-perl|155,763
-julia|126,103
-haskell|95,602
-fsharp|64,850
-R|9,208
-perl6|4,074
-bash|3,863
-powershell|402
+c|4,016,064
+crystal|2,621,231
+csharp|2,350,176
+java|2,197,802
+kotlin|2,178,649
+rust|2,114,164
+dart|1,647,446
+go|1,331,557
+javascript|1,275,510
+php|468,603
+hack|306,372
+ruby|241,545
+python3|181,159
+python|171,821
+perl|156,128
+julia|125,470
+haskell|95,785
+fsharp|59,453
+R|9,057
+perl6|4,269
+bash|4,025
+powershell|410
+
+thanks [Anthony Robinson](https://github.com/anthonycrobinson) for tip about randint and random speed in python

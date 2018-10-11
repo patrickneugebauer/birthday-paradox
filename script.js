@@ -98,7 +98,9 @@ const readme = xs => {
 
 language | iterations/sec
 |--|--|
-${tableData}\n`;
+${tableData}
+
+thanks [Anthony Robinson](https://github.com/anthonycrobinson) for tip about randint and random speed in python\n`;
   return writeFile(README, fileData).then(() => fileData);
 }
 
