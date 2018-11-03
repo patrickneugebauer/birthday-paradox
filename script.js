@@ -89,15 +89,15 @@ const run = xs => {
 const readme = xs => {
   const sampleSize = average(xs.map(x => parseFloat(x['sample-size'])));
   const percent = average(xs.map(x => parseFloat(x.percent))).toFixed(2);
-  const tableData = xs.map(x => `${x.name}|${x.speed.toLocaleString()}`).join('\n');
+  const tableData = xs.map((x, i) => `${i + 1}|${x.name}|${x.speed.toLocaleString()}`).join('\n');
   const fileData =
 `#### Birthday Paradox - Monte Carlo simulations
 
 * sample-size: ${sampleSize}
 * probability: ${percent}
 
-language | iterations/sec
-|--|--|
+| | language | iterations/sec |
+|--|--|--|
 ${tableData}
 
 thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about randint and random speed in python\n`;

@@ -133,5 +133,10 @@
     "build": "tsc typescript/loops.ts --out typescript/loops.js --target esnext",
     "run": "node typescript/loops.js",
     "repl": "ts-node"
+  }, {
+    "name": "vb.net",
+    "isScript": false,
+    "build": "dotnet build vbnet",
+    "run": "dotnet vbnet/bin/Debug/netcoreapp2.1/loops.dll"
   }]
 }

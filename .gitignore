@@ -13,3 +13,5 @@ rust/*
 !rust/src
 !rust/Cargo.toml
 typescript/loops.js
+vbnet/bin
+vbnet/obj
