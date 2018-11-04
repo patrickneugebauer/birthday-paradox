@@ -127,6 +127,12 @@
     "run": "rust/target/debug/rust",
     "repl": "rusti"
   }, {
+    "name": "swift",
+    "isScript": false,
+    "build": "cd swift && swift build -c release && cd ..",
+    "run": "swift/.build/release/swift",
+    "repl": "swift"
+  }, {
     "name": "typescript",
     "ignore": true,
     "isScript": false,
