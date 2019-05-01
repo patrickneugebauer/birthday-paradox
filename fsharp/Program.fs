@@ -2,6 +2,8 @@
 
 open System
 
+let flip f x y = f y x
+
 let random = Random()
 
 let rec duplicates n xs =
@@ -23,12 +25,12 @@ let simulate =
   println "iterations: " iterations
   println "sample-size: " sampleSize
   float(count) / float(iterations) * 100.0
-    |> fun x -> Math.Round(x, 2)
+    |> flip Math.Round 2
     |> println "percent: "
   let fin = DateTime.Now
   fin - start
     |> fun x -> x.TotalSeconds
-    |> fun x -> Math.Round(x, 3)
+    |> flip Math.Round 3
     |> println "seconds: "
   ()
 
