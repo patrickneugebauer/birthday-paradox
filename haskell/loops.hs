@@ -8,14 +8,14 @@ getTimeMillis = round <$> (*1000) <$> getPOSIXTime
 roundTo :: (Integral a, RealFrac b, Fractional c) => a -> b -> c
 roundTo n = (/10^n) . fromIntegral . round . (*10^n)
 
-simulate' :: Int -> StdGen -> Int
-simulate' 0 gen = 0
-simulate' n gen =
+simulate :: Int -> StdGen -> Int
+simulate 0 gen = 0
+simulate n gen =
   let range = (0, 364) :: (Int, Int)
       sampleSize = 23 :: Int
       sample = IntSet.empty :: IntSet.IntSet
       (x, newGen) = runIteration range sampleSize sample gen
-  in x + simulate' (n - 1) newGen
+  in x + simulate (n - 1) newGen
 
 runIteration :: (Int, Int) -> Int -> IntSet.IntSet -> StdGen -> (Int, StdGen)
 runIteration rng 0 xs gen = (0, gen)
@@ -27,7 +27,7 @@ main = do
   start <- getTimeMillis
   let iterations = 100000 :: Int
   gen <- getStdGen
-  let results = (/ (fromIntegral iterations)) . fromIntegral . simulate' iterations $ gen
+  let results = (/ (fromIntegral iterations)) . fromIntegral . simulate iterations $ gen
   putStrLn . ("iterations: " ++) . show $ iterations
   putStrLn . ("sample-size: " ++) . show $ 23
   putStrLn . ("percent: " ++) . show . roundTo 2 . (*100) $ results
