@@ -1,29 +1,21 @@
 function iterate
   start = time();
-  iterations = 500;
+  iterations = 10000;
   sample_size = 23;
   day_count = 365;
   count = 0;
+  matrix = randi(365, iterations, sample_size);
   for i = 1:iterations
-    % need to create a matrix in each iteration
-    % octave uses non-zero indexed arrays with paren lookup
-    % data = []
-    data = zeros(1, day_count);
-    for s = 1:sample_size
-      num = randi(day_count);
-      if (data(num) == 1)
-        count++;
-        break;
-      else
-        data(num) = 1;
-      endif
-    endfor
+    data = matrix(i, :);
+    if (columns(unique(data)) != sample_size)
+      count++;
+    endif
   endfor
-  disp(cstrcat("iterations: ", mat2str(iterations)))
-  disp(cstrcat("sample-size: ", mat2str(sample_size)))
+  printf("iterations: %d\n", iterations)
+  printf("sample-size: %d\n", sample_size)
   percent = count / iterations * 100;
-  disp(cstrcat("percent: ", mat2str(percent, 2)))
+  printf("percent: %.2f\n", percent)
   finish = time();
   diff = finish - start;
-  disp(cstrcat("seconds: ", mat2str(diff, 3)))
+  printf("seconds: %.3f\n", diff)
 endfunction
