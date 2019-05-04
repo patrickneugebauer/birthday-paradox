@@ -82,6 +82,10 @@
     "run": "",
     "repl": "ocaml"
   }, {
+    "name": "octave",
+    "isScript": true,
+    "run": "octave octave/loops.m"
+  }, {
     "name": "perl",
     "isScript": true,
     "run": "perl/loops"
