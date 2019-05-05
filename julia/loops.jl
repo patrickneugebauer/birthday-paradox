@@ -2,20 +2,14 @@ import Dates
 
 function simulate()
   start = Dates.now()
-  iterations = 100_000
+  iterations = 500_000
   sample_size = 23
 
   count = 0
   for i in 1:iterations
-    data = []
-    for x in 1:sample_size
-      num = rand(1:365)
-      if num in data
-        count+=1
-        break
-      else
-        push!(data, num)
-      end
+    data = rand(1:365, 1, sample_size)
+    if length(unique(data)) != sample_size
+      count += 1
     end
   end
   println("iterations: ", iterations)
