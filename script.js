@@ -66,6 +66,11 @@ const getConfig = () => {
   );
 }
 
+const buildSync = xs => {
+  console.log('\nbuilding sync...');
+  return asyncMap(x => x.build ? exec(x.build).then(() => x) : Promise.resolve(x), xs);
+}
+
 const build = xs => {
   console.log('\nbuilding...');
   return Promise.all(xs.map(
@@ -107,6 +112,7 @@ thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about
 const paths = new function() {
   this.config = () => getConfig();
   this.build = () => this.config().then(filter(x => !x.ignore)).then(build);
+  this.buildSync = () => this.config().then(filter(x => !x.ignore)).then(buildSync);
   this.run = () => this.build().then(run);
   this.readme = () => this.run().then(readme);
   this.repl = lang => this.config()
