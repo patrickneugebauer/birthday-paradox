@@ -118,6 +118,7 @@ const paths = new function() {
   this.repl = lang => this.config()
     .then(find(x => x.name == lang))
     .then(x => x && x.repl || `echo repl: '${lang}' not found`);
+  this.doc = this.help = this.man = () => Promise.resolve(`list of commands: ${commands}`);
 };
 
 const commands = `[${Object.keys(paths).join(', ')}]`;
