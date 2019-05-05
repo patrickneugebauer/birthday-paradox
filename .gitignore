@@ -7,6 +7,7 @@ fsharp/bin
 fsharp/obj
 haskell/*
 !haskell/loops.hs
+!haskell/loops-recursive.hs
 java/Loops.class
 kotlin/loops.jar
 rust/*
