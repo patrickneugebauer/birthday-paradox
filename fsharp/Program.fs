@@ -17,7 +17,7 @@ let rec duplicates n xs =
   match n with
   | 0 -> false
   | _ -> let num = random.Next(365)
-         if List.contains num xs then true else duplicates (n-1) (num::xs)
+         if Set.contains num xs then true else duplicates (n-1) (Set.add num xs)
 
 let inline println s i =
   s + string(i) |> printfn "%s"
@@ -28,7 +28,7 @@ let simulate =
   let sampleSize = 23
   let mutable count = 0
   for i in 1..iterations do
-    if duplicates sampleSize [] then count <- count + 1
+    if duplicates sampleSize Set.empty then count <- count + 1
   println "iterations: " iterations
   println "sample-size: " sampleSize
   float(count) / float(iterations) * 100.0
