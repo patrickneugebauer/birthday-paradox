@@ -83,8 +83,8 @@
     "name": "ocaml",
     "ignore": true,
     "isScript": false,
-    "build": "",
-    "run": "",
+    "build": "ocamlopt -o ocaml/loops ocaml/loops.ml",
+    "run": "ocaml/loops",
     "repl": "ocaml"
   }, {
     "name": "octave",

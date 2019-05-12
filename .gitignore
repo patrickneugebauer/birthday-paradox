@@ -10,6 +10,9 @@ haskell/*
 !haskell/loops-recursive.hs
 java/Loops.class
 kotlin/loops.jar
+ocaml/*
+!ocaml/loops.ml
+!ocaml/run-options.sh
 rust/*
 !rust/src
 !rust/Cargo.toml
