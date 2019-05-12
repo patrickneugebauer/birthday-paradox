@@ -89,7 +89,8 @@
   }, {
     "name": "octave",
     "isScript": true,
-    "run": "octave octave/loops.m"
+    "run": "octave octave/loops.m",
+    "repl": "octave --no-gui"
   }, {
     "name": "perl",
     "isScript": true,
