@@ -33,6 +33,11 @@
     "run": "dart dart/loops.dart",
     "repl": "dart_repl"
   }, {
+    "name": "elixir",
+    "isScript": true,
+    "run": "elixir elixir/loops.exs",
+    "repl": "iex"
+  }, {
     "name": "fsharp",
     "isScript": false,
     "build": "dotnet build fsharp",
