@@ -12,10 +12,9 @@
   }, {
     "name": "clojure",
     "ignore": true,
-    "isScript": false,
-    "build": "",
-    "run": "",
-    "repl": "clojure"
+    "isScript": true,
+    "run": "clojure loops.clj",
+    "repl": "rlwrap clj"
   }, {
     "name": "crystal",
     "isScript": false,
