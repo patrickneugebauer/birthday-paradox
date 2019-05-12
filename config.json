@@ -142,13 +142,6 @@
     "run": "swift/.build/release/swift",
     "repl": "swift"
   }, {
-    "name": "typescript",
-    "ignore": true,
-    "isScript": false,
-    "build": "tsc typescript/loops.ts --out typescript/loops.js --target esnext",
-    "run": "node typescript/loops.js",
-    "repl": "ts-node"
-  }, {
     "name": "vb.net",
     "isScript": false,
     "build": "dotnet build vbnet",
