@@ -17,23 +17,27 @@ defmodule Loops do
       |> Enum.map(fn (x) -> Task.await(x) end)
 
     total_iterations = @iterations * workers
-    IO.puts "#{total_iterations} iterations"
 
     seconds = Time.utc_now()
       |> Time.diff(start, :millisecond)
       |> Kernel./(1000)
       |> Float.round(3)
-    IO.puts "#{seconds} seconds"
 
     iterations_per_second = total_iterations
       |> Kernel./(seconds)
       |> Kernel.round
-    IO.puts "#{iterations_per_second} iterations/sec"
 
     iterations_per_second_per_worker = iterations_per_second
       |> Kernel./(workers)
       |> Kernel.round
-    IO.puts "#{iterations_per_second_per_worker} iterations/sec/worker"
+
+    [
+      iterations: total_iterations,
+      seconds: seconds,
+      workers: workers,
+      iterations_per_second: iterations_per_second,
+      iterations_per_second_per_worker: iterations_per_second_per_worker
+    ]
   end
 
   def generate_randoms(r, c, rng) do
@@ -46,8 +50,21 @@ defmodule Loops do
 
 end
 
-Enum.each(1..8, fn (x) ->
-  IO.puts "#{x} workers"
-  Loops.iterate(x)
-  IO.puts "-------------------------"
+range = 1..12
+IO.puts "running for #{Enum.at(range, 0)} to #{Enum.at(range, Enum.count(range) - 1)} workers"
+results = Enum.map(range, fn(x) ->
+  IO.puts "running #{x} workers"
+  Loops.iterate (x)
 end)
+headers = Enum.at(results, 0) |> Keyword.keys |> Enum.join("\t")
+rows = Enum.map(results, fn(x) ->
+  x |> Keyword.values |> Enum.join("\t")
+end)
+all_rows = [ headers | rows ]
+file_text = Enum.join(all_rows, "\n")
+
+filename = "elixir/stats.txt"
+{ :ok, file } = File.open(filename, [:write])
+IO.binwrite(file, file_text)
+File.close(file)
+IO.puts "results written to #{filename}"

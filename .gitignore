@@ -3,6 +3,8 @@ c/loops.out
 crystal/loops
 csharp/bin
 csharp/obj
+elixir/*
+!elixir/*.exs
 fsharp/bin
 fsharp/obj
 haskell/*
