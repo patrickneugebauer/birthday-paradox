@@ -23,13 +23,7 @@ void simulate() {
     int data[365] = {};
     for (int i=0; i < sampleSize; i++) {
       int number = (float) rand() / RAND_MAX * 365;
-      // check for number in array
-      // bool inArray = false;
-      // for (int c=0; c<i; c++) {
-      //   if (data[c] == number) inArray = true;
-      // }
       if (data[number] == 1) {
-        // printf("dupe\n");
         duplicates++;
         break;
       } else {
