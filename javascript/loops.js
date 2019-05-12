@@ -1,13 +1,13 @@
 function simulate() {
-  var start = new Date().getTime()
-  var iterations = 1000000
-  var sampleSize = 23
+  const start = new Date().getTime()
+  const iterations = 1000000
+  const sampleSize = 23
 
-  var count = 0
-  for (var i=0; i < iterations; i++) {
-    var arr = new Array(365)
-    for (var j=0; j < sampleSize; j++) {
-      var rand = Math.floor(Math.random()*365)
+  let count = 0
+  for (let i=0; i < iterations; i++) {
+    const arr = new Array(365)
+    for (let j=0; j < sampleSize; j++) {
+      const rand = Math.floor(Math.random()*365)
       if (arr[rand]) {
         count++
         break
@@ -18,10 +18,10 @@ function simulate() {
   }
   console.log(`iterations: ${iterations}`)
   console.log(`sample-size: ${sampleSize}`)
-  var results = (count / iterations * 100).toFixed(2)
+  const results = (count / iterations * 100).toFixed(2)
   console.log(`percent: ${results}`)
-  var end = new Date().getTime()
-  var diff = ((end-start) / 1000).toFixed(3)
+  const end = new Date().getTime()
+  const diff = ((end-start) / 1000).toFixed(3)
   console.log(`seconds: ${diff}`)
 }
 
