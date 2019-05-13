@@ -136,6 +136,11 @@
     "run": "rust/target/debug/rust",
     "repl": "rusti"
   }, {
+    "name": "scheme",
+    "isScript": true,
+    "run": "scheme --quiet < scheme/loops.scm",
+    "repl": "scheme"
+  }, {
     "name": "swift",
     "isScript": false,
     "build": "cd swift && swift build -c release && cd ..",
