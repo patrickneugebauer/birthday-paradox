@@ -125,6 +125,12 @@
     "run": "Rscript r/loops.r",
     "repl": "R"
   }, {
+    "name": "racket",
+    "isScript": false,
+    "build": "raco make racket/loops.rkt",
+    "run": "racket racket/loops.rkt",
+    "repl": "racket"
+  }, {
     "name": "ruby",
     "isScript": true,
     "run": "ruby ruby/loops.rb",

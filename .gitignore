@@ -15,9 +15,12 @@ kotlin/loops.jar
 ocaml/*
 !ocaml/loops.ml
 !ocaml/run-options.sh
+racket/*
+!racket/loops.rkt
 rust/*
 !rust/src
 !rust/Cargo.toml
-typescript/loops.js
+scheme/*
+!scheme/loops.scm
 vbnet/bin
 vbnet/obj
