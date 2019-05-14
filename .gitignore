@@ -1,5 +1,7 @@
 .vscode
 c/loops.out
+clojure/*
+!clojure/loops.clj
 crystal/loops
 csharp/bin
 csharp/obj
