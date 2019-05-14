@@ -16,7 +16,6 @@ java/Loops.class
 kotlin/loops.jar
 ocaml/*
 !ocaml/loops.ml
-!ocaml/run-options.sh
 racket/*
 !racket/loops.rkt
 rust/*
