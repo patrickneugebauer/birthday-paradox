@@ -11,9 +11,8 @@
     "run": "c/loops.out"
   }, {
     "name": "clojure",
-    "ignore": true,
     "isScript": true,
-    "run": "clojure loops.clj",
+    "run": "clojure clojure/loops.clj",
     "repl": "rlwrap clj"
   }, {
     "name": "crystal",
