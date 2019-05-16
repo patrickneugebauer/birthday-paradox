@@ -1,0 +1,32 @@
+' Gambas module file
+
+Public Sub Main()
+  Dim start As Date = Time(Now)
+  Dim iterations As Integer = 400000
+  Dim sampleSize As Integer = 23
+  Dim count As Integer = 0
+
+  Dim r As Integer
+  For r = 1 To iterations
+    Dim sample As New Integer[365]
+    Dim c As Integer
+    For c = 1 To sampleSize
+      Dim num As Integer = Rand(0, 364)
+      If sample[num] = 1 Then
+        Inc count
+        Break
+      Else
+        sample[num] = 1
+      Endif
+    Next
+  Next
+
+  Print "iterations: " & iterations
+  Print "sample-size: " & sampleSize
+  Dim percent As Float = count / iterations * 100
+  Print "percent: " & Format(percent, ".00")
+  Dim finish As Date = Time(Now)
+  Dim milliseconds As Integer = DateDiff(start, finish, gb.Millisecond)
+  Dim seconds As Float = milliseconds / 1000
+  Print "seconds: " & seconds
+End

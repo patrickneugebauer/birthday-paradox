@@ -42,6 +42,11 @@
     "run": "dotnet fsharp/bin/Debug/netcoreapp2.1/loops.dll",
     "repl": "fsharpi"
   }, {
+    "name": "gambas",
+    "isScript": false,
+    "build": "gbc3 gambas",
+    "run": "gbx3 gambas"
+  }, {
     "name": "go",
     "isScript": true,
     "run": "go run go/loops.go"

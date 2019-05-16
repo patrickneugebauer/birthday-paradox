@@ -9,6 +9,9 @@ elixir/*
 !elixir/*.exs
 fsharp/bin
 fsharp/obj
+gambas/*
+!gambas/.src
+!gambas/.project
 haskell/*
 !haskell/loops.hs
 !haskell/loops-recursive.hs
