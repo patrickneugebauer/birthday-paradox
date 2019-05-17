@@ -2,6 +2,7 @@
 c/loops.out
 clojure/*
 !clojure/loops.clj
+!clojure/parallel.clj
 crystal/loops
 csharp/bin
 csharp/obj
