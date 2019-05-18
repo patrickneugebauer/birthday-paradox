@@ -25,6 +25,8 @@ racket/*
 rust/*
 !rust/src
 !rust/Cargo.toml
+scala/*
+!scala/Loops.scala
 scheme/*
 !scheme/loops.scm
 vbnet/bin

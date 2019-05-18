@@ -146,6 +146,19 @@
     "run": "rust/target/debug/rust",
     "repl": "rusti"
   }, {
+    "name": "scala",
+    "isScript": false,
+    "build": "scalac -d scala scala/Loops.scala",
+    "run": "scala -cp scala Loops",
+    "repl": "scala"
+  }, {
+    "name": "scala-sbt",
+    "ignore": true,
+    "isScript": false,
+    "build": "sbt build",
+    "run": "sbt run",
+    "repl": "sbt console"
+  }, {
     "name": "scheme",
     "isScript": true,
     "run": "scheme --quiet < scheme/loops.scm",
