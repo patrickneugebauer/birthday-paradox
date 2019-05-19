@@ -28,3 +28,15 @@ simulate iterations sampleSize range =
   let generateLists = take iterations . chunksOf sampleSize . randomRs range
       listHasDuplicates = (/= sampleSize) . IntSet.size . IntSet.fromList
   in length . filter listHasDuplicates . generateLists
+
+-- iterations       100000
+-- sample-size      23
+----------------------------
+-- data-structure   time (s)
+----------------------------
+-- Infinite List    0.918
+-- Full IntSet      1.040
+-- Partial IntSet   1.069
+-- Partial List     1.142
+-- Full List        1.209
+-- Partial Array    4.470
