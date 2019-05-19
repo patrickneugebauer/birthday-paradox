@@ -3,6 +3,7 @@ c/loops.out
 clojure/*
 !clojure/loops.clj
 !clojure/parallel.clj
+!clojure/readme.md
 crystal/loops
 csharp/bin
 csharp/obj
