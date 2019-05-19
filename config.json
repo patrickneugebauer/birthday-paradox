@@ -84,9 +84,9 @@
     "repl": "kotlinc"
   }, {
     "name": "ocaml",
-    "ignore": true,
     "isScript": false,
-    "build": "ocamlopt -o ocaml/loops ocaml/loops.ml",
+    "buildStandard": "ocamlc unix.cma -o ocaml/loops ocaml/loops.ml",
+    "build": "ocamlopt -o ocaml/loops unix.cmxa ocaml/loops.ml",
     "run": "ocaml/loops",
     "repl": "ocaml"
   }, {
