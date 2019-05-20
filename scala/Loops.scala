@@ -4,12 +4,12 @@ object Loops {
     val start = System.currentTimeMillis()
     val iterations = 500000
     val sampleSize = 23
-    val random = scala.util.Random
 
-    // loop
-    val data = for (i <- 1 to iterations)
-      yield for (s <- 1 to sampleSize)
-        yield random.nextInt(365)
+    // create data
+    val random = scala.util.Random
+    val createDataPoint = (_: Int) => random.nextInt(365)
+    val createSample = (_: Int) => (1 to sampleSize).map(createDataPoint)
+    val data = (1 to iterations).map(createSample)
 
     // calcs
     val count = data.filter(sample => (sample.distinct.length != sampleSize)).length
