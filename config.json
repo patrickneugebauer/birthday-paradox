@@ -26,6 +26,11 @@
     "run": "dotnet csharp/bin/Debug/netcoreapp2.1/loops.dll",
     "repl": "csharp"
   }, {
+    "name": "d",
+    "isScript": false,
+    "build": "dmd d/loops.d -od=d -of=d/loops -release",
+    "run": "d/loops"
+  }, {
     "name": "dart",
     "isScript": true,
     "run": "dart dart/loops.dart",

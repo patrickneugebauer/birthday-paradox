@@ -7,6 +7,8 @@ clojure/*
 crystal/loops
 csharp/bin
 csharp/obj
+d/*
+!d/loops.d
 elixir/*
 !elixir/*.exs
 !elixir/readme.md
