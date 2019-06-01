@@ -15,6 +15,11 @@
     "run": "clojure clojure/loops.clj",
     "repl": "rlwrap clj"
   }, {
+    "name": "common-lisp",
+    "isScript": true,
+    "run": "sbcl --script common-lisp/loops.cl",
+    "repl": "sbcl"
+  }, {
     "name": "crystal",
     "isScript": false,
     "build": "crystal build crystal/loops.cr -o crystal/loops --release",

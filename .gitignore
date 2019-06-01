@@ -4,6 +4,8 @@ clojure/*
 !clojure/loops.clj
 !clojure/parallel.clj
 !clojure/readme.md
+common-lisp/*
+!/common-lisp/loops.cl
 crystal/loops
 csharp/bin
 csharp/obj
