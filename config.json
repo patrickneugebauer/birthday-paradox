@@ -180,6 +180,11 @@
     "run": "swift/.build/release/swift",
     "repl": "swift"
   }, {
+    "name": "vala",
+    "isScript": false,
+    "build": "valac vala/loops.vala -o vala/loops",
+    "run": "vala/loops"
+  }, {
     "name": "vb.net",
     "isScript": false,
     "build": "dotnet build vbnet",

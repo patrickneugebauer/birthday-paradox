@@ -1,43 +1,44 @@
 #### Birthday Paradox - Monte Carlo simulations
 
 * sample-size: 23
-* probability: 50.73
+* probability: 50.88
 
 | | language | iterations/sec |
 |--|--|--|
-1|c|4,012,841
-2|crystal|2,460,024
-3|csharp|2,309,468
-4|vb.net|2,212,389
-5|rust|2,132,196
-6|java|1,956,947
-7|kotlin|1,923,076
-8|d|1,752,848
-9|dart|1,693,480
-10|go|1,315,789
-11|javascript|1,041,666
-12|julia|602,409
-13|gambas|490,196
-14|php|459,136
-15|scala|366,032
-16|ocaml|355,555
-17|common-lisp|268,817
-18|hack|250,752
-19|ruby|241,254
-20|python3|186,567
-21|python|161,290
-22|perl|157,356
-23|racket|124,533
-24|clojure|113,636
-25|haskell|109,769
+1|c|3,993,610
+2|crystal|2,493,765
+3|vb.net|2,322,880
+4|csharp|2,322,880
+5|rust|2,055,498
+6|kotlin|2,049,180
+7|java|1,964,636
+8|d|1,739,130
+9|dart|1,700,680
+10|vala|1,659,751
+11|go|1,338,688
+12|javascript|1,051,524
+13|julia|603,864
+14|gambas|492,610
+15|php|462,534
+16|scala|368,731
+17|ocaml|354,609
+18|common-lisp|272,034
+19|hack|255,885
+20|ruby|239,808
+21|python3|184,501
+22|perl|174,367
+23|python|150,602
+24|racket|123,609
+25|haskell|110,497
 26|fsharp|108,932
-27|swift|80,840
-28|R|73,099
-29|elixir|20,100
-30|octave|9,049
-31|perl6|4,436
-32|scheme|4,424
-33|bash|3,849
-34|powershell|389
+27|clojure|108,695
+28|swift|82,034
+29|R|73,673
+30|elixir|20,366
+31|octave|9,066
+32|scheme|4,444
+33|perl6|4,105
+34|bash|3,885
+35|powershell|387
 
 thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about randint and random speed in python
