@@ -93,6 +93,11 @@
     "run": "kotlin -classpath kotlin/loops.jar LoopsKt",
     "repl": "kotlinc"
   }, {
+    "name": "lua",
+    "isScript": true,
+    "run": "lua5.3 lua/loops.lua",
+    "repl": "lua5.3"
+  }, {
     "name": "ocaml",
     "isScript": false,
     "buildStandard": "ocamlc unix.cma -o ocaml/loops ocaml/loops.ml",
