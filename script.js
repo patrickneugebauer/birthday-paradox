@@ -135,3 +135,8 @@ const commands = `[${Object.keys(paths).join(', ')}]`;
  * @description Docker command per language
  * @example `docker run --rm $(docker build --no-cache --quiet .)`
  */
+
+/**
+ * @description Docker command to terminal into built image
+ * @example `docker run -it --entrypoint=/bin/bash <image-id>`
+ */
