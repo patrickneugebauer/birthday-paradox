@@ -4,6 +4,8 @@ RUN apk add --no-cache bash
 
 WORKDIR /root
 
-ADD loops.sh .
+COPY loops.sh .
+
+RUN chmod +x loops.sh
 
 ENTRYPOINT ["./loops.sh"]

@@ -1,0 +1,13 @@
+name: birthday_paradox
+version: 0.1.0
+
+authors:
+  - Michael Wagner <mdwranger@gmail.com>
+
+targets:
+  birthday_paradox:
+    main: src/birthday_paradox.cr
+
+crystal: 0.31.1
+
+license: MIT
