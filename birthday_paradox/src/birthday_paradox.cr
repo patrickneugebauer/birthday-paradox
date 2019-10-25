@@ -1,46 +1,16 @@
-ITERATIONS = "iterations"
-SAMPLE_SIZE = "sample-size"
-PERCENT = "percent"
-SECONDS = "seconds"
-
-alias TextHash = Hash(String, String | Nil)
-
-class TextToHash
-  def self.unsafe(text : String) : TextHash
-    iterations_regex = /#{ITERATIONS}[:]\s*(\d+)/
-    sample_size_regex = /#{SAMPLE_SIZE.gsub("-", "[-]")}[:]\s*(\d+)/
-    percent_regex = /#{PERCENT}[:]\s*([^\n]+)/
-    seconds_regex = /#{SECONDS}[:]\s*([^\n]+)/
-    hash = TextHash.new
-
-    pairs = [
-      {ITERATIONS, iterations_regex},
-      {SAMPLE_SIZE, sample_size_regex},
-      {PERCENT, percent_regex},
-      {SECONDS, seconds_regex}
-    ]
-
-    text_hash = pairs.reduce(hash) do |acc, (name, regex)|
-      match = text.match(regex)
-      value = match ? match.captures.first : nil
-
-      acc[name] = value
-      acc
-    end
-
-    text_hash
-  end
-end
+require "./util"
+require "./text_to_hash"
 
 class BirthdayParadox
-  property dir : String = "."
-  property langs_to_run : Array(String) = [] of String
-  property results : Array(Tuple(String, TextHash)) = [] of Tuple(String, TextHash)
+  property dir = "."
+  property langs_to_run = [] of String
+  property results = [] of Tuple(String, TextHash)
 
   def initialize
     if ARGV.size > 0 && Dir.exists?(ARGV.first)
       @dir = ARGV.first
     end
+    @text_to_hash = TextToHash.new
   end
 
   def execute
@@ -65,11 +35,15 @@ class BirthdayParadox
     langs = @langs_to_run.first(2)
     langs.each do |lang|
       Dir.cd("#{@dir}/#{lang}") do
-        puts "#{lang} => Running..." if ENV["DEV"]?
+        Util.println("#{lang} => Running...")
+
         image_id = `docker build --no-cache --quiet .`
         output = `docker run --rm #{image_id}`
-        result = TextToHash.unsafe(output)
-        puts "#{lang} => #{result}" if ENV["DEV"]?
+        @text_to_hash.text = output
+        result = @text_to_hash.convert
+
+        Util.println("#{lang} => #{result}")
+
         @results << {lang, result}
       end
     end
