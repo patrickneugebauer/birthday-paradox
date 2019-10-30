@@ -1,8 +1,8 @@
 require "./spec_helper"
 
-describe TextToHash do
+describe TextToNamedTuple do
   it "should not find any text" do
-    instance = TextToHash.new("hello world")
+    instance = TextToNamedTuple.new("hello world")
     hash = instance.convert
 
     hash[ITERATIONS].should eq(nil)
@@ -12,7 +12,7 @@ describe TextToHash do
   end
 
   it "should find some text" do
-    instance = TextToHash.new(<<-TEXT)
+    instance = TextToNamedTuple.new(<<-TEXT)
       iterations: 123
       percent: 78.00
     TEXT
@@ -25,7 +25,7 @@ describe TextToHash do
   end
 
   it "should find correct text" do
-    instance = TextToHash.new(<<-TEXT)
+    instance = TextToNamedTuple.new(<<-TEXT)
       iterations: 123
       sample-size: 456
       percent: 78.00
@@ -40,7 +40,7 @@ describe TextToHash do
   end
 
   it "should find correct text excluding incorrect text" do
-    instance = TextToHash.new(<<-TEXT)
+    instance = TextToNamedTuple.new(<<-TEXT)
       kjldsjflkasdj;flkajsd;flkjsad;lfkjas;ldkfjasld
       iterations: 123
       sample-size: 456

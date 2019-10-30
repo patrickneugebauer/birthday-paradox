@@ -1,24 +1,25 @@
 require "./util"
-require "./text_to_hash"
+require "./text_to_named_tuple"
 
 class BirthdayParadox
   property dir = "."
   property langs_to_run = [] of String
-  property results = [] of Tuple(String, TextHash)
+  property results = [] of Tuple(String, TextNamedTuple)
 
   def initialize
     if ARGV.size > 0 && Dir.exists?(ARGV.first)
       @dir = ARGV.first
     end
-    @text_to_hash = TextToHash.new
+    @text_to_named_tuple = TextToNamedTuple.new
   end
 
   def execute
     get_langs_to_run
     @langs_to_run.sort!
     execute_docker_for_langs
+    generate_table
 
-    pp @results
+    # pp @results
   end
 
   private def get_langs_to_run
@@ -39,8 +40,8 @@ class BirthdayParadox
 
         image_id = `docker build --no-cache --quiet .`
         output = `docker run --rm #{image_id}`
-        @text_to_hash.text = output
-        result = @text_to_hash.convert
+        @text_to_named_tuple.text = output
+        result = @text_to_named_tuple.convert
 
         Util.println("#{lang} => #{result}")
 
