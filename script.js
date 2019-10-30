@@ -130,13 +130,3 @@ const commands = `[${Object.keys(paths).join(', ')}]`;
     paths[path](...args).then(x => console.log('\nresults:\n',x)) :
     console.log(`command: '${path}' failed\nlist of commands: ${commands}`);
 })()
-
-/**
- * @description Docker command per language
- * @example `docker run --rm $(docker build --no-cache --quiet .)`
- */
-
-/**
- * @description Docker command to terminal into built image
- * @example `docker run -it --entrypoint=/bin/bash <image-id>`
- */
