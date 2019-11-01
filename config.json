@@ -3,196 +3,307 @@
     "name": "bash",
     "isScript": true,
     "run": "bash/loops.sh",
-    "repl": "bash"
+    "repl": "bash",
+    "year": 1989,
+    "execution": "shell",
+    "solution": "imperative"
   }, {
     "name": "c",
     "isScript": false,
     "build": "cc c/loops.c -O3 -o c/loops.out",
-    "run": "c/loops.out"
+    "run": "c/loops.out",
+    "year": 1972,
+    "execution": "compiled",
+    "solution": "imperative"
   }, {
     "name": "clojure",
     "isScript": true,
     "run": "clojure clojure/loops.clj",
-    "repl": "rlwrap clj"
+    "repl": "rlwrap clj",
+    "year": 2007,
+    "execution": "compiled",
+    "solution": "lisp"
   }, {
     "name": "common-lisp",
     "isScript": true,
     "run": "sbcl --script common-lisp/loops.cl",
-    "repl": "sbcl"
+    "repl": "sbcl",
+    "year": 1984,
+    "execution": "interpreted",
+    "solution": "lisp"
   }, {
     "name": "crystal",
     "isScript": false,
     "build": "crystal build crystal/loops.cr -o crystal/loops --release",
-    "run": "crystal/loops"
+    "run": "crystal/loops",
+    "year": 2014,
+    "execution": "compiled",
+    "solution": "imperative"
   }, {
     "name": "csharp",
     "isScript": false,
     "build": "dotnet build csharp",
     "run": "dotnet csharp/bin/Debug/netcoreapp2.1/loops.dll",
-    "repl": "csharp"
+    "repl": "csharp",
+    "year": 2000,
+    "execution": "compiled",
+    "solution": "imperative"
   }, {
     "name": "d",
     "isScript": false,
     "build": "dmd d/loops.d -od=d -of=d/loops -release",
-    "run": "d/loops"
+    "run": "d/loops",
+    "year": 2001,
+    "execution": "compiled",
+    "solution": "imperative"
   }, {
     "name": "dart",
     "isScript": true,
     "run": "dart dart/loops.dart",
-    "repl": "dart_repl"
+    "repl": "dart_repl",
+    "year": 2011,
+    "execution": "interpreted",
+    "solution": "imperative"
   }, {
     "name": "elixir",
     "isScript": true,
     "run": "elixir elixir/loops.exs",
-    "repl": "iex"
+    "repl": "iex",
+    "year": 2011,
+    "execution": "interpreted",
+    "solution": "functional"
   }, {
     "name": "fsharp",
     "isScript": false,
     "build": "dotnet build fsharp",
     "run": "dotnet fsharp/bin/Debug/netcoreapp2.1/loops.dll",
-    "repl": "fsharpi"
+    "repl": "fsharpi",
+    "year": 2005,
+    "execution": "compiled",
+    "solution": "functional"
   }, {
     "name": "gambas",
     "isScript": false,
     "build": "gbc3 gambas",
-    "run": "gbx3 gambas"
+    "run": "gbx3 gambas",
+    "year": 1999,
+    "execution": "compiled",
+    "solution": "imperative"
   }, {
     "name": "go",
     "isScript": true,
-    "run": "go run go/loops.go"
+    "run": "go run go/loops.go",
+    "year": 2009,
+    "execution": "compiled",
+    "solution": "imperative"
   }, {
     "name": "hack",
     "isScript": true,
-    "run": "hhvm hack/loops.hh"
+    "run": "hhvm hack/loops.hh",
+    "year": 2014,
+    "execution": "interpreted",
+    "solution": "imperative"
   }, {
     "name": "haskell",
     "isScript": false,
     "build": "rm haskell/loops.hi haskell/loops.o && ghc haskell/loops.hs -o haskell/loops -optc-O3",
     "run": "haskell/loops",
-    "repl": "ghci"
+    "repl": "ghci",
+    "year": 1990,
+    "execution": "compiled",
+    "solution": "functional"
   }, {
     "name": "java",
     "isScript": false,
     "build": "javac -d java java/Loops.java",
     "run": "java -cp java Loops",
-    "repl": "jshell"
+    "repl": "jshell",
+    "year": 1995,
+    "execution": "compiled",
+    "solution": "imperative"
   }, {
     "name": "javascript",
     "isScript": true,
     "run": "node javascript/loops.js",
-    "repl": "node"
+    "repl": "node",
+    "year": 1995,
+    "execution": "interpreted",
+    "solution": "imperative"
   }, {
     "name": "julia",
     "isScript": true,
     "run": "julia julia/loops.jl",
-    "repl": "julia"
+    "repl": "julia",
+    "year": 2012,
+    "execution": "interpreted",
+    "solution": "scientific"
   }, {
     "name": "kotlin",
     "isScript": false,
     "build": "kotlinc kotlin/loops.kt -d kotlin/loops.jar",
     "run": "kotlin -classpath kotlin/loops.jar LoopsKt",
-    "repl": "kotlinc"
+    "repl": "kotlinc",
+    "year": 2011,
+    "execution": "compiled",
+    "solution": "imperative"
   }, {
     "name": "lua",
     "isScript": true,
     "run": "lua5.3 lua/loops.lua",
-    "repl": "lua5.3"
+    "repl": "lua5.3",
+    "year": 1993,
+    "execution": "compiled",
+    "solution": "imperative"
   }, {
     "name": "ocaml",
     "isScript": false,
     "buildStandard": "ocamlc unix.cma -o ocaml/loops ocaml/loops.ml",
     "build": "ocamlopt -o ocaml/loops unix.cmxa ocaml/loops.ml",
     "run": "ocaml/loops",
-    "repl": "ocaml"
+    "repl": "ocaml",
+    "year": 1996,
+    "execution": "compiled",
+    "solution": "functional"
   }, {
     "name": "octave",
     "isScript": true,
     "run": "octave octave/loops.m",
-    "repl": "octave --no-gui"
+    "repl": "octave --no-gui",
+    "year": 1988,
+    "execution": "imperative",
+    "solution": "scientific"
   }, {
     "name": "perl",
     "isScript": true,
-    "run": "perl/loops"
+    "run": "perl/loops",
+    "year": 1987,
+    "execution": "interpreted",
+    "solution": "imperative"
   }, {
     "name": "perl6",
     "isScript": true,
     "run": "perl6 perl6/loops.p6",
-    "repl": "perl6"
+    "repl": "perl6",
+    "year": 2015,
+    "execution": "interpreted",
+    "solution": "imperative"
   }, {
     "name": "php",
     "isScript": true,
     "run": "php php/loops.php",
-    "repl": "php -a"
+    "repl": "php -a",
+    "year": 1995,
+    "execution": "interpreted",
+    "solution": "imperative"
   }, {
     "name": "powershell",
     "isScript": true,
     "run": "pwsh-preview powershell/loops.ps1",
-    "repl": "pwsh-preview"
+    "repl": "pwsh-preview",
+    "year": 2006,
+    "execution": "shell",
+    "solution": "imperative"
   }, {
     "name": "python",
     "isScript": true,
     "run": "python python/loops.py",
-    "repl": "python"
+    "repl": "python",
+    "year": 1990,
+    "execution": "interpreted",
+    "solution": "imperative"
   }, {
     "name": "python3",
     "isScript": true,
     "run": "python3 python3/loops.py",
-    "repl": "python3"
+    "repl": "python3",
+    "year": 1990,
+    "execution": "interpreted",
+    "solution": "imperative"
   }, {
     "name": "R",
     "isScript": true,
     "run": "Rscript r/loops.r",
-    "repl": "R"
+    "repl": "R",
+    "year": 1993,
+    "execution": "interpreted",
+    "solution": "scientific"
   }, {
     "name": "racket",
     "isScript": false,
     "build": "raco make racket/loops.rkt",
     "run": "racket racket/loops.rkt",
-    "repl": "racket"
+    "repl": "racket",
+    "year": 1995,
+    "execution": "compiled",
+    "solution": "lisp"
   }, {
     "name": "ruby",
     "isScript": true,
     "run": "ruby ruby/loops.rb",
-    "repl": "irb"
+    "repl": "irb",
+    "year": 1995,
+    "execution": "interpreted",
+    "solution": "imperative"
   }, {
     "name": "rust",
     "isScript": false,
     "build": "cd rust && cargo build && cd ..",
     "run": "rust/target/debug/rust",
-    "repl": "rusti"
+    "repl": "rusti",
+    "year": 2010,
+    "execution": "compiled",
+    "solution": "imperative"
   }, {
     "name": "scala",
     "isScript": false,
     "build": "scalac -d scala scala/Loops.scala",
     "run": "scala -cp scala Loops",
-    "repl": "scala"
+    "repl": "scala",
+    "year": 2004,
+    "execution": "compiled",
+    "solution": "functional"
   }, {
     "name": "scala-sbt",
     "ignore": true,
     "isScript": false,
     "build": "sbt build",
     "run": "sbt run",
-    "repl": "sbt console"
+    "repl": "sbt console",
+    "year": 2004,
+    "execution": "compiled",
+    "solution": "functional"
   }, {
     "name": "scheme",
     "isScript": true,
     "run": "scheme --quiet < scheme/loops.scm",
-    "repl": "scheme"
+    "repl": "scheme",
+    "year": 1975,
+    "execution": "interpreted",
+    "solution": "lisp"
   }, {
     "name": "swift",
     "isScript": false,
     "build": "cd swift && swift build -c release && cd ..",
     "run": "swift/.build/release/swift",
-    "repl": "swift"
+    "repl": "swift",
+    "year": 2014,
+    "execution": "compiled",
+    "solution": "imperative"
   }, {
     "name": "vala",
     "isScript": false,
     "build": "valac vala/loops.vala -o vala/loops",
-    "run": "vala/loops"
+    "run": "vala/loops",
+    "year": 2006,
+    "execution": "compiled",
+    "solution": "imperative"
   }, {
     "name": "vb.net",
     "isScript": false,
     "build": "dotnet build vbnet",
-    "run": "dotnet vbnet/bin/Debug/netcoreapp2.1/loops.dll"
+    "run": "dotnet vbnet/bin/Debug/netcoreapp2.1/loops.dll",
+    "year": 2001,
+    "execution": "compiled",
+    "solution": "imperative"
   }]
 }

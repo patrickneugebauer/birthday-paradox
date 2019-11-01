@@ -85,7 +85,11 @@ const run = xs => {
         .then(x => x.stdout)
         .then(textToHash)
         .then(addKey('name', () => lang.name))
-        .then(addKey('speed', x => parseInt(x.iterations / x.seconds))),
+        .then(addKey('speed', x => parseInt(x.iterations / x.seconds)))
+        .then(addKey('year', () => lang.year))
+        .then(addKey('execution', () => lang.execution))
+        .then(addKey('solution', () => lang.solution))
+        .then(addKey('hasRepl', () => Boolean(lang.repl))),
       xs
     ).then(sortBy(x => x.speed))
     .then(x => x.reverse());
@@ -94,15 +98,17 @@ const run = xs => {
 const readme = xs => {
   const sampleSize = average(xs.map(x => parseFloat(x['sample-size'])));
   const percent = average(xs.map(x => parseFloat(x.percent))).toFixed(2);
-  const tableData = xs.map((x, i) => `${i + 1}|${x.name}|${x.speed.toLocaleString()}`).join('\n');
+  const tableData = xs.map(
+    (x, i) => `${i + 1}|${x.name}|${x.speed.toLocaleString()}|${x.year}|${x.execution}|${x.solution}|${x.hasRepl ? 'x' : ''}`
+  ).join('\n');
   const fileData =
 `#### Birthday Paradox - Monte Carlo simulations
 
 * sample-size: ${sampleSize}
 * probability: ${percent}
 
-| | language | iterations/sec |
-|--|--|--|
+| | language | iterations/sec | year | execution | solution type | has repl |
+|--| -- | -- | -- | -- | -- | -- |
 ${tableData}
 
 thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about randint and random speed in python\n`;
