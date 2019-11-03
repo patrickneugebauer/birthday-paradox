@@ -2,6 +2,7 @@ import System.Random
 import Data.Time.Clock.POSIX
 import Data.List.Split
 import qualified Data.IntSet as IntSet
+import System.Environment
 
 getTimeMillis :: (Integral a) => IO a
 getTimeMillis = round <$> (*1000) <$> getPOSIXTime
@@ -12,9 +13,9 @@ roundTo n =
 
 main = do
   start <- getTimeMillis
+  iterations <- read <$> head <$> getArgs :: IO Int
   gen <- getStdGen
-  let iterations = 100000 :: Int
-      sampleSize = 23 :: Int
+  let sampleSize = 23 :: Int
       range = (0, 364) :: (Int, Int)
       results = (/ (fromIntegral iterations)) . fromIntegral . simulate iterations sampleSize range $ gen
   putStrLn . ("iterations: " ++) . show $ iterations

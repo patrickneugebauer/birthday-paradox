@@ -6,7 +6,8 @@
     "repl": "bash",
     "year": 1989,
     "execution": "shell",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 3500
   }, {
     "name": "c",
     "isScript": false,
@@ -14,15 +15,18 @@
     "run": "c/loops.out",
     "year": 1972,
     "execution": "compiled",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 3750000
   }, {
     "name": "clojure",
     "isScript": true,
-    "run": "clojure clojure/loops.clj",
+    "scriptRun": "clojure clojure/src/clj/loops.clj",
+    "run": "cd clojure && lein run 10000 && cd ..",
     "repl": "rlwrap clj",
     "year": 2007,
     "execution": "compiled",
-    "solution": "lisp"
+    "solution": "lisp",
+    "executionsPerSecond": 100000
   }, {
     "name": "common-lisp",
     "isScript": true,
@@ -30,7 +34,8 @@
     "repl": "sbcl",
     "year": 1984,
     "execution": "interpreted",
-    "solution": "lisp"
+    "solution": "lisp",
+    "executionsPerSecond": 250000
   }, {
     "name": "crystal",
     "isScript": false,
@@ -38,7 +43,8 @@
     "run": "crystal/loops",
     "year": 2014,
     "execution": "compiled",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 2500000
   }, {
     "name": "csharp",
     "isScript": false,
@@ -47,7 +53,8 @@
     "repl": "csharp",
     "year": 2000,
     "execution": "compiled",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 2250000
   }, {
     "name": "d",
     "isScript": false,
@@ -55,7 +62,8 @@
     "run": "d/loops",
     "year": 2001,
     "execution": "compiled",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 1750000
   }, {
     "name": "dart",
     "isScript": true,
@@ -63,15 +71,19 @@
     "repl": "dart_repl",
     "year": 2011,
     "execution": "interpreted",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 1750000
   }, {
     "name": "elixir",
-    "isScript": true,
-    "run": "elixir elixir/loops.exs",
+    "isScript": false,
+    "runScript": "elixir elixir/loops.exs",
+    "build": "cd elixir && mix escript.build && cd ..",
+    "run": "elixir/loops",
     "repl": "iex",
     "year": 2011,
-    "execution": "interpreted",
-    "solution": "functional"
+    "execution": "transpiled",
+    "solution": "functional",
+    "executionsPerSecond": 27500
   }, {
     "name": "fsharp",
     "isScript": false,
@@ -80,29 +92,33 @@
     "repl": "fsharpi",
     "year": 2005,
     "execution": "compiled",
-    "solution": "functional"
+    "solution": "functional",
+    "executionsPerSecond": 100000
   }, {
     "name": "gambas",
     "isScript": false,
     "build": "gbc3 gambas",
-    "run": "gbx3 gambas",
+    "run": "gbx3 gambas --",
     "year": 1999,
     "execution": "compiled",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 400000
   }, {
     "name": "go",
     "isScript": true,
     "run": "go run go/loops.go",
     "year": 2009,
     "execution": "compiled",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 1250000
   }, {
     "name": "hack",
     "isScript": true,
     "run": "hhvm hack/loops.hh",
     "year": 2014,
     "execution": "interpreted",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 250000
   }, {
     "name": "haskell",
     "isScript": false,
@@ -111,7 +127,8 @@
     "repl": "ghci",
     "year": 1990,
     "execution": "compiled",
-    "solution": "functional"
+    "solution": "functional",
+    "executionsPerSecond": 100000
   }, {
     "name": "java",
     "isScript": false,
@@ -120,7 +137,8 @@
     "repl": "jshell",
     "year": 1995,
     "execution": "compiled",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 1875000
   }, {
     "name": "javascript",
     "isScript": true,
@@ -128,7 +146,8 @@
     "repl": "node",
     "year": 1995,
     "execution": "interpreted",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 1000000
   }, {
     "name": "julia",
     "isScript": true,
@@ -136,7 +155,8 @@
     "repl": "julia",
     "year": 2012,
     "execution": "interpreted",
-    "solution": "scientific"
+    "solution": "scientific",
+    "executionsPerSecond": 600000
   }, {
     "name": "kotlin",
     "isScript": false,
@@ -145,15 +165,17 @@
     "repl": "kotlinc",
     "year": 2011,
     "execution": "compiled",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 2000000
   }, {
     "name": "lua",
     "isScript": true,
     "run": "lua5.3 lua/loops.lua",
     "repl": "lua5.3",
     "year": 1993,
-    "execution": "compiled",
-    "solution": "imperative"
+    "execution": "interpreted",
+    "solution": "imperative",
+    "executionsPerSecond": 150000
   }, {
     "name": "ocaml",
     "isScript": false,
@@ -163,7 +185,8 @@
     "repl": "ocaml",
     "year": 1996,
     "execution": "compiled",
-    "solution": "functional"
+    "solution": "functional",
+    "executionsPerSecond": 350000
   }, {
     "name": "octave",
     "isScript": true,
@@ -171,14 +194,16 @@
     "repl": "octave --no-gui",
     "year": 1988,
     "execution": "imperative",
-    "solution": "scientific"
+    "solution": "scientific",
+    "executionsPerSecond": 9000
   }, {
     "name": "perl",
     "isScript": true,
     "run": "perl/loops",
     "year": 1987,
     "execution": "interpreted",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 175000
   }, {
     "name": "perl6",
     "isScript": true,
@@ -186,7 +211,8 @@
     "repl": "perl6",
     "year": 2015,
     "execution": "interpreted",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 4400
   }, {
     "name": "php",
     "isScript": true,
@@ -194,7 +220,8 @@
     "repl": "php -a",
     "year": 1995,
     "execution": "interpreted",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 460000
   }, {
     "name": "powershell",
     "isScript": true,
@@ -202,7 +229,8 @@
     "repl": "pwsh-preview",
     "year": 2006,
     "execution": "shell",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 350
   }, {
     "name": "python",
     "isScript": true,
@@ -210,7 +238,8 @@
     "repl": "python",
     "year": 1990,
     "execution": "interpreted",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 150000
   }, {
     "name": "python3",
     "isScript": true,
@@ -218,7 +247,8 @@
     "repl": "python3",
     "year": 1990,
     "execution": "interpreted",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 175000
   }, {
     "name": "R",
     "isScript": true,
@@ -226,7 +256,8 @@
     "repl": "R",
     "year": 1993,
     "execution": "interpreted",
-    "solution": "scientific"
+    "solution": "scientific",
+    "executionsPerSecond": 75000
   }, {
     "name": "racket",
     "isScript": false,
@@ -235,7 +266,8 @@
     "repl": "racket",
     "year": 1995,
     "execution": "compiled",
-    "solution": "lisp"
+    "solution": "lisp",
+    "executionsPerSecond": 125000
   }, {
     "name": "ruby",
     "isScript": true,
@@ -243,7 +275,8 @@
     "repl": "irb",
     "year": 1995,
     "execution": "interpreted",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 230000
   }, {
     "name": "rust",
     "isScript": false,
@@ -252,7 +285,8 @@
     "repl": "rusti",
     "year": 2010,
     "execution": "compiled",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 2000000
   }, {
     "name": "scala",
     "isScript": false,
@@ -261,7 +295,8 @@
     "repl": "scala",
     "year": 2004,
     "execution": "compiled",
-    "solution": "functional"
+    "solution": "functional",
+    "executionsPerSecond": 360000
   }, {
     "name": "scala-sbt",
     "ignore": true,
@@ -271,15 +306,18 @@
     "repl": "sbt console",
     "year": 2004,
     "execution": "compiled",
-    "solution": "functional"
+    "solution": "functional",
+    "executionsPerSecond": 360000
   }, {
     "name": "scheme",
     "isScript": true,
-    "run": "scheme --quiet < scheme/loops.scm",
+    "runScript": "scheme --quiet < scheme/loops.scm",
+    "run": "scheme/run-scheme.sh",
     "repl": "scheme",
     "year": 1975,
     "execution": "interpreted",
-    "solution": "lisp"
+    "solution": "lisp",
+    "executionsPerSecond": 4000
   }, {
     "name": "swift",
     "isScript": false,
@@ -288,7 +326,8 @@
     "repl": "swift",
     "year": 2014,
     "execution": "compiled",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 80000
   }, {
     "name": "vala",
     "isScript": false,
@@ -296,7 +335,8 @@
     "run": "vala/loops",
     "year": 2006,
     "execution": "compiled",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 1500000
   }, {
     "name": "vb.net",
     "isScript": false,
@@ -304,6 +344,7 @@
     "run": "dotnet vbnet/bin/Debug/netcoreapp2.1/loops.dll",
     "year": 2001,
     "execution": "compiled",
-    "solution": "imperative"
+    "solution": "imperative",
+    "executionsPerSecond": 2250000
   }]
 }

@@ -1,8 +1,16 @@
-defmodule Loops do
+defmodule Loops.CLI do
 
-  def iterate do
+  def main(args) do
+    iterations = args
+      |> Enum.at(0)
+      |> Integer.parse
+      |> elem(0)
+    iterate(iterations)
+  end
+
+  def iterate(iterations) do
     start = Time.utc_now()
-    iterations = 20000
+    # iterations = 20000
     sample_size = 23
     sample_range = 1..365
     data = Stream.map(1..iterations, fn(_) ->
@@ -28,6 +36,5 @@ defmodule Loops do
       |> Float.round(3)
     IO.puts "seconds: #{seconds}"
   end
-end
 
-Loops.iterate
+end

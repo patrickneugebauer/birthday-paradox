@@ -2,9 +2,12 @@ import Foundation
 
 func simulate() {
   let start = Date()
-  let iterations = 100000
+  let iterationsOptional = Int(CommandLine.arguments[1])
+  guard let iterations = iterationsOptional else {
+    print("missing iterations")
+    return
+  }
   let sampleSize = 23
-
   var count = 0
   for _ in 1...iterations {
     var data = Array(repeating: 0, count: 365)

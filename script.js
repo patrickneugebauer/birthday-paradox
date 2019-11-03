@@ -80,8 +80,9 @@ const build = xs => {
 
 const run = xs => {
   console.log('\nrunning...');
+  const iterationsScale = process.argv[3] || 0.25;
   return asyncMap(
-      lang => exec(lang.run)
+      lang => exec(`${lang.run} ${parseInt(lang.executionsPerSecond * iterationsScale)}`)
         .then(x => x.stdout)
         .then(textToHash)
         .then(addKey('name', () => lang.name))
@@ -99,7 +100,7 @@ const readme = xs => {
   const sampleSize = average(xs.map(x => parseFloat(x['sample-size'])));
   const percent = average(xs.map(x => parseFloat(x.percent))).toFixed(2);
   const tableData = xs.map(
-    (x, i) => `${i + 1}|${x.name}|${x.speed.toLocaleString()}|${x.year}|${x.execution}|${x.solution}|${x.hasRepl ? 'x' : ''}`
+    (x, i) => `${i + 1}|${x.name}|${x.speed.toLocaleString()}|${x.year}|${x.solution}|${x.hasRepl ? 'x' : ''}`
   ).join('\n');
   const fileData =
 `#### Birthday Paradox - Monte Carlo simulations
@@ -107,8 +108,8 @@ const readme = xs => {
 * sample-size: ${sampleSize}
 * probability: ${percent}
 
-| | language | iterations/sec | year | execution | solution type | has repl |
-|--| -- | -- | -- | -- | -- | -- |
+| | language | iterations/sec | year | solution type | has repl |
+|--| -- | -- | -- | -- | -- |
 ${tableData}
 
 thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about randint and random speed in python\n`;

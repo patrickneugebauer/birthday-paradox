@@ -1,8 +1,7 @@
 #!/usr/bin/perl
 
-sub simulate {
+sub MAIN($iterations) {
   my $start = now;
-  my $iterations = 5000;
   my $sample_size = 23;
   my $count = 0;
 
@@ -27,5 +26,3 @@ sub simulate {
   my $diff = $end - $start;
   printf("seconds: %.3f\n", $diff);
 }
-
-simulate();

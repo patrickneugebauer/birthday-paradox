@@ -2,11 +2,11 @@ using System;
 
 class Program {
   static void Main(string[] args) {
-    Simulate();
+    int iterations = Int32.Parse(args[0]);
+    Simulate(iterations);
   }
-  static void Simulate() {
+  static void Simulate(int iterations) {
     DateTime start = DateTime.Now;
-    int iterations = 2_000_000;
     int sampleSize = 23;
     int count = 0;
     Random rnd = new Random();

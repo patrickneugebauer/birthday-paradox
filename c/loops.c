@@ -4,16 +4,16 @@
 #include <stdbool.h>
 #include <sys/time.h>
 
-#define iterations 5000000
 #define sampleSize 23
 
 void simulate();
 
-int main() {
-  simulate();
+int main(int argc, char *argv[]) {
+  int iterations = atoi(argv[1]);
+  simulate(iterations);
 }
 
-void simulate() {
+void simulate(int iterations) {
   struct timeval start, end;
   gettimeofday(&start, NULL);
   srand(start.tv_usec);

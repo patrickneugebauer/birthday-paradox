@@ -1,6 +1,7 @@
 simulate <- function() {
   start <- Sys.time()
-  iterations <- 75000
+  args <- commandArgs(trailingOnly = TRUE)
+  iterations <- strtoi(args[1])
   sample_size <- 23
   count <- 0
   for (i in 1:iterations) {

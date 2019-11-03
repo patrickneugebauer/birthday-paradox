@@ -1,6 +1,6 @@
 (* constants *)
 let start = Unix.gettimeofday ();;
-let iterations = 400000;;
+let iterations = Sys.argv.(1) |> int_of_string;;
 let sampleSize = 23;;
 Random.self_init();;
 
@@ -15,7 +15,6 @@ functions
 ================================================== *)
 let randomDay _ = Random.int 365;;
 
-(* unused *)
 let createSamplePartialList n =
   let rec loop n acc =
     if n > 0
@@ -80,7 +79,11 @@ let rec createSamples n =
     else 0;;
 
 (* calcs *)
-let percent = (float_of_int (createSamples iterations)) /. (float_of_int iterations) *. (float_of_int 100);;
+let percent = iterations
+  |> createSamples
+  |> float_of_int
+  |> (fun x -> x /. float_of_int iterations)
+  |> (fun x -> x *. float_of_int 100);;
 let finish = Unix.gettimeofday ();;
 let seconds = (finish -. start);;
 

@@ -5,15 +5,17 @@ import (
 	"math"
 	"math/rand"
 	"time"
+	"strconv"
+	"os"
 )
 
 func main() {
-	simulate()
+	iterations, _ := strconv.Atoi(os.Args[1])
+	simulate(iterations)
 }
 
-func simulate() {
+func simulate(iterations int) {
 	start := time.Now().UnixNano()
-	iterations := 1000 * 1000
 	sampleSize := 23
 
 	count := 0

@@ -2,12 +2,12 @@ Imports System
 
 Module Program
   Sub Main(args As String())
-    Simulate()
+    Dim iterations as Integer = Int32.parse(args(0))
+    Simulate(iterations)
   End Sub
 
-  Sub Simulate()
+  Sub Simulate(iterations As Integer)
     Dim start as DateTime = DateTime.Now
-    Dim iterations as Integer = 2_000_000
     Dim sampleSize as Integer = 23
     Dim count as Integer = 0
     Dim rnd as Random = new Random()

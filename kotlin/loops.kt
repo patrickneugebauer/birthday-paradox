@@ -1,12 +1,12 @@
 import java.util.Random
 
 fun main(args: Array<String>) {
-  simulate()
+  val iterations = args[0].toInt();
+  simulate(iterations);
 }
 
-fun simulate() {
+fun simulate(iterations: Int) {
   val start = System.currentTimeMillis();
-  val iterations = 2000 * 1000
   val sample_size = 23
   val random = Random()
 

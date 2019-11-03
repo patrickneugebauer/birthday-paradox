@@ -1,8 +1,8 @@
 <?hh
+$iterations = $argv[1];
 
-function simulate() {
+function simulate($iterations) {
   $start = microtime(true);
-  $iterations = 250 * 1000;
   $sample_size = 23;
 
   $count = 0;
@@ -27,4 +27,4 @@ function simulate() {
   print "seconds: $seconds\n";
 }
 
-simulate();
+simulate($iterations);

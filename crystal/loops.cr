@@ -1,6 +1,6 @@
 def simulate
-  start = Time.new
-  iterations = 2_000_000
+  start = Time.local
+  iterations = ARGV.first.to_i
   sample_size = 23
 
   count = 0
@@ -22,7 +22,7 @@ def simulate
   puts "sample-size: #{sample_size}"
   results = (count.to_f / iterations * 100).round(2)
   puts "percent: #{results}"
-  fin = Time.new
+  fin = Time.local
   time_diff = (fin - start)
   diff = time_diff.seconds + time_diff.milliseconds / 1000.0
   puts "seconds: #{diff}"

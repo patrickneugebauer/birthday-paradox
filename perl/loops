@@ -4,7 +4,7 @@ use Time::HiRes qw/gettimeofday/;
 
 sub simulate {
   $start = gettimeofday();
-  $iterations = 200 * 1000;
+  $iterations = $ARGV[0];
   $sample_size = 23;
   $count = 0;
 

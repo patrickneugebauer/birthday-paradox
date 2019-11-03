@@ -1,6 +1,6 @@
 def simulate
   start = Time.new
-  iterations = 200_000
+  iterations = ARGV.first.to_i
   sample_size = 23
 
   count = 0

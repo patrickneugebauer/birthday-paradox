@@ -1,9 +1,10 @@
 from random import random
 import time
+import sys
 
 def simulate():
     start = time.time()
-    iterations = 100_000
+    iterations = int(sys.argv[1])
     sample_size = 23
 
     count = 0

@@ -2,7 +2,7 @@
 
 Public Sub Main()
   Dim start As Date = Time(Now)
-  Dim iterations As Integer = 400000
+  Dim iterations As Integer = Val(Args[1])
   Dim sampleSize As Integer = 23
   Dim count As Integer = 0
 

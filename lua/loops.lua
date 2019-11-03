@@ -1,6 +1,6 @@
 -- constants
 start = os.clock()
-iterations = 200000
+iterations = tonumber(arg[1])
 sample_size = 23
 count = 0
 

@@ -22,9 +22,8 @@ let rec duplicates n xs =
 let inline println s i =
   s + string(i) |> printfn "%s"
 
-let simulate =
+let simulate iterations =
   let start = DateTime.Now
-  let iterations = 50 * 1000
   let sampleSize = 23
   let mutable count = 0
   for i in 1..iterations do
@@ -43,5 +42,6 @@ let simulate =
 
 [<EntryPoint>]
 let main argv =
-    simulate
-    0 // return an integer exit code
+  let iterations = argv.[0] |> int
+  simulate iterations
+  0 // return an integer exit code

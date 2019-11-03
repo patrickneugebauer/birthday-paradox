@@ -1,6 +1,7 @@
+const iterations = process.argv[2];
+
 function simulate() {
   const start = new Date().getTime()
-  const iterations = 1000000
   const sampleSize = 23
 
   let count = 0

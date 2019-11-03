@@ -1,12 +1,12 @@
 import 'dart:math';
 
-void main() {
-  simulate();
+void main(List<String> arguments) {
+  var iterations = int.parse(arguments[0]);
+  simulate(iterations);
 }
 
-void simulate() {
+void simulate(int iterations) {
   final start = new DateTime.now().millisecondsSinceEpoch;
-  const iterations = 2 * 1000 * 1000;
   const sampleSize = 23;
 
   var count = 0;

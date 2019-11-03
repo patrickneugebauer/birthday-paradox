@@ -21,7 +21,13 @@
 ; main method code
 ; ==================================================
 (define start (current-inexact-milliseconds))
-(define iterations 100000)
+
+(define iterations
+  (string->number
+    (vector-ref
+      (current-command-line-arguments)
+      0)))
+
 (define sample-size 23)
 
 (define data

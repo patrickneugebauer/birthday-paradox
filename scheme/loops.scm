@@ -2,6 +2,14 @@
 ; functions
 ; ==================================================
 
+(define (readfile filename)
+  (with-input-from-file filename
+    (lambda ()
+      (let loop ((lines '()) (next-line (read-line)))
+        (if (eof-object? next-line)
+          (reverse lines)
+          (loop (cons next-line lines) (read-line)))))))
+
 (define (random-day) (random 365))
 
 (define (repeat num fn)
@@ -34,7 +42,11 @@
 ; main method code
 ; ==================================================
 (define start (real-time-clock))
-(define iterations 5000)
+
+(define iterations
+  (string->number
+     (car (readfile "scheme-input.txt"))))
+
 (define sample-size 23)
 
 (define data
@@ -79,3 +91,6 @@
     "seconds: "
     (number->string seconds)
     "\n"))
+
+(define (main args)
+  (display args))

@@ -2,7 +2,7 @@ import Dates
 
 function simulate()
   start = Dates.now()
-  iterations = 500_000
+  iterations = parse(Int32, ARGS[1])
   sample_size = 23
 
   count = 0

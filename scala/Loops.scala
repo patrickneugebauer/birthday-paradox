@@ -2,7 +2,7 @@ object Loops {
   def main(args: Array[String]) = {
     // constants
     val start = System.currentTimeMillis()
-    val iterations = 500000
+    val iterations = args(0).toInt
     val sampleSize = 23
 
     // create data

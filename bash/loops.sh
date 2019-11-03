@@ -1,5 +1,7 @@
 #!/bin/bash
 
+iterations=$1
+
 function padl {
   string=$1
   result=$string
@@ -14,7 +16,6 @@ function padl {
 }
 
 function simulate {
-  iterations=5000
   sample_size=23
   start=$(($(date +%s%N)/1000/1000))
 

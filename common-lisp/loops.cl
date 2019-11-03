@@ -1,6 +1,6 @@
 ;; constants
 (defvar start (get-internal-real-time))
-(defvar iterations 250000)
+(defvar iterations (parse-integer (nth 1 *posix-argv*)))
 (defvar sample-size 23)
 
 ;; generate data

@@ -2,7 +2,7 @@ class HelloWorld : GLib.Object {
   public static int main(string[] args) {
     //  constants
     int64 start = get_real_time();
-    const int iterations = 2000000;
+    int iterations = int.parse(args[1]);
     const int sample_size = 23;
 
     //  generate data

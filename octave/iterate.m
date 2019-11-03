@@ -1,6 +1,5 @@
-function iterate
+function iterate(iterations)
   start = time();
-  iterations = 10000;
   sample_size = 23;
   day_count = 365;
   count = 0;

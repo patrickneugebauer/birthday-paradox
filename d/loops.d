@@ -4,10 +4,10 @@ import std.conv;
 import std.datetime.systime;
 import core.time;
 
-void main() {
+void main(string[] args) {
   // constants and variables
   immutable auto start = Clock.currTime();
-  immutable auto iterations = 2_000_000;
+  immutable auto iterations = to!int(args[1]);
   immutable auto sampleSize = 23;
   auto rnd = Random();
   auto count = 0;

@@ -1,8 +1,7 @@
 .vscode
 c/loops.out
 clojure/*
-!clojure/loops.clj
-!clojure/parallel.clj
+!clojure/src
 !clojure/readme.md
 common-lisp/*
 !/common-lisp/loops.cl
@@ -12,7 +11,7 @@ csharp/obj
 d/*
 !d/loops.d
 elixir/*
-!elixir/*.exs
+!elixir/lib
 !elixir/readme.md
 fsharp/bin
 fsharp/obj
