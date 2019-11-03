@@ -269,6 +269,15 @@
     "solution": "lisp",
     "executionsPerSecond": 125000
   }, {
+    "name": "reasonml",
+    "isScript": false,
+    "build": "cd reasonml && npm run build && cd ..",
+    "run": "node reasonml/src/Loops.bs.js",
+    "year": 2016,
+    "execution": "transpiled",
+    "solution": "functional",
+    "executionsPerSecond": 200000
+  }, {
     "name": "ruby",
     "isScript": true,
     "run": "ruby ruby/loops.rb",
