@@ -1,46 +1,47 @@
 #### Birthday Paradox - Monte Carlo simulations
 
 * sample-size: 23
-* probability: 50.75
+* probability: 50.67
 
 | | language | iterations/sec | year | solution type | has repl |
 |--| -- | -- | -- | -- | -- |
-1|c|4,067,245|1972|imperative|
-2|crystal|2,520,161|2014|imperative|
+1|c|4,125,412|1972|imperative|
+2|crystal|2,450,980|2014|imperative|
 3|csharp|2,329,192|2000|imperative|x
-4|vb.net|2,268,145|2001|imperative|
-5|rust|2,123,142|2010|imperative|x
-6|kotlin|1,910,219|2011|imperative|x
-7|dart|1,798,561|2011|imperative|x
-8|java|1,797,698|1995|imperative|x
-9|d|1,676,245|2001|imperative|
-10|vala|1,637,554|2006|imperative|
-11|go|1,360,174|2009|imperative|
-12|javascript|1,039,501|1995|imperative|x
-13|julia|542,005|2012|scientific|x
-14|gambas|500,000|1999|imperative|
-15|php|463,709|1995|imperative|x
-16|scala|350,194|2004|functional|x
-17|ocaml|340,466|1996|functional|x
-18|hack|275,330|2014|imperative|
-19|common-lisp|270,270|1984|lisp|x
-20|ruby|239,833|1995|imperative|x
-21|fsharp|193,423|2005|functional|x
-22|python3|181,912|1990|imperative|x
-23|python|171,428|1990|imperative|x
-24|lua|168,728|1993|imperative|x
-25|perl|159,090|1987|imperative|
-26|reasonml|153,964|2016|functional|
-27|racket|124,131|1995|lisp|x
-28|haskell|109,529|1990|functional|x
-29|swift|82,901|2014|imperative|x
-30|elixir|72,944|2011|functional|x
-31|R|72,604|1993|scientific|x
-32|clojure|50,251|2007|lisp|x
-33|octave|8,919|1988|scientific|x
-34|scheme|4,319|1975|lisp|x
-35|perl6|4,077|2015|imperative|x
-36|bash|3,691|1989|imperative|x
-37|powershell|333|2006|imperative|x
+4|vb.net|2,286,585|2001|imperative|
+5|rust|2,118,644|2010|imperative|x
+6|kotlin|1,992,031|2011|imperative|x
+7|java|1,777,251|1995|imperative|x
+8|d|1,736,111|2001|imperative|
+9|vala|1,670,378|2006|imperative|
+10|dart|1,669,847|2011|imperative|x
+11|go|1,339,764|2009|imperative|
+12|javascript|1,042,752|1995|imperative|x
+13|julia|527,240|2012|scientific|x
+14|gambas|490,196|1999|imperative|
+15|nim|472,589|2008|imperative|
+16|php|465,116|1995|imperative|x
+17|ocaml|338,818|1996|functional|x
+18|hack|272,925|2014|imperative|
+19|common-lisp|269,978|1984|lisp|x
+20|ruby|241,090|1995|imperative|x
+21|scala|202,931|2004|functional|x
+22|fsharp|191,938|2005|functional|x
+23|python3|181,347|1990|imperative|x
+24|lua|179,640|1993|imperative|x
+25|python|170,068|1990|imperative|x
+26|reasonml|156,985|2016|functional|
+27|perl|149,063|1987|imperative|
+28|racket|124,378|1995|lisp|x
+29|haskell|109,649|1990|functional|x
+30|swift|82,730|2014|imperative|x
+31|R|74,404|1993|scientific|x
+32|elixir|68,578|2011|functional|x
+33|clojure|50,761|2007|lisp|x
+34|octave|9,045|1988|scientific|x
+35|scheme|4,381|1975|lisp|x
+36|perl6|4,123|2015|imperative|x
+37|bash|3,791|1989|imperative|x
+38|powershell|337|2006|imperative|x
 
 thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about randint and random speed in python

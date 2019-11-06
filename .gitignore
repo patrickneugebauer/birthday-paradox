@@ -23,6 +23,8 @@ haskell/*
 !haskell/loops-recursive.hs
 java/Loops.class
 kotlin/loops.jar
+nim/*
+!nim/loops.nim
 ocaml/*
 !ocaml/loops.ml
 racket/*

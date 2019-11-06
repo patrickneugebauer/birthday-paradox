@@ -177,6 +177,15 @@
     "solution": "imperative",
     "executionsPerSecond": 150000
   }, {
+    "name": "nim",
+    "isScript": false,
+    "build": "nim c -d:release nim/loops.nim",
+    "run": "nim/loops",
+    "year": 2008,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 500000
+  }, {
     "name": "ocaml",
     "isScript": false,
     "buildStandard": "ocamlc unix.cma -o ocaml/loops ocaml/loops.ml",
