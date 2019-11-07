@@ -112,6 +112,14 @@
     "solution": "imperative",
     "executionsPerSecond": 1250000
   }, {
+    "name": "groovy",
+    "isScript": true,
+    "run": "groovy groovy/loops.groovy",
+    "year": 2003,
+    "execution": "interpreted",
+    "solution": "imperative",
+    "executionsPerSecond": 1000000
+  }, {
     "name": "hack",
     "isScript": true,
     "run": "hhvm hack/loops.hh",

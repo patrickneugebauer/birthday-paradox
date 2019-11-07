@@ -18,6 +18,8 @@ fsharp/obj
 gambas/*
 !gambas/.src
 !gambas/.project
+groovy/*
+!groovy/*.groovy
 haskell/*
 !haskell/loops.hs
 !haskell/loops-recursive.hs
