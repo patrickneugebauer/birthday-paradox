@@ -3,6 +3,8 @@ c/loops.out
 clojure/*
 !clojure/src
 !clojure/readme.md
+coffeescript/*
+!coffeescript/*.coffee
 common-lisp/*
 !/common-lisp/loops.cl
 crystal/loops

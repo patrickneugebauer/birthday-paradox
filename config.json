@@ -28,6 +28,15 @@
     "solution": "lisp",
     "executionsPerSecond": 100000
   }, {
+    "name": "coffeescript",
+    "isScript": false,
+    "build": "coffee -c coffeescript/loops.coffee",
+    "run": "node coffeescript/loops.js",
+    "year": 2009,
+    "execution": "transpiled",
+    "solution": "imperative",
+    "executionsPerSecond": 1000000
+  }, {
     "name": "common-lisp",
     "isScript": true,
     "run": "sbcl --script common-lisp/loops.cl",
