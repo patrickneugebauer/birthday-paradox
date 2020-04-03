@@ -94,6 +94,15 @@
     "solution": "functional",
     "executionsPerSecond": 27500
   }, {
+    "name": "fish",
+    "isScript": true,
+    "run": "fish fish/loops.fish",
+    "repl": "fish",
+    "year": 2005,
+    "execution": "shell",
+    "solution": "imperative",
+    "executionsPerSecond": 125
+  }, {
     "name": "fsharp",
     "isScript": false,
     "build": "dotnet build fsharp",
