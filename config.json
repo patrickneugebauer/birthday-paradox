@@ -296,7 +296,7 @@
   }, {
     "name": "racket",
     "isScript": false,
-    "build": "raco make racket/loops.rkt",
+    "build": "raco exe -o racket/loops racket/loops.rkt",
     "run": "racket racket/loops.rkt",
     "repl": "racket",
     "year": 1995,
