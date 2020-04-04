@@ -1,75 +1,26 @@
 #lang racket
-; ==================================================
+
 ; functions
-; ==================================================
-
-(define (random-day) (random 365))
-
-(define (repeat num fn)
-  (let loop ((n num) (f fn) (acc '()))
-    (if (> n 0)
-      (loop (- n 1) f (cons (fn) acc))
-      acc)))
-
+(define (random-day _) (random 365))
+(define (random-sample x) (build-list x random-day))
 (define (round-to n x)
   (let ((shifter (expt 10 n)))
     (/
       (round (* x shifter))
       shifter)))
 
-; ==================================================
-; main method code
-; ==================================================
-(define start (current-inexact-milliseconds))
-
-(define iterations
-  (string->number
-    (vector-ref
-      (current-command-line-arguments)
-      0)))
-
+; data
+(define start-ms (current-inexact-milliseconds))
+(define iterations (string->number (vector-ref (current-command-line-arguments) 0)))
 (define sample-size 23)
+(define data (build-list iterations (lambda (_) (check-duplicates (random-sample sample-size)))))
+(define duplicates (length (filter identity data)))
+(define percent (* (/ duplicates iterations) 100))
+(define end-ms (current-inexact-milliseconds))
+(define seconds (/ (round (- end-ms start-ms)) 1000))
 
-(define data
-  (repeat iterations
-    (lambda () (repeat sample-size random-day))))
-
-(define percent
-  (*
-    (/
-      (length (filter check-duplicates data))
-      iterations)
-    100))
-
-(define formatted-percent
-  (round-to 2
-    (exact->inexact percent)))
-
-(display
-  (string-append
-    "iterations: "
-    (number->string iterations)
-    "\n"))
-(display
-  (string-append
-    "sample-size: "
-    (number->string sample-size)
-    "\n"))
-(display
-  (string-append
-    "percent: "
-    (number->string formatted-percent)
-    "\n"))
-(define seconds
-  (exact->inexact
-    (/
-      (round
-        (-
-          (current-inexact-milliseconds)
-          start))
-      1000)))
-(display
-  (string-append
-    "seconds: "
-    (number->string seconds)
-    "\n"))
+; output
+(printf "iterations: ~a~n" iterations)
+(printf "sample-size: ~a~n" sample-size)
+(printf "percent: ~a~n" (round-to 2 (exact->inexact percent)))
+(printf "seconds: ~a~n" (exact->inexact seconds))
