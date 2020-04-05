@@ -9,8 +9,8 @@ defmodule Loops.CLI do
   end
 
   def iterate(iterations) do
+    # data
     start = Time.utc_now()
-    # iterations = 20000
     sample_size = 23
     sample_range = 1..365
     data = Stream.map(1..iterations, fn(_) ->
@@ -18,8 +18,6 @@ defmodule Loops.CLI do
         Enum.random(sample_range)
       end)
     end)
-    IO.puts "iterations: #{iterations}"
-    IO.puts "sample-size: #{sample_size}"
     percent = data
       |> Stream.map(fn(x) -> MapSet.new(x) end)
       |> Stream.filter(fn(x) -> MapSet.size(x) == sample_size end)
@@ -28,12 +26,14 @@ defmodule Loops.CLI do
       |> Kernel./(iterations)
       |> Kernel.*(100)
       |> Float.round(2)
-    IO.puts "percent: #{percent}"
-    # time
     seconds = Time.utc_now()
       |> Time.diff(start, :millisecond)
       |> Kernel./(1000)
       |> Float.round(3)
+    # output
+    IO.puts "iterations: #{iterations}"
+    IO.puts "sample-size: #{sample_size}"
+    IO.puts "percent: #{percent}"
     IO.puts "seconds: #{seconds}"
   end
 

@@ -92,7 +92,7 @@
     "year": 2011,
     "execution": "transpiled",
     "solution": "functional",
-    "executionsPerSecond": 27500
+    "executionsPerSecond": 60000
   }, {
     "name": "fish",
     "isScript": true,
