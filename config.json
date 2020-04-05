@@ -94,6 +94,17 @@
     "solution": "functional",
     "executionsPerSecond": 60000
   }, {
+    "name": "erlang",
+    "isScript": false,
+    "runScript": "eshell erlang/loops.erl",
+    "build": "erlc -o erlang erlang/loops.erl",
+    "run": "erl -noshell -noinput -pa ./erlang -s init stop -run loops main",
+    "repl": "erl",
+    "year": 1986,
+    "execution": "interpreted",
+    "solution": "functional",
+    "executionsPerSecond": 90000
+  }, {
     "name": "fish",
     "isScript": true,
     "run": "fish fish/loops.fish",

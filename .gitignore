@@ -15,6 +15,8 @@ d/*
 elixir/*
 !elixir/lib
 !elixir/readme.md
+erlang/*
+!erlang/loops.erl
 fsharp/bin
 fsharp/obj
 gambas/*
