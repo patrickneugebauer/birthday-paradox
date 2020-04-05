@@ -8,6 +8,14 @@ defmodule Loops.CLI do
     iterate(iterations)
   end
 
+  def duplicates([]) do
+    false
+  end
+
+  def duplicates([x|xs]) do
+    if Enum.member?(xs, x), do: true, else: duplicates(xs)
+  end
+
   def iterate(iterations) do
     # data
     start = Time.utc_now()
@@ -19,8 +27,7 @@ defmodule Loops.CLI do
       end)
     end)
     percent = data
-      |> Stream.map(fn(x) -> MapSet.new(x) end)
-      |> Stream.filter(fn(x) -> MapSet.size(x) == sample_size end)
+      |> Stream.filter(&Loops.CLI.duplicates/1)
       |> Enum.to_list
       |> length
       |> Kernel./(iterations)

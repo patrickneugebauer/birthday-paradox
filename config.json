@@ -92,7 +92,7 @@
     "year": 2011,
     "execution": "transpiled",
     "solution": "functional",
-    "executionsPerSecond": 60000
+    "executionsPerSecond": 70000
   }, {
     "name": "erlang",
     "isScript": false,
