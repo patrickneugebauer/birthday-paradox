@@ -58,6 +58,7 @@ const average = xs => {
 // constants
 const CONFIG = 'config.json';
 const README = 'README.md'
+const VERSIONS = 'versions';
 
 // commands
 const getConfig = () => {
@@ -116,6 +117,15 @@ thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about
   return writeFile(README, fileData).then(() => fileData);
 }
 
+const versions = xs => {
+  const version = xs.filter(x => !x.ignore).map(x =>
+    exec(x.version).then(x => x.stdout || x.stderr).then(r => `${x.name}\n${x.version}\n${r}`)
+  );
+  return Promise.all(version).then(xs => xs.join('\n')).then(
+    x => writeFile(VERSIONS, x).then(() => x)
+  );
+}
+
 const paths = new function() {
   this.config = () => getConfig();
   this.build = () => this.config().then(filter(x => !x.ignore)).then(build);
@@ -126,6 +136,7 @@ const paths = new function() {
     .then(find(x => x.name == lang))
     .then(x => x && x.repl || `echo repl: '${lang}' not found`);
   this.doc = this.help = this.man = () => Promise.resolve(`list of commands: ${commands}`);
+  this.versions = () => this.config().then(versions);
 };
 
 const commands = `[${Object.keys(paths).join(', ')}]`;
