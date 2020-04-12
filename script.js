@@ -58,7 +58,7 @@ const average = xs => {
 // constants
 const CONFIG = 'config.json';
 const README = 'README.md'
-const VERSIONS = 'versions';
+const VERSIONS = 'versions.md';
 
 // commands
 const getConfig = () => {
@@ -119,9 +119,21 @@ thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about
 
 const versions = xs => {
   const version = xs.filter(x => !x.ignore).map(x =>
-    exec(x.version).then(x => x.stdout || x.stderr).then(r => `${x.name}\n${x.version}\n${r}`)
+    exec(x.version).then(
+      x => x.stdout || x.stderr
+    ).then(r => {
+      const name = `#### ${x.name}`;
+      const command = `\`${x.version}\``;
+      const version = r
+        .replace(/\r/g, '\n')
+        .split('\n')
+        .filter(x => Boolean(x))
+        .map(x => `    ${x}`)
+        .join('\n');
+      return `${name}\n\n${command}\n\n${version}`;
+    })
   );
-  return Promise.all(version).then(xs => xs.join('\n')).then(
+  return Promise.all(version).then(xs => xs.join('\n\n') + '\n').then(
     x => writeFile(VERSIONS, x).then(() => x)
   );
 }
