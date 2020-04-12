@@ -243,6 +243,15 @@
     "solution": "scientific",
     "executionsPerSecond": 9000
   }, {
+    "name": "pascal",
+    "isScript": false,
+    "build": "fpc -o\"pascal/loops\" -O4 pascal/loops.pp",
+    "run": "pascal/loops",
+    "year": "1970",
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 1000000
+  }, {
     "name": "perl",
     "isScript": true,
     "run": "perl/loops",

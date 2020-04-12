@@ -33,6 +33,8 @@ nim/*
 !nim/loops.nim
 ocaml/*
 !ocaml/loops.ml
+pascal/*
+!pascal/loops.pp
 racket/*
 !racket/loops.rkt
 reasonml/*
