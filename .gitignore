@@ -48,6 +48,8 @@ scala/*
 !scala/Loops.scala
 scheme/*
 !scheme/loops.scm
+smalltalk/*
+!smalltalk/loops.st
 vala/*
 !vala/loops.vala
 vbnet/bin

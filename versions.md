@@ -209,10 +209,10 @@
 
 `php --version`
 
-    PHP 7.2.24-0ubuntu0.18.04.3 (cli) (built: Feb 11 2020 15:55:52) ( NTS )
+    PHP 7.2.24-0ubuntu0.18.04.4 (cli) (built: Apr  8 2020 15:45:57) ( NTS )
     Copyright (c) 1997-2018 The PHP Group
     Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
-        with Zend OPcache v7.2.24-0ubuntu0.18.04.3, Copyright (c) 1999-2018, by Zend Technologies
+        with Zend OPcache v7.2.24-0ubuntu0.18.04.4, Copyright (c) 1999-2018, by Zend Technologies
 
 #### powershell
 
@@ -287,6 +287,20 @@
       Release 9.1.1     || Microcode 15.3 || Runtime 15.7 || SF 4.41
       LIAR/x86-64 4.118 || Edwin 3.116
     Moriturus te saluto.
+
+#### smalltalk
+
+`gst --version`
+
+    GNU Smalltalk version 3.2.5
+    Copyright 2009 Free Software Foundation, Inc.
+    Written by Steve Byrne (sbb@gnu.org) and Paolo Bonzini (bonzini@gnu.org)
+    GNU Smalltalk comes with NO WARRANTY, to the extent permitted by law.
+    You may redistribute copies of GNU Smalltalk under the terms of the
+    GNU General Public License.  For more information, see the file named
+    COPYING.
+    Using default kernel path: /usr/share/gnu-smalltalk/kernel
+    Using default image path: /usr/lib/gnu-smalltalk
 
 #### swift
 

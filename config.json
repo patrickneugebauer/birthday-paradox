@@ -412,6 +412,16 @@
     "executionsPerSecond": 4000,
     "version": "scheme --version"
   }, {
+    "name": "smalltalk",
+    "isScript": true,
+    "run": "gst smalltalk/loops.st -g -a",
+    "repl": "gst",
+    "year": 1972,
+    "execution": "interpreted",
+    "solution": "functional",
+    "executionsPerSecond": 40000,
+    "version": "gst --version"
+  }, {
     "name": "swift",
     "isScript": false,
     "build": "cd swift && swift build -c release && cd ..",
