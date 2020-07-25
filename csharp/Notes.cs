@@ -20,7 +20,4 @@ class Notes
   // private static Random rnd = new Random();
   // sharing random makes the app fast - but it appears to be skipping
   // time is used to seed random, so to ensure each thread is distinctly different, we should pass in some var
-
-  static void Main(string[] args)
-  { }
 }

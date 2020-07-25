@@ -6,7 +6,6 @@ class Program
 {
   static void Main(string[] args)
   {
-    Console.WriteLine("start program");
     // params
     DateTime start = DateTime.Now;
     int threads = Int32.Parse(args[1]);
@@ -31,6 +30,7 @@ class Program
     var ips = iterations * threads / diff;
 
     // output
+    Console.WriteLine($"threads: {threads}");
     Console.WriteLine($"iterations: {iterations * threads}");
     Console.WriteLine($"sample-size: {sampleSize}");
     Console.WriteLine($"percent: {Math.Round(percent, 2)}");
