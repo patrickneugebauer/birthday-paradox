@@ -1,4 +1,4 @@
-FROM mdwagner/gambas:latest
+FROM ghcr.io/mdwagner/gambas:latest
 
 WORKDIR /root
 
