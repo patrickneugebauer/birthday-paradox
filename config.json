@@ -148,12 +148,14 @@
     "version": "gbc3 --version"
   }, {
     "name": "go",
-    "isScript": true,
-    "run": "go run go/loops.go",
+    "build": "go build -o go/loops go/loops.go",
+    "isScript": false,
+    "run": "go/loops",
+    "runScript": "go run go/loops.go",
     "year": 2009,
     "execution": "compiled",
     "solution": "imperative",
-    "executionsPerSecond": 1250000,
+    "executionsPerSecond": 1800000,
     "version": "go version"
   }, {
     "name": "groovy",

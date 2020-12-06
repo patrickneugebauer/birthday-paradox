@@ -2,6 +2,8 @@ const fs = require('fs');
 const child_process = require('child_process');
 const util = require('util');
 
+const watcher = require('./watcher');
+
 // promisify
 const exec = x => {
   console.log(x);
@@ -83,8 +85,7 @@ const run = xs => {
   console.log('\nrunning...');
   const iterationsScale = process.argv[3] || 0.25;
   return asyncMap(
-      lang => exec(`${lang.run} ${parseInt(lang.executionsPerSecond * iterationsScale)}`)
-        .then(x => x.stdout)
+      lang => watcher.runAndWatch(`${lang.run} ${parseInt(lang.executionsPerSecond * iterationsScale)}`)
         .then(textToHash)
         .then(addKey('name', () => lang.name))
         .then(addKey('speed', x => parseInt(x.iterations / x.seconds)))
@@ -101,7 +102,7 @@ const readme = xs => {
   const sampleSize = average(xs.map(x => parseFloat(x['sample-size'])));
   const percent = average(xs.map(x => parseFloat(x.percent))).toFixed(2);
   const tableData = xs.map(
-    (x, i) => `${i + 1}|${x.name}|${x.speed.toLocaleString()}|${x.year}|${x.solution}|${x.hasRepl ? 'x' : ''}`
+    (x, i) => `${i + 1}|${x.name}|${x.speed.toLocaleString()}|${parseInt(x.memory).toLocaleString()}|${x.year}|${x.solution}|${x.hasRepl ? 'x' : ''}`
   ).join('\n');
   const fileData =
 `#### Birthday Paradox - Monte Carlo simulations
@@ -109,8 +110,8 @@ const readme = xs => {
 * sample-size: ${sampleSize}
 * probability: ${percent}
 
-| | language | iterations/sec | year | solution type | has repl |
-|--| -- | -- | -- | -- | -- |
+| | language | iterations/sec | memory(k) | year | solution type | has repl |
+|--| -- | -- | -- | -- | -- | -- |
 ${tableData}
 
 thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about randint and random speed in python\n`;

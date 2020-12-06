@@ -22,6 +22,8 @@ fsharp/obj
 gambas/*
 !gambas/.src
 !gambas/.project
+go/*
+!go/loops.go
 groovy/*
 !groovy/*.groovy
 haskell/*
