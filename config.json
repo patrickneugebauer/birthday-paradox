@@ -2,7 +2,7 @@
   "languages": [{
     "name": "bash",
     "isScript": true,
-    "run": "bash/loops.sh",
+    "run": "bash bash/loops.sh",
     "repl": "bash",
     "year": 1989,
     "execution": "shell",
@@ -283,7 +283,7 @@
   }, {
     "name": "perl",
     "isScript": true,
-    "run": "perl/loops",
+    "run": "perl perl/loops",
     "year": 1987,
     "execution": "interpreted",
     "solution": "imperative",

@@ -59,7 +59,7 @@ const average = xs => {
 
 // constants
 const CONFIG = 'config.json';
-const README = 'README.md'
+const README = 'README.test.md'
 const VERSIONS = 'versions.md';
 
 // commands
@@ -94,15 +94,21 @@ const run = xs => {
         .then(addKey('solution', () => lang.solution))
         .then(addKey('hasRepl', () => Boolean(lang.repl))),
       xs
-    ).then(sortBy(x => x.speed))
-    .then(x => x.reverse());
+    ).then(sortBy(x => parseInt(x['rss-mem(k)'])))
+    .then(x => x /* .reverse() */ );
 }
 
 const readme = xs => {
   const sampleSize = average(xs.map(x => parseFloat(x['sample-size'])));
   const percent = average(xs.map(x => parseFloat(x.percent))).toFixed(2);
   const tableData = xs.map(
-    (x, i) => `${i + 1}|${x.name}|${x.speed.toLocaleString()}|${parseInt(x.memory).toLocaleString()}|${x.year}|${x.solution}|${x.hasRepl ? 'x' : ''}`
+    (x, i) => `| ${i + 1}
+      ${x.name}
+      ${x.speed.toLocaleString()}
+      ${parseInt(x['rss-mem(k)']).toLocaleString()}
+      ${x.year}
+      ${x.solution}
+      ${x.hasRepl ? 'x' : ''} |`.replace(/\s*\n\s*/gi, ' | ')
   ).join('\n');
   const fileData =
 `#### Birthday Paradox - Monte Carlo simulations
@@ -110,7 +116,7 @@ const readme = xs => {
 * sample-size: ${sampleSize}
 * probability: ${percent}
 
-| | language | iterations/sec | memory(k) | year | solution type | has repl |
+| | language | iterations/sec | rss-mem(k) | year | solution type | has repl |
 |--| -- | -- | -- | -- | -- | -- |
 ${tableData}
 
