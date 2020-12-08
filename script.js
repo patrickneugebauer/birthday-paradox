@@ -58,7 +58,7 @@ const average = xs => {
 }
 
 // constants
-const CONFIG = 'config.json';
+const CONFIG = 'config.test.json';
 const README = 'README.test.md'
 const VERSIONS = 'versions.md';
 

@@ -14,6 +14,7 @@ d/*
 !d/loops.d
 elixir/*
 !elixir/lib
+!elixir/mix.exs
 !elixir/readme.md
 erlang/*
 !erlang/loops.erl
@@ -30,7 +31,10 @@ haskell/*
 !haskell/loops.hs
 !haskell/loops-recursive.hs
 java/Loops.class
-kotlin/loops.jar
+kotlin/*
+!kotlin/loops.kt
+kotlin-native/*
+!kotlin-native/loops.kt
 nim/*
 !nim/loops.nim
 ocaml/*

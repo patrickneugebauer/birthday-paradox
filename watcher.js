@@ -20,7 +20,6 @@ function getMemory(pid, reportFn, stopFn) {
 
 exports.runAndWatch = function(command) {
   // vars
-  let pid = 0;
   let max = { vsz: 0, rss: 0, dirty: 0 };
   let finished = false;
 
@@ -35,6 +34,7 @@ exports.runAndWatch = function(command) {
       } else {
         const mem = `vsz-mem(k): ${max.vsz}\nrss-mem(k): ${max.rss}\ndirty-mem(k): ${max.dirty}`;
         // append memory to output
+        // console.log(`mem: ${max.rss}`);
         res(`${stdout}${mem}`);
       }
     });
@@ -42,20 +42,32 @@ exports.runAndWatch = function(command) {
     // GET PID
     // pgrep -f = match full pattern
     // this can take 100ms to complete -_-
-    childProcess.exec(`pgrep -f "^${command}$"`, (err, stdout, stderr) => {
-      if (err) {
-        console.log(err);
-        rej(err);
-      }
-      pid = parseInt(stdout);
-      // wait until we get pid to check memory
-      const reportFn = x => {
-        ['vsz', 'rss', 'dirty'].forEach(key => {
-          if (x[key] > max[key]) max[key] = x[key];
-        });
-      }
-      const stopFn = () => finished;
-      getMemory(pid, reportFn, stopFn);
-    });
+
+    // we could try to use pidof with just the first word
+    // childProcess.exec(`pgrep -af "^${command}$"`, (err, stdout, stderr) => {
+
+    // pidof is too fast so I had to add a timeout or it would fail on ruby: thanks ruby
+    const commandStr = `pidof ${command.split(/\s+/)[0]}`;
+    setTimeout(() => {
+      childProcess.exec(commandStr, (err, stdout, stderr) => {
+        if (err) {
+          console.log(err);
+          rej(err);
+        }
+        // console.log(command);
+        // console.log(commandStr);
+        // console.log(stdout);
+        const pid = parseInt(stdout);
+        // console.log(`pid: ${pid}`);
+        // wait until we get pid to check memory
+        const reportFn = x => {
+          ['vsz', 'rss', 'dirty'].forEach(key => {
+            if (x[key] > max[key]) max[key] = x[key];
+          });
+        }
+        const stopFn = () => finished;
+        getMemory(pid, reportFn, stopFn);
+      });
+    }, 150);
   });
 }

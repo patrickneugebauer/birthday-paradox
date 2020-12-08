@@ -20,7 +20,7 @@ for i in countup(1, iterations):
   type Sample = array[1..365, bool]
   var sample: Sample
   for s in countup(1, sampleSize):
-    let day = random(1..365)
+    let day = rand(1..365)
     if sample[day]:
       inc(count)
       break

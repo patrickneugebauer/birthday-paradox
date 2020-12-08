@@ -1,0 +1,171 @@
+{
+  "languages": [{
+    "name": "bash",
+    "isScript": true,
+    "run": "bash bash/loops.sh",
+    "repl": "bash",
+    "year": 1989,
+    "execution": "shell",
+    "solution": "imperative",
+    "executionsPerSecond": 3500,
+    "version": "bash --version"
+  }, {
+    "name": "c",
+    "isScript": false,
+    "build": "cc c/loops.c -O3 -o c/loops.out",
+    "run": "c/loops.out",
+    "year": 1972,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 3750000,
+    "version": "cc --version"
+  }, {
+    "name": "dart",
+    "isScript": true,
+    "run": "dart dart/loops.dart",
+    "repl": "dart_repl",
+    "year": 2011,
+    "execution": "interpreted",
+    "solution": "imperative",
+    "executionsPerSecond": 1750000,
+    "version": "dart --version"
+  }, {
+    "name": "elixir",
+    "isScript": false,
+    "runScript": "elixir elixir/loops.exs",
+    "build": "cd elixir && mix escript.build && cd ..",
+    "run": "elixir/loops",
+    "repl": "iex",
+    "year": 2011,
+    "execution": "transpiled",
+    "solution": "functional",
+    "executionsPerSecond": 70000,
+    "version": "elixir --version"
+}, {
+    "name": "go",
+    "build": "go build -o go/loops go/loops.go",
+    "isScript": false,
+    "run": "go/loops",
+    "runScript": "go run go/loops.go",
+    "year": 2009,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 1250000,
+    "version": "go version"
+  }, {
+    "name": "haskell",
+    "isScript": false,
+    "build": "ghc haskell/loops.hs -o haskell/loops -optc-O3",
+    "run": "haskell/loops",
+    "repl": "ghci",
+    "year": 1990,
+    "execution": "compiled",
+    "solution": "functional",
+    "executionsPerSecond": 100000,
+    "version": "ghc --version"
+  }, {
+    "name": "java",
+    "isScript": false,
+    "build": "javac -d java java/Loops.java",
+    "run": "java -cp java Loops",
+    "repl": "jshell",
+    "year": 1995,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 1875000,
+    "version": "javac -version"
+  }, {
+    "name": "javascript",
+    "isScript": true,
+    "run": "node javascript/loops.js",
+    "repl": "node",
+    "year": 1995,
+    "execution": "interpreted",
+    "solution": "imperative",
+    "executionsPerSecond": 1000000,
+    "version": "node --version"
+  }, {
+    "name": "kotlin",
+    "isScript": false,
+    "build": "kotlinc-native kotlin-native/loops.kt -o kotlin-native/loops",
+    "run": "kotlin-native/loops.kexe",
+    "repl": "kotlinc",
+    "year": 2011,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 1250000,
+    "version": "kotlinc -version"
+  }, {
+    "name": "nim",
+    "isScript": false,
+    "build": "nim c -d:release nim/loops.nim",
+    "run": "nim/loops",
+    "year": 2008,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 500000,
+    "version": "nim --version"
+  }, {
+    "name": "ocaml",
+    "isScript": false,
+    "buildStandard": "ocamlc unix.cma -o ocaml/loops ocaml/loops.ml",
+    "build": "ocamlopt -o ocaml/loops unix.cmxa ocaml/loops.ml",
+    "run": "ocaml/loops",
+    "repl": "ocaml",
+    "year": 1996,
+    "execution": "compiled",
+    "solution": "functional",
+    "executionsPerSecond": 350000,
+    "version": "ocamlc --version"
+  }, {
+    "name": "perl",
+    "isScript": true,
+    "run": "perl perl/loops",
+    "year": 1987,
+    "execution": "interpreted",
+    "solution": "imperative",
+    "executionsPerSecond": 175000,
+    "version": "perl --version"
+  }, {
+    "name": "python",
+    "isScript": true,
+    "run": "python python/loops.py",
+    "repl": "python",
+    "year": 1990,
+    "execution": "interpreted",
+    "solution": "imperative",
+    "executionsPerSecond": 150000,
+    "version": "python --version"
+  }, {
+    "name": "python3",
+    "isScript": true,
+    "run": "python3 python3/loops.py",
+    "repl": "python3",
+    "year": 1990,
+    "execution": "interpreted",
+    "solution": "imperative",
+    "executionsPerSecond": 175000,
+    "version": "python3 --version"
+  }, {
+    "name": "ruby",
+    "isScript": true,
+    "run": "ruby ruby/loops.rb",
+    "repl": "irb",
+    "year": 1995,
+    "execution": "interpreted",
+    "solution": "imperative",
+    "executionsPerSecond": 230000,
+    "version": "ruby --version"
+  }, {
+    "name": "rust",
+    "isScript": false,
+    "build": "cd rust && cargo build && cd ..",
+    "run": "rust/target/debug/rust",
+    "repl": "rusti",
+    "year": 2010,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 2000000,
+    "version": "rustc --version"
+  }]
+}
