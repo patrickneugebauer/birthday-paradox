@@ -20,6 +20,16 @@
     "executionsPerSecond": 3750000,
     "version": "cc --version"
   }, {
+    "name": "c++",
+    "isScript": false,
+    "build": "g++ cpp/loops.cpp -O3 -o cpp/loops.out",
+    "run": "cpp/loops.out",
+    "year": 1985,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 3750000,
+    "version": "g++ --version"
+  }, {
     "name": "clojure",
     "isScript": true,
     "scriptRun": "clojure clojure/src/clj/loops.clj",

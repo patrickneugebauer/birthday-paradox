@@ -7,11 +7,15 @@ coffeescript/*
 !coffeescript/*.coffee
 common-lisp/*
 !/common-lisp/loops.cl
+cpp/*
+!cpp/loops.cpp
 crystal/loops
 csharp/bin
 csharp/obj
 d/*
 !d/loops.d
+d-ldc/*
+!d-ldc/loops.d
 elixir/*
 !elixir/lib
 !elixir/mix.exs

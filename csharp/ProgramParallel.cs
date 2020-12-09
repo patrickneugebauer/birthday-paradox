@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-class Program
+class ProgramParallel
 {
-  static void Main(string[] args)
+  static void MainParallel(string[] args)
   {
     // params
     DateTime start = DateTime.Now;

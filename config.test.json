@@ -20,6 +20,67 @@
     "executionsPerSecond": 3750000,
     "version": "cc --version"
   }, {
+    "name": "c++",
+    "isScript": false,
+    "build": "g++ cpp/loops.cpp -O3 -o cpp/loops.out",
+    "run": "cpp/loops.out",
+    "year": 1985,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 3750000,
+    "version": "g++ --version"
+  }, {
+    "name": "common-lisp",
+    "isScript": true,
+    "run": "sbcl --script common-lisp/loops.cl",
+    "repl": "sbcl",
+    "year": 1984,
+    "execution": "interpreted",
+    "solution": "lisp",
+    "executionsPerSecond": 250000,
+    "version": "sbcl --version"
+  }, {
+    "name": "crystal",
+    "isScript": false,
+    "build": "crystal build crystal/loops.cr -o crystal/loops --release",
+    "run": "crystal/loops",
+    "year": 2014,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 2500000,
+    "version": "crystal --version"
+  }, {
+    "name": "csharp",
+    "isScript": false,
+    "build": "dotnet build csharp",
+    "run": "dotnet csharp/bin/Debug/netcoreapp3.1/loops.dll",
+    "repl": "csharp",
+    "year": 2000,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 2250000,
+    "version": "dotnet --version"
+  }, {
+    "name": "d",
+    "isScript": false,
+    "build": "dmd d/loops.d -od=d -of=d/loops -release",
+    "run": "d/loops",
+    "year": 2001,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 1750000,
+    "version": "dmd --version"
+  }, {
+    "name": "d-llvm",
+    "isScript": false,
+    "build": "ldc2 d-ldc/loops.d -od=d -of=d-ldc/loops -release",
+    "run": "d-ldc/loops",
+    "year": 2001,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 1750000,
+    "version": "dmd --version"
+  }, {
     "name": "dart",
     "isScript": true,
     "run": "dart dart/loops.dart",
@@ -41,6 +102,17 @@
     "solution": "functional",
     "executionsPerSecond": 70000,
     "version": "elixir --version"
+  }, {
+    "name": "fsharp",
+    "isScript": false,
+    "build": "dotnet build fsharp",
+    "run": "dotnet fsharp/bin/Debug/netcoreapp3.1/loops.dll",
+    "repl": "fsharpi",
+    "year": 2005,
+    "execution": "compiled",
+    "solution": "functional",
+    "executionsPerSecond": 100000,
+    "version": "dotnet --version"
 }, {
     "name": "go",
     "build": "go build -o go/loops go/loops.go",
@@ -127,6 +199,16 @@
     "executionsPerSecond": 175000,
     "version": "perl --version"
   }, {
+    "name": "php",
+    "isScript": true,
+    "run": "php php/loops.php",
+    "repl": "php -a",
+    "year": 1995,
+    "execution": "interpreted",
+    "solution": "imperative",
+    "executionsPerSecond": 460000,
+    "version": "php --version"
+  }, {
     "name": "python",
     "isScript": true,
     "run": "python python/loops.py",
@@ -146,6 +228,17 @@
     "solution": "imperative",
     "executionsPerSecond": 175000,
     "version": "python3 --version"
+  }, {
+    "name": "racket",
+    "isScript": false,
+    "build": "raco exe -o racket/loops racket/loops.rkt",
+    "run": "racket racket/loops.rkt",
+    "repl": "racket",
+    "year": 1995,
+    "execution": "compiled",
+    "solution": "lisp",
+    "executionsPerSecond": 150000,
+    "version": "racket --version"
   }, {
     "name": "ruby",
     "isScript": true,
