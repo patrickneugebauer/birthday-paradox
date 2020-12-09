@@ -452,7 +452,7 @@
     "year": 2019,
     "execution": "compiled",
     "solution": "imperative",
-    "executionsPerSecond": 200000,
+    "executionsPerSecond": 450000,
     "version": "v --version"
   }, {
     "name": "vala",
