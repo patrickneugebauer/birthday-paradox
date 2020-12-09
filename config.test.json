@@ -122,7 +122,7 @@
     "year": 2009,
     "execution": "compiled",
     "solution": "imperative",
-    "executionsPerSecond": 1250000,
+    "executionsPerSecond": 1800000,
     "version": "go version"
   }, {
     "name": "haskell",
@@ -260,5 +260,15 @@
     "solution": "imperative",
     "executionsPerSecond": 2000000,
     "version": "rustc --version"
+  }, {
+    "name": "v",
+    "isScript": false,
+    "build": "v v/loops.v -o v/loops",
+    "run": "v/loops",
+    "year": 2019,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 200000,
+    "version": "v --version"
   }]
 }

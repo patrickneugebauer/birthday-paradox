@@ -149,7 +149,7 @@ const paths = new function() {
   this.config = () => getConfig();
   this.build = () => this.config().then(filter(x => !x.ignore)).then(build);
   this.buildSync = () => this.config().then(filter(x => !x.ignore)).then(buildSync);
-  this.run = () => this.config().then(run);
+  this.run = () => this.build().then(run);
   this.readme = () => this.run().then(readme);
   this.repl = lang => this.config()
     .then(find(x => x.name == lang))

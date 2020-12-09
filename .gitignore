@@ -60,6 +60,8 @@ scheme/*
 !scheme/loops.scm
 smalltalk/*
 !smalltalk/loops.st
+v/*
+!v/loops.v
 vala/*
 !vala/loops.vala
 vbnet/bin

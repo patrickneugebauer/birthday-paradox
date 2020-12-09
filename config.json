@@ -445,6 +445,16 @@
     "executionsPerSecond": 80000,
     "version": "swift --version"
   }, {
+    "name": "v",
+    "isScript": false,
+    "build": "v v/loops.v -o v/loops",
+    "run": "v/loops",
+    "year": 2019,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 200000,
+    "version": "v --version"
+  }, {
     "name": "vala",
     "isScript": false,
     "build": "valac vala/loops.vala -o vala/loops",
