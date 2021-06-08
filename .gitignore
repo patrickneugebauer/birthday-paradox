@@ -66,3 +66,4 @@ vala/*
 !vala/loops.vala
 vbnet/bin
 vbnet/obj
+node_modules
