@@ -1,5 +1,6 @@
 import * as helpers from './script-helpers';
 import * as watcher from './watcher';
+import { constants } from 'fs';
 
 // constants
 const CONFIG = 'config.json'; // 'config.test.json'
@@ -47,6 +48,28 @@ const getConfig = (): Promise<Config[]> => {
 const buildSync = (xs: Config[]): Promise<Config[]> => {
   console.log('\nbuilding sync...');
   return helpers.asyncMap(x => x.build ? helpers.exec(x.build).then(() => x) : Promise.resolve(x), xs);
+}
+
+const buildSyncWithFailures = (xs: Config[]): Promise<Config[]> => {
+  console.log('\nbuilding sync with failures...');
+  return helpers.asyncMap(
+    x => x.build
+      ? helpers.exec(x.build).then(() => x).catch(err => { console.log(err); return x; })
+      : Promise.resolve(x),
+  xs);
+}
+
+const filterForDocker = (xs: Config[]): Promise<Config[]> => {
+  console.log('\nfiltering for docker...');
+  return Promise.all(xs.map(
+    x => helpers.access(`${x.name}/Dockerfile`, constants.F_OK)
+      .then(access => Promise.resolve([access, x] as [boolean, Config]))
+  )).then(
+    configs => configs.filter(x => x[0]).map(x => Object.assign({}, x[1], {
+      build: `docker build ${x[1].name} -t bday/${x[1].name}`,
+      run: `docker run --rm bday/${x[1].name}`
+    }))
+  );
 }
 
 const build = (xs: Config[]): Promise<Config[]> => {
@@ -128,6 +151,22 @@ class PublicFunctions {
   config = () => getConfig();
   build = () => this.config().then(helpers.filter(x => !x.ignore)).then(build);
   buildSync = () => this.config().then(helpers.filter(x => !x.ignore)).then(buildSync);
+  readmeDocker = () => this.config()
+    .then(helpers.filter(x => !x.ignore))
+    .then(filterForDocker)
+    .then(build)
+    .then(run)
+    .then(readme);
+  readmeDockerSync = () => this.config()
+    .then(helpers.filter(x => !x.ignore))
+    .then(filterForDocker)
+    .then(buildSync)
+    .then(run)
+    .then(readme);
+  buildDockerSyncWithFailures = () => this.config()
+    .then(helpers.filter(x => !x.ignore))
+    .then(filterForDocker)
+    .then(buildSyncWithFailures);
   run = () => this.build().then(run);
   readme = () => this.run().then(readme);
   repl = (lang?: string) => this.config()
@@ -137,7 +176,7 @@ class PublicFunctions {
   help = this.doc;
   man = this.doc;
   versions = () => this.config().then(versions);
-};
+}
 
 const mainObj = new PublicFunctions();
 type Commands = keyof typeof mainObj;

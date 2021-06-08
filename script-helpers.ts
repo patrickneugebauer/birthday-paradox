@@ -12,6 +12,14 @@ export const exec = (x: Command) => {
 };
 export const readFile = util.promisify(fs.readFile);
 export const writeFile = util.promisify(fs.writeFile);
+export const access = (x: Command, accessType: any): Promise<boolean> => {
+  return new Promise((res, _rej) => {
+    fs.access(x, accessType, (err) => {
+      // always resolve, just pass true or false
+      res(err ? false : true);
+    });
+  });
+};
 
 export const asyncMap = <T>(fn: (x: T) => any, arr: Array<T>) =>
 arr.reduce(

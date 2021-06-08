@@ -2,6 +2,6 @@ FROM elixir
 
 WORKDIR /root
 
-ADD loops.exs .
+ADD lib/loops.ex .
 
-ENTRYPOINT ["elixir", "loops.exs"]
+ENTRYPOINT ["elixir", "loops.ex"]

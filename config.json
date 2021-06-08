@@ -39,7 +39,8 @@
     "execution": "compiled",
     "solution": "lisp",
     "executionsPerSecond": 50000,
-    "version": "lein --version"
+    "version": "lein --version",
+    "ignore": true
   }, {
     "name": "coffeescript",
     "isScript": false,
