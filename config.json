@@ -270,7 +270,7 @@
     "year": 1996,
     "execution": "compiled",
     "solution": "functional",
-    "executionsPerSecond": 350000,
+    "executionsPerSecond": 250000,
     "version": "ocamlc --version"
   }, {
     "name": "octave",
