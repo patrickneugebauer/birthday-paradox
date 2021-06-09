@@ -156,7 +156,8 @@
     "execution": "compiled",
     "solution": "imperative",
     "executionsPerSecond": 400000,
-    "version": "gbc3 --version"
+    "version": "gbc3 --version",
+    "ignore": true
   }, {
     "name": "go",
     "build": "go build -o go/loops go/loops.go",

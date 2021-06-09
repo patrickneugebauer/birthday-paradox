@@ -23,7 +23,7 @@ export const access = (x: Command, accessType: any): Promise<boolean> => {
 
 export const asyncMap = <T>(fn: (x: T) => any, arr: Array<T>) =>
 arr.reduce(
-  (prev: Promise<any[]>, curr) => prev.then(result => fn(curr).then((res: any) => result.concat(res))),
+  (prev: Promise<any[]>, curr) => prev.then(result => fn(curr).then((res: any) => addToArray(res, result))),
   Promise.resolve([])
 );
 
@@ -52,6 +52,12 @@ export const find = (fn: (x: any) => any) =>
 
 export const average = (xs: any[]) =>
   xs.reduce((acc, x) => acc + x, 0) / xs.length;
+
+const addToArray = <T>(a: T, b: T[]) => {
+  const copy = b.slice();
+  copy.push(a);
+  return copy;
+}
 
 // ==================================================
 // un-exported (private) methods

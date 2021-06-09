@@ -12,7 +12,7 @@ void simulate(int iterations) {
   var count = 0;
   final random = new Random();
   for (var i=0; i < iterations; i++) {
-    final arr = new List(365);
+    final arr = new List.filled(365, 0);
     for (var j=0; j < sampleSize; j++) {
       final number = random.nextInt(365);
       if (arr[number] == 1) {

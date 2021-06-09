@@ -52,11 +52,12 @@ const buildSync = (xs: Config[]): Promise<Config[]> => {
 
 const buildSyncWithFailures = (xs: Config[]): Promise<Config[]> => {
   console.log('\nbuilding sync with failures...');
-  return helpers.asyncMap(
+  const mapResult = helpers.asyncMap(
     x => x.build
-      ? helpers.exec(x.build).then(() => x).catch(err => { console.log(err); return x; })
+      ? helpers.exec(x.build).then(() => [x, null]).catch(err => [null, err]) as Promise<[Config | null, null | string]>
       : Promise.resolve(x),
   xs);
+  return mapResult.then(x => x.filter(a => a[0]).map(b => b[0]));
 }
 
 const filterForDocker = (xs: Config[]): Promise<Config[]> => {
@@ -167,6 +168,12 @@ class PublicFunctions {
     .then(helpers.filter(x => !x.ignore))
     .then(filterForDocker)
     .then(buildSyncWithFailures);
+  readmeDockerSyncWithFailures = () => this.config()
+    .then(helpers.filter(x => !x.ignore))
+    .then(filterForDocker)
+    .then(buildSyncWithFailures)
+    .then(run)
+    .then(readme);
   run = () => this.build().then(run);
   readme = () => this.run().then(readme);
   repl = (lang?: string) => this.config()

@@ -1,5 +1,4 @@
 <?hh
-$iterations = $argv[1];
 
 function simulate($iterations) {
   $start = microtime(true);
@@ -27,4 +26,9 @@ function simulate($iterations) {
   print "seconds: $seconds\n";
 }
 
-simulate($iterations);
+<<__EntryPoint>>
+function main() {
+  // $iterations = $_GLOBALS['argv'][1];
+  $iterations = HH\global_get('argv')[1];
+  simulate($iterations);
+}
