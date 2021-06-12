@@ -7,4 +7,4 @@ COPY .src/* .src/
 
 RUN gbc3
 
-ENTRYPOINT ["gbx3"]
+ENTRYPOINT ["gbx3", "--"]
