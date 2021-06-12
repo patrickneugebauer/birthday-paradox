@@ -362,7 +362,7 @@
     "executionsPerSecond": 175000,
     "version": "python3 --version"
   }, {
-    "name": "R",
+    "name": "r",
     "isScript": true,
     "run": "Rscript r/loops.r",
     "repl": "R",
