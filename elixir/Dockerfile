@@ -2,6 +2,9 @@ FROM elixir
 
 WORKDIR /root
 
-ADD lib/loops.ex .
+ADD mix.exs .
+ADD lib/ lib/
 
-ENTRYPOINT ["elixir", "loops.ex"]
+RUN mix escript.build
+
+ENTRYPOINT ["./loops"]
