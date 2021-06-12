@@ -1,7 +1,7 @@
 .vscode
 c/loops.out
 clojure/*
-!clojure/src
+!clojure/*.clj
 !clojure/readme.md
 coffeescript/*
 !coffeescript/*.coffee
