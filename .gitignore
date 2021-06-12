@@ -67,3 +67,4 @@ vala/*
 vbnet/bin
 vbnet/obj
 node_modules
+!Dockerfile

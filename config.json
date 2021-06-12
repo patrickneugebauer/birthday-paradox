@@ -62,6 +62,16 @@
     "executionsPerSecond": 250000,
     "version": "sbcl --version"
   }, {
+    "name": "cpp",
+    "isScript": false,
+    "build": "g++ cpp/loops.cpp -O3 -o cpp/loops.out",
+    "run": "cpp/loops.out",
+    "year": 1985,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 3750000,
+    "version": "g++ --version"
+  }, {
     "name": "crystal",
     "isScript": false,
     "build": "crystal build crystal/loops.cr -o crystal/loops --release",
