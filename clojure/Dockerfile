@@ -1,10 +1,8 @@
-FROM clojure
-
-RUN apt-get update \
- && apt-get install -y clojure
+FROM clojure:lein
 
 WORKDIR /root
 
-ADD loops.clj .
+ADD project.clj .
+ADD src/ src/
 
-ENTRYPOINT ["clojure", "loops.clj"]
+ENTRYPOINT ["lein", "run"]
