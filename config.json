@@ -39,8 +39,7 @@
     "execution": "compiled",
     "solution": "lisp",
     "executionsPerSecond": 50000,
-    "version": "lein --version",
-    "ignore": true
+    "version": "lein --version"
   }, {
     "name": "coffeescript",
     "isScript": false,
@@ -166,8 +165,7 @@
     "execution": "compiled",
     "solution": "imperative",
     "executionsPerSecond": 400000,
-    "version": "gbc3 --version",
-    "ignore": true
+    "version": "gbc3 --version"
   }, {
     "name": "go",
     "build": "go build -o go/loops go/loops.go",
@@ -434,7 +432,8 @@
     "execution": "interpreted",
     "solution": "lisp",
     "executionsPerSecond": 4000,
-    "version": "scheme --version"
+    "version": "scheme --version",
+    "ignore": true
   }, {
     "name": "smalltalk",
     "isScript": true,
