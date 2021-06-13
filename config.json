@@ -389,8 +389,7 @@
     "execution": "transpiled",
     "solution": "functional",
     "executionsPerSecond": 200000,
-    "version": "bsc -version",
-    "ignore": true
+    "version": "bsc -version"
   }, {
     "name": "ruby",
     "isScript": true,
