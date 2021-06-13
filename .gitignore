@@ -47,10 +47,6 @@ pascal/*
 !pascal/loops.pp
 racket/*
 !racket/loops.rkt
-reasonml/*
-!reasonml/src
-reasonml/src/*
-!reasonml/src/*.re
 rust/*
 !rust/src
 !rust/Cargo.toml
