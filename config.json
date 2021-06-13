@@ -391,6 +391,16 @@
     "executionsPerSecond": 200000,
     "version": "bsc -version"
   }, {
+    "name": "rescript",
+    "isScript": false,
+    "build": "echo $(cd rescript && npm run build)",
+    "run": "node rescript/src/Loops.bs.js",
+    "year": 2020,
+    "execution": "transpiled",
+    "solution": "functional",
+    "executionsPerSecond": 200000,
+    "version": "rescript -version"
+  }, {
     "name": "ruby",
     "isScript": true,
     "run": "ruby ruby/loops.rb",
