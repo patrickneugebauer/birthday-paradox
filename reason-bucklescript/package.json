@@ -1,5 +1,5 @@
 {
-  "name": "sample",
+  "name": "@birthday-paradox/reason-bucklescript",
   "version": "0.1.0",
   "scripts": {
     "clean": "bsb -clean-world",

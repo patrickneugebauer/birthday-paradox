@@ -1,5 +1,5 @@
 {
-  "name": "reasonml",
+  "name": "@birthday-paradox/reason-bucklescript",
   "version": "0.1.0",
   "sources": {
     "dir" : "src",

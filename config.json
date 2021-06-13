@@ -381,10 +381,10 @@
     "executionsPerSecond": 150000,
     "version": "racket --version"
   }, {
-    "name": "reasonml",
+    "name": "reason-bucklescript",
     "isScript": false,
-    "build": "cd reasonml && npm run build && cd ..",
-    "run": "node reasonml/src/Loops.bs.js",
+    "build": "echo $(cd reason-bucklescript && npm run build)",
+    "run": "node reason-bucklescript/src/Loops.bs.js",
     "year": 2016,
     "execution": "transpiled",
     "solution": "functional",
