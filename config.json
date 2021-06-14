@@ -445,14 +445,13 @@
     "name": "scheme",
     "isScript": true,
     "runScript": "scheme --quiet < scheme/loops.scm",
-    "run": "scheme/run-scheme.sh",
+    "run": "scheme/run-scheme.sh loops.scm",
     "repl": "scheme",
     "year": 1975,
     "execution": "interpreted",
     "solution": "lisp",
     "executionsPerSecond": 4000,
-    "version": "scheme --version",
-    "ignore": true
+    "version": "scheme --version"
   }, {
     "name": "smalltalk",
     "isScript": true,

@@ -3,8 +3,6 @@ FROM inikolaev/alpine-scheme
 WORKDIR /root
 
 COPY loops.scm .
-COPY run .
+COPY run-scheme.sh .
 
-RUN chmod +x run
-
-ENTRYPOINT ["./run", "loops.scm"]
+ENTRYPOINT ["./run-scheme.sh", "loops.scm"]
