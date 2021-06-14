@@ -381,9 +381,18 @@
     "executionsPerSecond": 150000,
     "version": "racket --version"
   }, {
+    "name": "reason",
+    "isScript": true,
+    "run": "echo \"$(cd reason && esy x Loops)\"",
+    "year": 2020,
+    "execution": "transpiled",
+    "solution": "functional",
+    "executionsPerSecond": 300000,
+    "version": "esy version"
+  }, {
     "name": "reason-bucklescript",
     "isScript": false,
-    "build": "echo $(cd reason-bucklescript && npm run build)",
+    "build": "echo \"$(cd reason-bucklescript && npm run build)\"",
     "run": "node reason-bucklescript/src/Loops.bs.js",
     "year": 2016,
     "execution": "transpiled",
@@ -393,12 +402,12 @@
   }, {
     "name": "rescript",
     "isScript": false,
-    "build": "echo $(cd rescript && npm run build)",
+    "build": "echo \"$(cd rescript && npm run build)\"",
     "run": "node rescript/src/Loops.bs.js",
     "year": 2020,
     "execution": "transpiled",
     "solution": "functional",
-    "executionsPerSecond": 200000,
+    "executionsPerSecond": 250000,
     "version": "rescript -version"
   }, {
     "name": "ruby",
