@@ -107,7 +107,7 @@ const run = (xs: Config[]): Promise<ResultData[]> => {
           hasRepl: Boolean(lang.repl)
         }) as ResultData)
     }, xs
-  ).then(helpers.sortBy(x => parseInt(x['speed'])))
+  ).then(helpers.sortBy(x => x['speed']))
   .then(x => x.reverse());
 }
 
