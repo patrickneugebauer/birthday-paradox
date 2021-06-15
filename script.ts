@@ -1,5 +1,5 @@
 import * as helpers from './script-helpers';
-import * as watcher from './watcher';
+// import * as watcher from './watcher';
 import { constants } from 'fs';
 
 // constants
@@ -50,14 +50,22 @@ const buildSync = (xs: Config[]): Promise<Config[]> => {
   return helpers.asyncMap(x => x.build ? helpers.exec(x.build).then(() => x) : Promise.resolve(x), xs);
 }
 
+type PassResult = [Config, null];
+type FailResult = [null, string];
 const buildSyncWithFailures = (xs: Config[]): Promise<Config[]> => {
   console.log('\nbuilding sync with failures...');
-  const mapResult = helpers.asyncMap(
-    x => x.build
-      ? helpers.exec(x.build).then(() => [x, null]).catch(err => [null, err]) as Promise<[Config | null, null | string]>
-      : Promise.resolve(x),
-  xs);
-  return mapResult.then(x => x.filter(a => a[0]).map(b => b[0]));
+  const mapResult = helpers.asyncMap(x =>
+    (x.build)
+      ? helpers.exec(x.build)
+        .then(() => [x, null])
+        .catch(err => [null, err]) as Promise<PassResult | FailResult>
+      : Promise.resolve([x, null] as PassResult)
+  , xs);
+  return mapResult.then(x => {
+    // (x.filter(a => a[0]) as PassResult[]).map(b => b[0]);
+    const positiveResults = x.filter(a => a[0]) as PassResult[];
+    return positiveResults.map(b => b[0]);
+  });
 }
 
 const filterForDocker = (xs: Config[]): Promise<Config[]> => {
@@ -76,29 +84,31 @@ const filterForDocker = (xs: Config[]): Promise<Config[]> => {
 const build = (xs: Config[]): Promise<Config[]> => {
   console.log('\nbuilding...');
   return Promise.all(xs.map(
-    x => x.build ? helpers.exec(x.build).then(() => x) : Promise.resolve(x)
+    x => x.build ? helpers.exec(`echo "\${${x.build}}"`).then(() => x) : Promise.resolve(x)
   ));
 }
 
 const run = (xs: Config[]): Promise<ResultData[]> => {
   console.log('\nrunning...');
-  const iterationsScale = parseInt(process.argv[3]) || 0.25;
+  const iterationsScale = parseFloat(process.argv[3]) || 0.25;
   return helpers.asyncMap(
     lang => {
       const iterations = parseInt((lang.executionsPerSecond * iterationsScale).toString());
-      return watcher.runAndWatch(`${lang.run} ${iterations}`)
+      // return watcher.runAndWatch(`${lang.run} ${iterations}`)
+      return helpers.exec(`${lang.run} ${iterations}`).then(x => x.stdout)
         .then(x => helpers.textToHash(x) as RawResult)
+        // .then(x => { console.log(x); return x })
         .then(x => Object.assign({}, x, {
           name: lang.name,
-          speed: parseInt((iterations / parseInt(x.seconds)).toString()),
+          speed: parseInt((iterations / parseFloat(x.seconds)).toString()),
           year: lang.year,
           execution: lang.execution,
           solution: lang.solution,
           hasRepl: Boolean(lang.repl)
         }) as ResultData)
     }, xs
-  ).then(helpers.sortBy(x => parseInt(x['rss-mem(k)'])));
-  // .then(x => x /* .reverse() */);
+  ).then(helpers.sortBy(x => parseInt(x['speed'])))
+  .then(x => x.reverse());
 }
 
 const readme = (xs: ResultData[]) => {
@@ -108,7 +118,6 @@ const readme = (xs: ResultData[]) => {
     (x, i) => `| ${i + 1}
       ${x.name}
       ${x.speed.toLocaleString()}
-      ${parseInt(x['rss-mem(k)']).toLocaleString()}
       ${x.year}
       ${x.solution}
       ${x.hasRepl ? 'x' : ''} |`.replace(/\s*\n\s*/gi, ' | ')
@@ -119,8 +128,8 @@ const readme = (xs: ResultData[]) => {
 * sample-size: ${sampleSize}
 * probability: ${percent}
 
-| | language | iterations/sec | rss-mem(k) | year | solution type | has repl |
-|--| -- | -- | -- | -- | -- | -- |
+| | language | iterations/sec | year | solution type | has repl |
+|--| -- | -- | -- | -- | -- |
 ${tableData}
 
 thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about randint and random speed in python\n`;
@@ -128,12 +137,12 @@ thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about
 }
 
 const versions = (xs: Config[]) => {
-  const versionInfoPromises = xs.filter(x => !x.ignore).map(x =>
-    helpers.exec(x.version).then(
+  const versionInfoPromises = xs.filter(x => !x.ignore).map(info =>
+    helpers.exec(info.version).then(
       execResult => execResult.stdout || execResult.stderr
     ).then(r => {
-      const name = `#### ${x.name}`;
-      const command = `\`${x.version}\``;
+      const name = `#### ${info.name}`;
+      const command = `\`${info.version}\``;
       const version = r
         .replace(/\r/g, '\n')
         .split('\n')
@@ -159,9 +168,9 @@ class PublicFunctions {
     .then(run)
     .then(readme);
   readmeDockerSync = () => this.config()
-    .then(helpers.filter(x => !x.ignore))
+    // .then(helpers.filter(x => !x.ignore))
     .then(filterForDocker)
-    .then(buildSync)
+    // .then(buildSync)
     .then(run)
     .then(readme);
   buildDockerSyncWithFailures = () => this.config()
@@ -193,6 +202,6 @@ const commands = `[${Object.keys(mainObj).join(', ')}]`;
 (() => {
   const [, , path, ...args] = process.argv;
   mainObj[path as Commands]
-    ? mainObj[path as Commands](...args).then((x: string) => console.log('\nresults:\n', x))
+    ? mainObj[path as Commands](...args).then((x) => console.log('\nresults:\n', x))
     : console.log(`command: '${path}' failed\nlist of commands: ${commands}`);
 })()

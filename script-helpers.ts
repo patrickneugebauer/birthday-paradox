@@ -12,7 +12,7 @@ export const exec = (x: Command) => {
 };
 export const readFile = util.promisify(fs.readFile);
 export const writeFile = util.promisify(fs.writeFile);
-export const access = (x: Command, accessType: any): Promise<boolean> => {
+export const access = (x: Command, accessType: number | undefined): Promise<boolean> => {
   return new Promise((res, _rej) => {
     fs.access(x, accessType, (err) => {
       // always resolve, just pass true or false
@@ -21,11 +21,11 @@ export const access = (x: Command, accessType: any): Promise<boolean> => {
   });
 };
 
-export const asyncMap = <T>(fn: (x: T) => any, arr: Array<T>) =>
-arr.reduce(
-  (prev: Promise<any[]>, curr) => prev.then(result => fn(curr).then((res: any) => addToArray(res, result))),
-  Promise.resolve([])
-);
+export const asyncMap = <I, O>(fn: (x: I) => Promise<O>, arr: Array<I>): Promise<O[]> =>
+  arr.reduce(
+    (prev: Promise<O[]>, curr) => prev.then(result => fn(curr).then((res) => addToArray(res, result))),
+    Promise.resolve([])
+  );
 
 export const textToHash = (text: string) => {
   const lines = text
@@ -81,4 +81,4 @@ const compare = <T>(a: T, b: T): CompareInt => {
 };
 
 const sort = (fn: CompareFn) =>
-  (xs: any[]) => xs.slice().sort(fn);
+  <T>(xs: T[]): T[] => xs.slice().sort(fn);
