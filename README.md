@@ -1,56 +1,57 @@
 #### Birthday Paradox - Monte Carlo simulations
 
 * sample-size: 23
-* probability: 50.97
+* probability: 50.47
 
-| | language | iterations/sec | year | solution type | has repl |
-|--| -- | -- | -- | -- | -- |
-| 1 | c | 3,504,672 | 1972 | imperative | |
-| 2 | cpp | 3,232,758 | 1985 | imperative | |
-| 3 | nim | 2,941,176 | 2008 | imperative | |
-| 4 | rust | 2,666,666 | 2010 | imperative | x |
-| 5 | csharp | 2,250,000 | 2000 | imperative | x |
-| 6 | d | 2,108,433 | 2001 | imperative | |
-| 7 | go | 2,045,454 | 2009 | imperative | |
-| 8 | kotlin | 1,470,588 | 2011 | imperative | x |
-| 9 | vala | 1,415,094 | 2006 | imperative | |
-| 10 | java | 1,399,253 | 1995 | imperative | x |
-| 11 | pascal | 1,369,863 | 1970 | imperative | |
-| 12 | dart | 1,174,496 | 2011 | imperative | x |
-| 13 | crystal | 1,146,788 | 2014 | imperative | |
-| 14 | javascript | 1,098,901 | 1995 | imperative | x |
-| 15 | coffeescript | 657,894 | 2009 | imperative | |
-| 16 | groovy | 613,496 | 2003 | imperative | |
-| 17 | php | 589,743 | 1995 | imperative | x |
-| 18 | ocaml | 446,428 | 1996 | functional | x |
-| 19 | common-lisp | 446,428 | 1984 | lisp | x |
-| 20 | haskell | 416,666 | 1990 | functional | x |
-| 21 | v | 405,405 | 2019 | imperative | |
-| 22 | reason | 405,405 | 2020 | functional | |
-| 23 | hack | 308,641 | 2014 | imperative | |
-| 24 | julia | 209,059 | 2012 | scientific | x |
-| 25 | gambas | 206,185 | 1999 | imperative | |
-| 26 | ruby | 179,687 | 1995 | imperative | x |
-| 27 | rescript | 167,785 | 2020 | functional | |
-| 28 | scala | 156,521 | 2004 | functional | x |
-| 29 | python3 | 147,058 | 1990 | imperative | x |
-| 30 | racket | 145,631 | 1995 | lisp | x |
-| 31 | reason-bucklescript | 144,927 | 2016 | functional | |
-| 32 | lua | 123,966 | 1993 | imperative | x |
-| 33 | python | 120,967 | 1990 | imperative | x |
-| 34 | perl | 120,689 | 1987 | imperative | |
-| 35 | erlang | 113,924 | 1986 | functional | x |
-| 36 | fsharp | 107,526 | 2005 | functional | x |
-| 37 | elixir | 106,060 | 2011 | functional | x |
-| 38 | r | 104,166 | 1993 | scientific | x |
-| 39 | clojure | 68,493 | 2007 | lisp | x |
-| 40 | smalltalk | 30,075 | 1972 | functional | x |
-| 41 | swift | 28,673 | 2014 | imperative | x |
-| 42 | octave | 16,071 | 1988 | scientific | x |
-| 43 | scheme | 4,301 | 1975 | lisp | x |
-| 44 | perl6 | 2,993 | 2015 | imperative | x |
-| 45 | bash | 2,916 | 1989 | imperative | x |
-| 46 | powershell | 336 | 2006 | imperative | x |
-| 47 | fish | 137 | 2005 | imperative | x |
+| | language | iterations/sec | image-size(MB) | year | solution type | has repl |
+| :--: | :-- | --: | --: | --: | :-- | :--: |
+| 1 | c++ | 3,511,235 | 193 | 1985 | imperative | |
+| 2 | c | 3,409,090 | 666 | 1972 | imperative | |
+| 3 | rust | 2,923,976 | 1351 | 2010 | imperative | x |
+| 4 | crystal | 2,920,560 | 559 | 2014 | imperative | |
+| 5 | nim | 2,906,976 | 631 | 2008 | imperative | |
+| 6 | c# | 2,305,327 | 710 | 2000 | imperative | x |
+| 7 | vb.net | 2,232,142 | 1781 | 2001 | imperative | |
+| 8 | d | 2,220,812 | 733 | 2001 | imperative | |
+| 9 | go | 2,027,027 | 862 | 2009 | imperative | |
+| 10 | kotlin | 1,984,126 | 404 | 2011 | imperative | x |
+| 11 | java | 1,977,848 | 467 | 1995 | imperative | x |
+| 12 | vala | 1,506,024 | 438 | 2006 | imperative | |
+| 13 | pascal | 1,436,781 | 79 | 1970 | imperative | |
+| 14 | javascript | 1,207,729 | 908 | 1995 | imperative | x |
+| 15 | dart | 1,192,098 | 733 | 2011 | imperative | x |
+| 16 | groovy | 748,502 | 327 | 2003 | imperative | |
+| 17 | coffeescript | 712,250 | 49 | 2009 | imperative | |
+| 18 | php | 580,808 | 423 | 1995 | imperative | x |
+| 19 | haskell | 490,196 | 2406 | 1990 | functional | x |
+| 20 | ocaml | 466,417 | 605 | 1996 | functional | x |
+| 21 | common-lisp | 446,428 | 900 | 1984 | lisp | x |
+| 22 | v | 424,528 | 1781 | 2019 | imperative | |
+| 23 | julia | 360,576 | 486 | 2012 | scientific | x |
+| 24 | reason | 317,796 | 3829 | 2020 | functional | |
+| 25 | hack | 307,881 | 706 | 2014 | imperative | |
+| 26 | scala | 281,250 | 2580 | 2004 | functional | x |
+| 27 | gambas | 218,340 | 802 | 1999 | imperative | |
+| 28 | rescript | 217,013 | 1198 | 2020 | functional | |
+| 29 | ruby | 201,048 | 851 | 1995 | imperative | x |
+| 30 | f# | 149,700 | 729 | 2005 | functional | x |
+| 31 | python3 | 146,812 | 886 | 1990 | imperative | x |
+| 32 | erlang | 144,230 | 1280 | 1986 | functional | x |
+| 33 | reason (bs) | 137,741 | 1116 | 2016 | functional | |
+| 34 | lua | 132,978 | 50 | 1993 | imperative | x |
+| 35 | perl | 125,718 | 458 | 1987 | imperative | |
+| 36 | python | 122,149 | 886 | 1990 | imperative | x |
+| 37 | elixir | 113,636 | 1290 | 2011 | functional | x |
+| 38 | r | 107,758 | 3829 | 1993 | scientific | x |
+| 39 | racket | 106,232 | 931 | 1995 | lisp | x |
+| 40 | clojure | 67,567 | 666 | 2007 | lisp | x |
+| 41 | smalltalk | 31,250 | 671 | 1972 | functional | x |
+| 42 | swift | 28,530 | 2160 | 2014 | imperative | x |
+| 43 | octave | 15,734 | 853 | 1988 | scientific | x |
+| 44 | perl6 | 4,029 | 458 | 2015 | imperative | x |
+| 45 | scheme | 4,016 | 78 | 1975 | lisp | x |
+| 46 | bash | 2,966 | 9 | 1989 | imperative | x |
+| 47 | powershell | 424 | 325 | 2006 | imperative | x |
+| 48 | fish | 144 | 19 | 2005 | imperative | x |
 
 thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about randint and random speed in python

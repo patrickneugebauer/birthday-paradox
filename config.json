@@ -20,16 +20,6 @@
     "executionsPerSecond": 3750000,
     "version": "cc --version"
   }, {
-    "name": "c++",
-    "isScript": false,
-    "build": "g++ cpp/loops.cpp -O3 -o cpp/loops.out",
-    "run": "cpp/loops.out",
-    "year": 1985,
-    "execution": "compiled",
-    "solution": "imperative",
-    "executionsPerSecond": 3750000,
-    "version": "g++ --version"
-  }, {
     "name": "clojure",
     "isScript": true,
     "scriptRun": "clojure clojure/src/clj/loops.clj",
@@ -62,6 +52,7 @@
     "version": "sbcl --version"
   }, {
     "name": "cpp",
+    "displayName": "c++",
     "isScript": false,
     "build": "g++ cpp/loops.cpp -O3 -o cpp/loops.out",
     "run": "cpp/loops.out",
@@ -82,6 +73,7 @@
     "version": "crystal --version"
   }, {
     "name": "csharp",
+    "displayName": "c#",
     "isScript": false,
     "build": "dotnet build csharp",
     "run": "dotnet csharp/bin/Debug/netcoreapp2.1/loops.dll",
@@ -147,6 +139,7 @@
     "version": "fish --version"
   }, {
     "name": "fsharp",
+    "displayName": "f#",
     "isScript": false,
     "build": "dotnet build fsharp",
     "run": "dotnet fsharp/bin/Debug/netcoreapp2.1/loops.dll",
@@ -391,6 +384,7 @@
     "version": "esy version"
   }, {
     "name": "reason-bucklescript",
+    "displayName": "reason (bs)",
     "isScript": false,
     "build": "echo \"$(cd reason-bucklescript && npm run build)\"",
     "run": "node reason-bucklescript/src/Loops.bs.js",
@@ -494,7 +488,8 @@
     "executionsPerSecond": 1500000,
     "version": "valac --version"
   }, {
-    "name": "vb.net",
+    "name": "vbnet",
+    "displayName": "vb.net",
     "isScript": false,
     "build": "dotnet build vbnet",
     "run": "dotnet vbnet/bin/Debug/netcoreapp2.1/loops.dll",
