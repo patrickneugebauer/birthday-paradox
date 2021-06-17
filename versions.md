@@ -27,7 +27,7 @@
 
 `coffee --version`
 
-    CoffeeScript version 1.12.7
+    CoffeeScript version 2.5.1
 
 #### common-lisp
 
@@ -139,7 +139,7 @@
 
 `node --version`
 
-    v16.3.0
+    v14.17.1
 
 #### julia
 
@@ -277,7 +277,7 @@
 
 `npx rescript -version`
 
-    9.1.3
+    9.1.4
 
 #### ruby
 
