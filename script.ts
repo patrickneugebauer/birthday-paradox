@@ -7,6 +7,8 @@ const CONFIG = 'config.json'; // 'config.test.json'
 const README = 'README.md' // 'readme.test.md'
 const VERSIONS = 'versions.md';
 
+const iterationsScale = parseFloat(process.argv[2]) || 0.25;
+
 type Command = string;
 type Config = {
   build: Command;
@@ -42,42 +44,47 @@ type ResultData = RawResult & {
 }
 
 const getConfig = (): Promise<Config[]> => {
-  return helpers.readFile(CONFIG).then(
-    x => JSON.parse(x.toString()).languages
-  );
+  console.log('start: read config')
+  return helpers.readFile(CONFIG).then(x => {
+    console.log('finish: read config\n')
+    return JSON.parse(x.toString()).languages
+  });
 };
 
-const filterForDocker = (xs: Config[]): Promise<Array<Config & { weigh: string }>> => {
-  console.log('\nfiltering for docker...');
+const filterSolutions = (xs: Config[]): Promise<Array<Config & { weigh: string }>> => {
+  console.log('start: filtering');
   const checkForDockerfilesPromise = Promise.all(xs.map(
     x => helpers.access(`${x.name}/Dockerfile`, constants.F_OK)
       .then(access => Promise.resolve([access, x] as [boolean, Config]))
   ));
-  return checkForDockerfilesPromise.then(configs => configs
-    .filter(x => {
-      const keep = x[0];
-      if (!keep) console.log(`removing: ${x[1].name}`);
-      return keep;
-    })
-    .map(x => x[1])
-    .map(x => {
-      const imageName = `bday/${x.name}`;
-      return Object.assign({}, x, {
-        build: `docker build ${x.name} -t ${imageName}`,
-        run: `docker run --rm ${imageName}`,
-        weigh: `docker images | grep ${imageName} | rev | cut -d " " -f 1 | rev`
+  return checkForDockerfilesPromise.then(configs => {
+    const filteredConfigs = configs
+      .filter(x => {
+        const keep = x[0];
+        if (!keep) console.log(`removing: ${x[1].name}`);
+        return keep;
       })
-    })
-  );
+      .map(x => x[1])
+      .map(x => {
+        const imageName = `bday/${x.name}`;
+        return Object.assign({}, x, {
+          build: `docker build ${x.name} -t ${imageName}`,
+          run: `docker run --rm ${imageName}`,
+          weigh: `docker images | grep "${imageName} " | rev | cut -d " " -f 1 | rev`
+        })
+      });
+    console.log('finish: filtering\n');
+    return filteredConfigs;
+  });
 }
 
 type PassResult = [Config, null];
 type FailResult = [null, string];
 const buildSyncWithFailures = (xs: Config[]): Promise<Config[]> => {
-  console.log('\nbuilding sync with failures...');
+  console.log('start: building');
   const mapResult = helpers.asyncMap(x =>
     (x.build)
-      ? helpers.exec(x.build)
+      ? helpers.exec(x.build, true)
         .then(() => [x, null])
         .catch(err => [null, err]) as Promise<PassResult | FailResult>
       : Promise.resolve([x, null] as PassResult)
@@ -85,47 +92,56 @@ const buildSyncWithFailures = (xs: Config[]): Promise<Config[]> => {
   return mapResult.then(x => {
     // (x.filter(a => a[0]) as PassResult[]).map(b => b[0]);
     const positiveResults = x.filter(a => a[0]) as PassResult[];
-    return positiveResults.map(b => b[0]);
+    const positiveResultConfigs = positiveResults.map(b => b[0])
+    console.log('finish: building\n');
+    return positiveResultConfigs;
   });
+
 }
 
 const weighImages = (xs: Array<Config & { weigh: string }>): Promise<Array<Config & { size: string }>> => {
-  console.log('\nmeasuring size of images...');
+  console.log('start: weigh images');
   return Promise.all(xs.map(
     x => helpers
       .exec(x.weigh)
       .then(res => Object.assign({}, x, { size: res.stdout }) )
-  ));
+  )).then(x => {
+    console.log('finish: weigh images\n');
+    return x;
+  });
 }
 
 const run = (xs: Array<Config & { size: string }>): Promise<ResultData[]> => {
-  console.log('\nrunning...');
-  const iterationsScale = parseFloat(process.argv[3]) || 0.25;
-  return helpers.asyncMap(
-    lang => {
-      const iterations = parseInt((lang.executionsPerSecond * iterationsScale).toString());
-      // return watcher.runAndWatch(`${lang.run} ${iterations}`)
-      return helpers.exec(`${lang.run} ${iterations}`).then(x => x.stdout)
-        .then(x => helpers.textToHash(x) as RawResult)
-        // .then(x => { console.log(x); return x })
-        .then(x => {
-          const speed = parseInt((iterations / parseFloat(x.seconds)).toString());
-          const size = parseInt( (parseFloat(lang.size) * (lang.size.includes('GB') ? 1024 : 1) ).toString() )
-          return Object.assign({}, x, {
-            name: lang.displayName || lang.name,
-            speed,
-            size,
-            year: lang.year,
-            execution: lang.execution,
-            solution: lang.solution,
-            hasRepl: Boolean(lang.repl)
-          }) as ResultData
-        })
-    }, xs
-  ).then(helpers.sortBy(x => x['speed']))
-  .then(x => x.reverse());
+  console.log('start: run');
+  return helpers.asyncMap(lang => {
+    const iterations = parseInt((lang.executionsPerSecond * iterationsScale).toString());
+    // return watcher.runAndWatch(`${lang.run} ${iterations}`)
+    return helpers.exec(`${lang.run} ${iterations}`, true).then(x => x.stdout)
+      .then(x => helpers.textToHash(x) as RawResult)
+      // .then(x => { console.log(x); return x })
+      .then(x => {
+        const speed = parseInt((iterations / parseFloat(x.seconds)).toString());
+        const size = parseInt( (parseFloat(lang.size) * (lang.size.includes('GB') ? 1024 : 1) ).toString() )
+        return Object.assign({}, x, {
+          name: lang.displayName || lang.name,
+          speed,
+          size,
+          year: lang.year,
+          execution: lang.execution,
+          solution: lang.solution,
+          hasRepl: Boolean(lang.repl)
+        }) as ResultData
+      })
+  }, xs)
+    .then(helpers.sortBy(x => x['speed']))
+    .then(x => {
+      const descendingResults = x.reverse()
+      console.log('finish: run\n');
+      return descendingResults;
+    });
 }
 const readme = (xs: ResultData[]) => {
+  console.log('start: readme');
   const sampleSize = helpers.average(xs.map(x => parseFloat(x['sample-size'])));
   const percent = helpers.average(xs.map(x => parseFloat(x.percent))).toFixed(2);
   const tableData = xs.map(
@@ -148,12 +164,20 @@ const readme = (xs: ResultData[]) => {
 ${tableData}
 
 thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about randint and random speed in python\n`;
-  return helpers.writeFile(README, fileData).then(() => fileData);
+  return helpers
+    .writeFile(README, fileData)
+    .then(() => {
+      console.log('finish: readme\n');
+      return fileData
+    });
 }
 
 const versions = (xs: Config[]) => {
-  const versionInfoPromises = xs.filter(x => !x.ignore).map(info =>
-    helpers.exec(info.version).then(
+  console.log('start: versions');
+  const versionInfoPromises = xs.map(info => {
+    const [versionExecutable, versionParams] = helpers.headTail(info.version.split(" "));
+    const versionCommand = `docker run --rm --entrypoint ${versionExecutable} bday/${info.name} ${versionParams.join(" ")}`;
+    return helpers.exec(versionCommand).then(
       execResult => execResult.stdout || execResult.stderr
     ).then(r => {
       const name = `#### ${info.name}`;
@@ -166,20 +190,25 @@ const versions = (xs: Config[]) => {
         .join('\n');
       return `${name}\n\n${command}\n\n${version}`;
     })
-  );
+  });
   return Promise.all(versionInfoPromises)
     .then(versionInfo => versionInfo.join('\n\n') + '\n')
-    .then(x => helpers.writeFile(VERSIONS, x).then(() => x));
+    .then(x =>
+      helpers.writeFile(VERSIONS, x).then(() => {
+        console.log('finish: versions\n');
+        return x;
+      })
+    );
 }
 
 // main
 (() => {
   getConfig()
-    .then(helpers.filter(x => !x.ignore))
-    .then(filterForDocker)
+    .then(filterSolutions)
     .then(x => buildSyncWithFailures(x) as Promise<typeof x>)
     .then(weighImages)
+    .then(x => versions(x).then(() => x))
     .then(run)
     .then(readme)
-    .then(x => console.log('\nresults:\n', x))
+    .then(_x => console.log('complete'))
 })()

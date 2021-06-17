@@ -244,13 +244,13 @@
   }, {
     "name": "lua",
     "isScript": true,
-    "run": "lua5.3 lua/loops.lua",
-    "repl": "lua5.3",
+    "run": "lua lua/loops.lua",
+    "repl": "lua",
     "year": 1993,
     "execution": "interpreted",
     "solution": "imperative",
     "executionsPerSecond": 150000,
-    "version": "lua5.3 -v"
+    "version": "lua -v"
   }, {
     "name": "nim",
     "isScript": false,
@@ -325,13 +325,13 @@
   }, {
     "name": "powershell",
     "isScript": true,
-    "run": "pwsh-preview powershell/loops.ps1",
-    "repl": "pwsh-preview",
+    "run": "pwsh powershell/loops.ps1",
+    "repl": "pwsh",
     "year": 2006,
     "execution": "shell",
     "solution": "imperative",
     "executionsPerSecond": 350,
-    "version": "pwsh-preview --version"
+    "version": "pwsh --version"
   }, {
     "name": "python",
     "isScript": true,
@@ -383,16 +383,16 @@
     "executionsPerSecond": 300000,
     "version": "esy version"
   }, {
-    "name": "reason-bucklescript",
+    "name": "reason-bs",
     "displayName": "reason (bs)",
     "isScript": false,
-    "build": "echo \"$(cd reason-bucklescript && npm run build)\"",
-    "run": "node reason-bucklescript/src/Loops.bs.js",
+    "build": "echo \"$(cd reason-bs && npm run build)\"",
+    "run": "node reason-bs/src/Loops.bs.js",
     "year": 2016,
     "execution": "transpiled",
     "solution": "functional",
     "executionsPerSecond": 200000,
-    "version": "bsc -version"
+    "version": "npx bsc -version"
   }, {
     "name": "rescript",
     "isScript": false,
@@ -402,7 +402,7 @@
     "execution": "transpiled",
     "solution": "functional",
     "executionsPerSecond": 250000,
-    "version": "rescript -version"
+    "version": "npx rescript -version"
   }, {
     "name": "ruby",
     "isScript": true,

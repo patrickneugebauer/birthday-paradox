@@ -6,8 +6,8 @@ import util from 'util';
 // exported (public) methods
 // ==================================================
 type Command = string;
-export const exec = (x: Command) => {
-  console.log(x);
+export const exec = (x: Command, log = false) => {
+  if (log) console.log(x);
   return util.promisify(child_process.exec)(x)
 };
 export const readFile = util.promisify(fs.readFile);
@@ -26,6 +26,10 @@ export const asyncMap = <I, O>(fn: (x: I) => Promise<O>, arr: Array<I>): Promise
     (prev: Promise<O[]>, curr) => prev.then(result => fn(curr).then((res) => addToArray(res, result))),
     Promise.resolve([])
   );
+
+export const head = <T>(xs: T[]): T => xs[0];
+export const tail = <T>(xs: T[]): T[] => xs.slice(1);
+export const headTail = <T>(xs: T[]): [T, T[]] => [head(xs), tail(xs)];
 
 export const textToHash = (text: string) => {
   const lines = text

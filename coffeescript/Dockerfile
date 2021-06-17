@@ -1,6 +1,8 @@
-FROM mor1/coffeescript
+FROM node:lts-slim
 
 WORKDIR /root
+
+RUN npm i -g coffeescript
 
 ADD loops.coffee .
 
