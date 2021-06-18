@@ -4,8 +4,8 @@ import { Printer } from './printer';
 import { constants } from 'fs';
 
 // constants
-const CONFIG = 'config.json'; // 'config.test.json'
-const README = 'README.md' // 'readme.test.md'
+const CONFIG = 'config.json';
+const README = 'readme.md';
 const VERSIONS = 'versions.md';
 
 const iterationsScale = parseFloat(process.argv[2]) || 0.25;
@@ -57,7 +57,7 @@ const getConfig = (): Promise<Config[]> => {
 const filterSolutions = (xs: Config[]): Promise<Array<Config & { weigh: string }>> => {
   printer.startLine(xs.length, "parallel");
   const checkForDockerfilesPromise = Promise.all(xs.map(
-    x => helpers.access(`${x.name}/Dockerfile`, constants.F_OK)
+    x => helpers.access(`solutions/${x.name}/Dockerfile`, constants.F_OK)
       .then(access => {
         printer.progressTick();
         return Promise.resolve([access, x] as [boolean, Config]);
@@ -67,14 +67,14 @@ const filterSolutions = (xs: Config[]): Promise<Array<Config & { weigh: string }
     const filteredConfigs = configs
       .filter(x => {
         const keep = x[0];
-        if (!keep) console.log(`removing: ${x[1].name}`);
+        // if (!keep) console.log(`removing: ${x[1].name}`);
         return keep;
       })
       .map(x => x[1])
       .map(x => {
         const imageName = `bday/${x.name}`;
         return Object.assign({}, x, {
-          build: `docker build ${x.name} -t ${imageName}`,
+          build: `docker build solutions/${x.name} -t ${imageName}`,
           run: `docker run --rm ${imageName}`,
           weigh: `docker images | grep "${imageName} " | rev | cut -d " " -f 1 | rev`
         });

@@ -94,6 +94,17 @@
     "executionsPerSecond": 1750000,
     "version": "dmd --version"
   }, {
+    "name": "d-llvm",
+    "isScript": false,
+    "build": "ldc2 d-ldc/loops.d -od=d -of=d-ldc/loops -release",
+    "run": "d-ldc/loops",
+    "year": 2001,
+    "execution": "compiled",
+    "solution": "imperative",
+    "executionsPerSecond": 1750000,
+    "version": "ldc2 --version",
+    "ignore": "true"
+  }, {
     "name": "dart",
     "isScript": true,
     "run": "dart dart/loops.dart",
