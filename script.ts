@@ -1,4 +1,5 @@
 import * as helpers from './script-helpers';
+import { Printer } from './printer';
 // import * as watcher from './watcher';
 import { constants } from 'fs';
 
@@ -43,19 +44,24 @@ type ResultData = RawResult & {
   hasRepl: boolean;
 }
 
+const printer = new Printer();
+
 const getConfig = (): Promise<Config[]> => {
-  console.log('start: read config')
+  printer.startLine(1, "parallel");
   return helpers.readFile(CONFIG).then(x => {
-    console.log('finish: read config\n')
+    printer.progressTick();
     return JSON.parse(x.toString()).languages
   });
 };
 
 const filterSolutions = (xs: Config[]): Promise<Array<Config & { weigh: string }>> => {
-  console.log('start: filtering');
+  printer.startLine(xs.length, "parallel");
   const checkForDockerfilesPromise = Promise.all(xs.map(
     x => helpers.access(`${x.name}/Dockerfile`, constants.F_OK)
-      .then(access => Promise.resolve([access, x] as [boolean, Config]))
+      .then(access => {
+        printer.progressTick();
+        return Promise.resolve([access, x] as [boolean, Config]);
+      })
   ));
   return checkForDockerfilesPromise.then(configs => {
     const filteredConfigs = configs
@@ -71,9 +77,8 @@ const filterSolutions = (xs: Config[]): Promise<Array<Config & { weigh: string }
           build: `docker build ${x.name} -t ${imageName}`,
           run: `docker run --rm ${imageName}`,
           weigh: `docker images | grep "${imageName} " | rev | cut -d " " -f 1 | rev`
-        })
+        });
       });
-    console.log('finish: filtering\n');
     return filteredConfigs;
   });
 }
@@ -81,48 +86,78 @@ const filterSolutions = (xs: Config[]): Promise<Array<Config & { weigh: string }
 type PassResult = [Config, null];
 type FailResult = [null, string];
 const buildSyncWithFailures = (xs: Config[]): Promise<Config[]> => {
-  console.log('start: building');
+  printer.startLine(xs.length, "series");
   const mapResult = helpers.asyncMap(x =>
     (x.build)
-      ? helpers.exec(x.build, true)
-        .then(() => [x, null])
+      ? helpers.exec(x.build)
+        .then(() => {
+          printer.progressTick();
+          return [x, null];
+        })
         .catch(err => [null, err]) as Promise<PassResult | FailResult>
       : Promise.resolve([x, null] as PassResult)
   , xs);
   return mapResult.then(x => {
-    // (x.filter(a => a[0]) as PassResult[]).map(b => b[0]);
     const positiveResults = x.filter(a => a[0]) as PassResult[];
-    const positiveResultConfigs = positiveResults.map(b => b[0])
-    console.log('finish: building\n');
+    const positiveResultConfigs = positiveResults.map(b => b[0]);
     return positiveResultConfigs;
   });
-
 }
 
 const weighImages = (xs: Array<Config & { weigh: string }>): Promise<Array<Config & { size: string }>> => {
-  console.log('start: weigh images');
+  printer.startLine(xs.length, "parallel");
   return Promise.all(xs.map(
     x => helpers
       .exec(x.weigh)
-      .then(res => Object.assign({}, x, { size: res.stdout }) )
+      .then(res => {
+        printer.progressTick();
+        return Object.assign({}, x, { size: res.stdout });
+      })
   )).then(x => {
-    console.log('finish: weigh images\n');
     return x;
   });
 }
 
+const versions = (xs: Config[]) => {
+  printer.startLine(xs.length, "parallel");
+  const versionInfoPromises = xs.map(info => {
+    const [versionExecutable, versionParams] = helpers.headTail(info.version.split(" "));
+    const versionCommand = `docker run --rm --entrypoint ${versionExecutable} bday/${info.name} ${versionParams.join(" ")}`;
+    return helpers.exec(versionCommand).then(
+      execResult => execResult.stdout || execResult.stderr
+    ).then(r => {
+      const name = `#### ${info.name}`;
+      const command = `\`${info.version}\``;
+      const version = r
+        .replace(/\r/g, '\n')
+        .split('\n')
+        .filter(x => Boolean(x))
+        .map(x => `    ${x}`)
+        .join('\n');
+      const versionString = `${name}\n\n${command}\n\n${version}`;
+      printer.progressTick();
+      return versionString;
+    })
+  });
+  return Promise.all(versionInfoPromises)
+    .then(versionInfo => versionInfo.join('\n\n') + '\n')
+    .then(x =>
+      helpers.writeFile(VERSIONS, x).then(() => {
+        return x;
+      })
+    );
+}
+
 const run = (xs: Array<Config & { size: string }>): Promise<ResultData[]> => {
-  console.log('start: run');
+  printer.startLine(xs.length, "series");
   return helpers.asyncMap(lang => {
     const iterations = parseInt((lang.executionsPerSecond * iterationsScale).toString());
-    // return watcher.runAndWatch(`${lang.run} ${iterations}`)
-    return helpers.exec(`${lang.run} ${iterations}`, true).then(x => x.stdout)
+    return helpers.exec(`${lang.run} ${iterations}`).then(x => x.stdout)
       .then(x => helpers.textToHash(x) as RawResult)
-      // .then(x => { console.log(x); return x })
       .then(x => {
         const speed = parseInt((iterations / parseFloat(x.seconds)).toString());
         const size = parseInt( (parseFloat(lang.size) * (lang.size.includes('GB') ? 1024 : 1) ).toString() )
-        return Object.assign({}, x, {
+        const resultData: ResultData = Object.assign({}, x, {
           name: lang.displayName || lang.name,
           speed,
           size,
@@ -130,18 +165,19 @@ const run = (xs: Array<Config & { size: string }>): Promise<ResultData[]> => {
           execution: lang.execution,
           solution: lang.solution,
           hasRepl: Boolean(lang.repl)
-        }) as ResultData
+        });
+        printer.progressTick();
+        return resultData;
       })
   }, xs)
     .then(helpers.sortBy(x => x['speed']))
     .then(x => {
       const descendingResults = x.reverse()
-      console.log('finish: run\n');
       return descendingResults;
     });
 }
 const readme = (xs: ResultData[]) => {
-  console.log('start: readme');
+  printer.startLine(1, "parallel");
   const sampleSize = helpers.average(xs.map(x => parseFloat(x['sample-size'])));
   const percent = helpers.average(xs.map(x => parseFloat(x.percent))).toFixed(2);
   const tableData = xs.map(
@@ -167,42 +203,17 @@ thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about
   return helpers
     .writeFile(README, fileData)
     .then(() => {
-      console.log('finish: readme\n');
-      return fileData
+      printer.progressTick();
+      return fileData;
     });
-}
-
-const versions = (xs: Config[]) => {
-  console.log('start: versions');
-  const versionInfoPromises = xs.map(info => {
-    const [versionExecutable, versionParams] = helpers.headTail(info.version.split(" "));
-    const versionCommand = `docker run --rm --entrypoint ${versionExecutable} bday/${info.name} ${versionParams.join(" ")}`;
-    return helpers.exec(versionCommand).then(
-      execResult => execResult.stdout || execResult.stderr
-    ).then(r => {
-      const name = `#### ${info.name}`;
-      const command = `\`${info.version}\``;
-      const version = r
-        .replace(/\r/g, '\n')
-        .split('\n')
-        .filter(x => Boolean(x))
-        .map(x => `    ${x}`)
-        .join('\n');
-      return `${name}\n\n${command}\n\n${version}`;
-    })
-  });
-  return Promise.all(versionInfoPromises)
-    .then(versionInfo => versionInfo.join('\n\n') + '\n')
-    .then(x =>
-      helpers.writeFile(VERSIONS, x).then(() => {
-        console.log('finish: versions\n');
-        return x;
-      })
-    );
 }
 
 // main
 (() => {
+  const commands = ['read config', 'filter', 'build', 'weigh', 'versions', 'run', 'readme'];
+  printer.setNames(commands);
+  printer.printPlan();
+
   getConfig()
     .then(filterSolutions)
     .then(x => buildSyncWithFailures(x) as Promise<typeof x>)
@@ -210,5 +221,5 @@ const versions = (xs: Config[]) => {
     .then(x => versions(x).then(() => x))
     .then(run)
     .then(readme)
-    .then(_x => console.log('complete'))
+    .then(_x => printer.finish())
 })()
