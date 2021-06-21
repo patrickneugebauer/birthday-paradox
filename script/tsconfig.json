@@ -72,6 +72,8 @@
   "files": [
     "script.ts",
     "script-helpers.ts",
-    "watcher.ts"
+    "watcher.ts",
+    "printer.ts",
+    "printer.test.ts"
   ]
 }

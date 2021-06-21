@@ -9,6 +9,7 @@ const README = 'readme.md';
 const VERSIONS = 'versions.md';
 
 const iterationsScale = parseFloat(process.argv[2]) || 0.25;
+const silentFlag = (process.argv[3] === '-s') ? true : false;
 
 type Command = string;
 type Config = {
@@ -44,7 +45,10 @@ type ResultData = RawResult & {
   hasRepl: boolean;
 }
 
-const printer = new Printer();
+const commands = ['read config', 'filter', 'build', 'weigh', 'versions', 'run', 'readme'];
+const printer = new Printer({ names: commands, ...(
+  silentFlag ? { write: () => undefined, moveCursor: () => undefined } : {}
+) });
 
 const getConfig = (): Promise<Config[]> => {
   printer.startLine(1, "parallel");
@@ -210,8 +214,6 @@ thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about
 
 // main
 (() => {
-  const commands = ['read config', 'filter', 'build', 'weigh', 'versions', 'run', 'readme'];
-  printer.setNames(commands);
   printer.printPlan();
 
   getConfig()
