@@ -74,6 +74,7 @@
     "script-helpers.ts",
     "watcher.ts",
     "printer.ts",
-    "printer.test.ts"
+    "printer.test.ts",
+    "simulation-runner.ts"
   ]
 }
