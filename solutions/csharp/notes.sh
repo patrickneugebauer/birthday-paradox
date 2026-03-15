@@ -1,11 +1,11 @@
 # run in one command
-dotnet Program.cs -- 1000000
-dotnet run --file Program.cs -- 1000000
+dotnet Program.cs -- 4000000
+dotnet run --file Program.cs -- 4000000
 
 # build and run with framework
 dotnet build
-dotnet bin/Debug/net10.0/loops.dll 1000000
-./bin/Debug/net10.0/loops 1000000
+dotnet bin/Debug/net10.0/loops.dll 4000000
+./bin/Debug/net10.0/loops 4000000
 
 # publish standalone and run
 dotnet publish -c Release \
@@ -14,7 +14,7 @@ dotnet publish -c Release \
     -p:PublishSingleFile=true \
     -p:PublishTrimmed=true \
     -o ./publish
-./publish/loops 1000000
+./publish/loops 4000000
 
 # in .NET 10 you don't need a class and main method to start the app
 

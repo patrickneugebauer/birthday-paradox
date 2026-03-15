@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine
 
 WORKDIR /root
 
@@ -7,4 +7,4 @@ ADD Program.fs .
 
 RUN dotnet build
 
-ENTRYPOINT ["dotnet", "bin/Debug/netcoreapp3.1/loops.dll"]
+ENTRYPOINT ["dotnet", "bin/Debug/net10.0/loops.dll"]

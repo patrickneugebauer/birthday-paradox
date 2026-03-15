@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/powershell
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine
 
 WORKDIR /root
 

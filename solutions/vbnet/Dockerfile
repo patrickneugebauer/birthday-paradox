@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:2.1
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine
 
 WORKDIR /root
 
@@ -7,4 +7,4 @@ ADD Program.vb .
 
 RUN dotnet build
 
-ENTRYPOINT ["dotnet", "bin/Debug/netcoreapp2.1/loops.dll"]
+ENTRYPOINT ["dotnet", "bin/Debug/net10.0/loops.dll"]
