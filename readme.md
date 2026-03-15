@@ -17,8 +17,8 @@
 | 10 | vala | 1,428,571 | 438 | 2006 | imperative | |
 | 11 | kotlin | 1,398,601 | 404 | 2011 | imperative | x |
 | 12 | pascal | 1,369,863 | 79 | 1970 | imperative | |
-| 13 | java | 1,348,920 | 467 | 1995 | imperative | x |
-| 14 | javascript | 1,219,512 | 168 | 1995 | imperative | x |
+| 13 | java | 1,348,920 | 302 | 1995 | imperative | x |
+| 14 | javascript | 1,219,512 | 170 | 1995 | imperative | x |
 | 15 | dart | 1,206,896 | 733 | 2011 | imperative | x |
 | 16 | php | 630,136 | 423 | 1995 | imperative | x |
 | 17 | groovy | 588,235 | 327 | 2003 | imperative | |
