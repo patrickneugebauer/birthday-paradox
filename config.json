@@ -334,16 +334,6 @@
     "executionsPerSecond": 350,
     "version": "pwsh --version"
   }, {
-    "name": "python",
-    "isScript": true,
-    "run": "python python/loops.py",
-    "repl": "python",
-    "year": 1990,
-    "execution": "interpreted",
-    "solution": "imperative",
-    "executionsPerSecond": 150000,
-    "version": "python --version"
-  }, {
     "name": "python3",
     "isScript": true,
     "run": "python3 python3/loops.py",

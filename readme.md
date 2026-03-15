@@ -34,20 +34,19 @@
 | 27 | scala | 146,341 | 2580 | 2004 | functional | x |
 | 28 | racket | 144,230 | 931 | 1995 | lisp | x |
 | 29 | lua | 128,205 | 50 | 1993 | imperative | x |
-| 30 | python | 121,951 | 902 | 1990 | imperative | x |
-| 31 | perl | 120,689 | 860 | 1987 | imperative | |
-| 32 | erlang | 120,000 | 1280 | 1986 | functional | x |
-| 33 | f# | 113,636 | 771 | 2005 | functional | x |
-| 34 | elixir | 102,941 | 1290 | 2011 | functional | x |
-| 35 | r | 101,351 | 763 | 1993 | scientific | x |
-| 36 | clojure | 66,666 | 666 | 2007 | lisp | x |
-| 37 | smalltalk | 30,534 | 671 | 1972 | functional | x |
-| 38 | swift | 28,169 | 2160 | 2014 | imperative | x |
-| 39 | octave | 15,789 | 853 | 1988 | scientific | x |
-| 40 | scheme | 4,123 | 78 | 1975 | lisp | x |
-| 41 | perl6 | 3,034 | 458 | 2015 | imperative | x |
-| 42 | bash | 2,868 | 9 | 1989 | imperative | x |
-| 43 | powershell | 318 | 758 | 2006 | imperative | x |
-| 44 | fish | 136 | 19 | 2005 | imperative | x |
+| 30 | perl | 120,689 | 860 | 1987 | imperative | |
+| 31 | erlang | 120,000 | 1280 | 1986 | functional | x |
+| 32 | f# | 113,636 | 771 | 2005 | functional | x |
+| 33 | elixir | 102,941 | 1290 | 2011 | functional | x |
+| 34 | r | 101,351 | 763 | 1993 | scientific | x |
+| 35 | clojure | 66,666 | 666 | 2007 | lisp | x |
+| 36 | smalltalk | 30,534 | 671 | 1972 | functional | x |
+| 37 | swift | 28,169 | 2160 | 2014 | imperative | x |
+| 38 | octave | 15,789 | 853 | 1988 | scientific | x |
+| 39 | scheme | 4,123 | 78 | 1975 | lisp | x |
+| 40 | perl6 | 3,034 | 458 | 2015 | imperative | x |
+| 41 | bash | 2,868 | 9 | 1989 | imperative | x |
+| 42 | powershell | 318 | 758 | 2006 | imperative | x |
+| 43 | fish | 136 | 19 | 2005 | imperative | x |
 
 thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about randint and random speed in python
