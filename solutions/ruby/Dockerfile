@@ -1,4 +1,4 @@
-FROM ruby
+FROM ruby:alpine
 
 WORKDIR /root
 

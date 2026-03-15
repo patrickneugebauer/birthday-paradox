@@ -1,4 +1,4 @@
-FROM python:3-buster
+FROM python:alpine
 
 WORKDIR /root
 

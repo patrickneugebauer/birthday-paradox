@@ -1,4 +1,4 @@
-FROM rust
+FROM rust:slim
 
 WORKDIR /root
 
