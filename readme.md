@@ -26,27 +26,26 @@
 | 19 | ocaml | 416,666 | 605 | 1996 | functional | x |
 | 20 | common-lisp | 416,666 | 900 | 1984 | lisp | x |
 | 21 | haskell | 370,370 | 5510 | 1990 | functional | x |
-| 22 | hack | 308,641 | 709 | 2014 | imperative | |
-| 23 | gambas | 224,719 | 802 | 1999 | imperative | |
-| 24 | julia | 202,020 | 486 | 2012 | scientific | x |
-| 25 | ruby | 193,277 | 89 | 1995 | imperative | x |
-| 26 | python3 | 148,305 | 47 | 1990 | imperative | x |
-| 27 | scala | 146,341 | 2580 | 2004 | functional | x |
-| 28 | racket | 144,230 | 931 | 1995 | lisp | x |
-| 29 | lua | 128,205 | 50 | 1993 | imperative | x |
-| 30 | perl | 120,689 | 194 | 1987 | imperative | |
-| 31 | erlang | 120,000 | 1280 | 1986 | functional | x |
-| 32 | f# | 113,636 | 771 | 2005 | functional | x |
-| 33 | elixir | 102,941 | 1290 | 2011 | functional | x |
-| 34 | r | 101,351 | 763 | 1993 | scientific | x |
-| 35 | clojure | 66,666 | 666 | 2007 | lisp | x |
-| 36 | smalltalk | 30,534 | 671 | 1972 | functional | x |
-| 37 | swift | 28,169 | 2160 | 2014 | imperative | x |
-| 38 | octave | 15,789 | 853 | 1988 | scientific | x |
-| 39 | scheme | 4,123 | 78 | 1975 | lisp | x |
-| 40 | perl6 | 3,034 | 215 | 2015 | imperative | x |
-| 41 | bash | 2,868 | 8 | 1989 | imperative | x |
-| 42 | powershell | 318 | 758 | 2006 | imperative | x |
-| 43 | fish | 136 | 19 | 2005 | imperative | x |
+| 22 | gambas | 224,719 | 802 | 1999 | imperative | |
+| 23 | julia | 202,020 | 486 | 2012 | scientific | x |
+| 24 | ruby | 193,277 | 89 | 1995 | imperative | x |
+| 25 | python3 | 148,305 | 47 | 1990 | imperative | x |
+| 26 | scala | 146,341 | 2580 | 2004 | functional | x |
+| 27 | racket | 144,230 | 931 | 1995 | lisp | x |
+| 28 | lua | 128,205 | 50 | 1993 | imperative | x |
+| 29 | perl | 120,689 | 194 | 1987 | imperative | |
+| 30 | erlang | 120,000 | 1280 | 1986 | functional | x |
+| 31 | f# | 113,636 | 771 | 2005 | functional | x |
+| 32 | elixir | 102,941 | 1290 | 2011 | functional | x |
+| 33 | r | 101,351 | 763 | 1993 | scientific | x |
+| 34 | clojure | 66,666 | 666 | 2007 | lisp | x |
+| 35 | smalltalk | 30,534 | 671 | 1972 | functional | x |
+| 36 | swift | 28,169 | 2160 | 2014 | imperative | x |
+| 37 | octave | 15,789 | 853 | 1988 | scientific | x |
+| 38 | scheme | 4,123 | 78 | 1975 | lisp | x |
+| 39 | perl6 | 3,034 | 215 | 2015 | imperative | x |
+| 40 | bash | 2,868 | 8 | 1989 | imperative | x |
+| 41 | powershell | 318 | 758 | 2006 | imperative | x |
+| 42 | fish | 136 | 19 | 2005 | imperative | x |
 
 thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about randint and random speed in python
