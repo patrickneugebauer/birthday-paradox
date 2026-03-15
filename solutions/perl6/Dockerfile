@@ -1,4 +1,4 @@
-FROM rakudo-star
+FROM rakudo-star:alpine
 
 WORKDIR /root
 

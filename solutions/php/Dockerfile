@@ -1,4 +1,4 @@
-FROM php
+FROM php:alpine
 
 WORKDIR /root
 

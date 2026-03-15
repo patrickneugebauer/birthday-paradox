@@ -20,13 +20,13 @@
 | 13 | java | 1,348,920 | 302 | 1995 | imperative | x |
 | 14 | javascript | 1,219,512 | 170 | 1995 | imperative | x |
 | 15 | dart | 1,206,896 | 733 | 2011 | imperative | x |
-| 16 | php | 630,136 | 423 | 1995 | imperative | x |
+| 16 | php | 630,136 | 138 | 1995 | imperative | x |
 | 17 | groovy | 588,235 | 327 | 2003 | imperative | |
 | 18 | v | 416,666 | 755 | 2019 | imperative | |
 | 19 | ocaml | 416,666 | 605 | 1996 | functional | x |
 | 20 | common-lisp | 416,666 | 900 | 1984 | lisp | x |
 | 21 | haskell | 370,370 | 5510 | 1990 | functional | x |
-| 22 | hack | 308,641 | 706 | 2014 | imperative | |
+| 22 | hack | 308,641 | 709 | 2014 | imperative | |
 | 23 | gambas | 224,719 | 802 | 1999 | imperative | |
 | 24 | julia | 202,020 | 486 | 2012 | scientific | x |
 | 25 | ruby | 193,277 | 89 | 1995 | imperative | x |
@@ -34,7 +34,7 @@
 | 27 | scala | 146,341 | 2580 | 2004 | functional | x |
 | 28 | racket | 144,230 | 931 | 1995 | lisp | x |
 | 29 | lua | 128,205 | 50 | 1993 | imperative | x |
-| 30 | perl | 120,689 | 860 | 1987 | imperative | |
+| 30 | perl | 120,689 | 194 | 1987 | imperative | |
 | 31 | erlang | 120,000 | 1280 | 1986 | functional | x |
 | 32 | f# | 113,636 | 771 | 2005 | functional | x |
 | 33 | elixir | 102,941 | 1290 | 2011 | functional | x |
@@ -44,7 +44,7 @@
 | 37 | swift | 28,169 | 2160 | 2014 | imperative | x |
 | 38 | octave | 15,789 | 853 | 1988 | scientific | x |
 | 39 | scheme | 4,123 | 78 | 1975 | lisp | x |
-| 40 | perl6 | 3,034 | 458 | 2015 | imperative | x |
+| 40 | perl6 | 3,034 | 215 | 2015 | imperative | x |
 | 41 | bash | 2,868 | 9 | 1989 | imperative | x |
 | 42 | powershell | 318 | 758 | 2006 | imperative | x |
 | 43 | fish | 136 | 19 | 2005 | imperative | x |

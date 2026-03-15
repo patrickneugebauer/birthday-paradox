@@ -1,4 +1,4 @@
-FROM perl
+FROM perl:slim
 
 WORKDIR /root
 
