@@ -45,7 +45,7 @@
 | 38 | octave | 15,789 | 853 | 1988 | scientific | x |
 | 39 | scheme | 4,123 | 78 | 1975 | lisp | x |
 | 40 | perl6 | 3,034 | 215 | 2015 | imperative | x |
-| 41 | bash | 2,868 | 9 | 1989 | imperative | x |
+| 41 | bash | 2,868 | 8 | 1989 | imperative | x |
 | 42 | powershell | 318 | 758 | 2006 | imperative | x |
 | 43 | fish | 136 | 19 | 2005 | imperative | x |
 
