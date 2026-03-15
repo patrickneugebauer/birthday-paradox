@@ -1,4 +1,3 @@
-# build stage
 FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
 WORKDIR /root
 
@@ -12,10 +11,4 @@ RUN dotnet publish -c Release \
     -p:PublishTrimmed=true \
     -o ./publish
 
-# run stage
-FROM mcr.microsoft.com/dotnet/runtime-deps:10.0-alpine
-WORKDIR /root
-
-COPY --from=build /root/publish/loops .
-
-ENTRYPOINT ["./loops"]
+ENTRYPOINT ["./publish/loops"]

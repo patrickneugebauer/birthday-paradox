@@ -1,0 +1,7 @@
+{
+    "base-build-image": "mcr.microsoft.com/dotnet/sdk:10.0-alpine",
+    "base-run-image": "mcr.microsoft.com/dotnet/runtime-deps:10.0-alpine",
+    "build-dockerfile": "Dockerfile.publish",
+    "run-dockerfile": "Dockerfile.runtime",
+    "runscript-dockerfile": "Dockerfile.build"
+}

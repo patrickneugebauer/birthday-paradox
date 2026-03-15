@@ -1,0 +1,9 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
+WORKDIR /root
+
+ADD loops.csproj .
+ADD Program.cs .
+
+RUN dotnet build
+
+ENTRYPOINT ["./bin/Debug/net10.0/loops"]
