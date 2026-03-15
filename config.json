@@ -31,16 +31,6 @@
     "executionsPerSecond": 50000,
     "version": "lein --version"
   }, {
-    "name": "coffeescript",
-    "isScript": false,
-    "build": "coffee -c coffeescript/loops.coffee",
-    "run": "node coffeescript/loops.js",
-    "year": 2009,
-    "execution": "transpiled",
-    "solution": "imperative",
-    "executionsPerSecond": 1000000,
-    "version": "coffee --version"
-  }, {
     "name": "common-lisp",
     "isScript": true,
     "run": "sbcl --script common-lisp/loops.cl",
@@ -384,36 +374,6 @@
     "solution": "lisp",
     "executionsPerSecond": 150000,
     "version": "racket --version"
-  }, {
-    "name": "reason",
-    "isScript": true,
-    "run": "echo \"$(cd reason && esy x Loops)\"",
-    "year": 2020,
-    "execution": "transpiled",
-    "solution": "functional",
-    "executionsPerSecond": 300000,
-    "version": "esy version"
-  }, {
-    "name": "reason-bs",
-    "displayName": "reason (bs)",
-    "isScript": false,
-    "build": "echo \"$(cd reason-bs && npm run build)\"",
-    "run": "node reason-bs/src/Loops.bs.js",
-    "year": 2016,
-    "execution": "transpiled",
-    "solution": "functional",
-    "executionsPerSecond": 200000,
-    "version": "npx bsc -version"
-  }, {
-    "name": "rescript",
-    "isScript": false,
-    "build": "echo \"$(cd rescript && npm run build)\"",
-    "run": "node rescript/src/Loops.bs.js",
-    "year": 2020,
-    "execution": "transpiled",
-    "solution": "functional",
-    "executionsPerSecond": 250000,
-    "version": "npx rescript -version"
   }, {
     "name": "ruby",
     "isScript": true,

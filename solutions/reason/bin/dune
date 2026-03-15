@@ -1,4 +1,0 @@
-(executable
- (name Loops)
- (public_name Loops)
- (libraries console.lib lib))
