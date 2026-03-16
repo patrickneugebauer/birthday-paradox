@@ -8,7 +8,7 @@
 | 1 | c | 3,318,584 | 130 | 1972 | imperative | |
 | 2 | c++ | 3,177,966 | 193 | 1985 | imperative | |
 | 3 | nim | 3,125,000 | 786 | 2008 | imperative | |
-| 4 | crystal | 2,777,777 | 559 | 2014 | imperative | |
+| 4 | crystal | 2,777,777 | 509 | 2014 | imperative | |
 | 5 | rust | 2,500,000 | 916 | 2010 | imperative | x |
 | 6 | vb.net | 2,184,466 | 758 | 2001 | imperative | |
 | 7 | c# | 2,142,857 | 758 | 2000 | imperative | x |

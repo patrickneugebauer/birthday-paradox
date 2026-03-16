@@ -1,4 +1,4 @@
-FROM crystallang/crystal:latest
+FROM crystallang/crystal:latest-alpine
 
 WORKDIR /root
 
