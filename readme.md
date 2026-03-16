@@ -35,7 +35,7 @@
 | 26 | python3 | 148,305 | 47 | 1990 | imperative | x |
 | 27 | scala | 146,341 | 824 | 2004 | functional | x |
 | 28 | racket | 144,230 | 262 | 1995 | lisp | x |
-| 29 | lua | 128,205 | 50 | 1993 | imperative | x |
+| 29 | lua | 128,205 | 13 | 1993 | imperative | x |
 | 30 | perl | 120,689 | 194 | 1987 | imperative | |
 | 31 | erlang | 120,000 | 89 | 1986 | functional | x |
 | 32 | f# | 113,636 | 771 | 2005 | functional | x |
