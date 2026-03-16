@@ -24,7 +24,7 @@
 | 17 | groovy | 588,235 | 327 | 2003 | imperative | |
 | 18 | v | 416,666 | 755 | 2019 | imperative | |
 | 19 | ocaml | 416,666 | 605 | 1996 | functional | x |
-| 20 | common-lisp | 416,666 | 900 | 1984 | lisp | x |
+| 20 | common-lisp | 416,666 | 339 | 1984 | lisp | x |
 | 21 | haskell | 370,370 | 5510 | 1990 | functional | x |
 | 22 | gambas | 224,719 | 802 | 1999 | imperative | |
 | 23 | julia | 202,020 | 486 | 2012 | scientific | x |

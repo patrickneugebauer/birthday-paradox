@@ -1,4 +1,4 @@
-FROM daewok/lisp-devel:base
+FROM clfoundation/sbcl:2.6.2-rc-alpine3.22
 
 WORKDIR /root
 
