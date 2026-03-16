@@ -1,4 +1,4 @@
-FROM julia
+FROM julia:alpine
 
 WORKDIR /root
 

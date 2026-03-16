@@ -28,7 +28,7 @@
 | 21 | common-lisp | 416,666 | 339 | 1984 | lisp | x |
 | 22 | haskell | 370,370 | 5510 | 1990 | functional | x |
 | 23 | gambas | 224,719 | 802 | 1999 | imperative | |
-| 24 | julia | 202,020 | 486 | 2012 | scientific | x |
+| 24 | julia | 202,020 | 1050 | 2012 | scientific | x |
 | 25 | ruby | 193,277 | 89 | 1995 | imperative | x |
 | 26 | python3 | 148,305 | 47 | 1990 | imperative | x |
 | 27 | scala | 146,341 | 2580 | 2004 | functional | x |
