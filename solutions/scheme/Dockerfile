@@ -1,8 +1,10 @@
-FROM inikolaev/alpine-scheme
+FROM debian:stable-slim
 
-WORKDIR /root
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends mit-scheme
+
+WORKDIR /app
 
 COPY loops.scm .
-COPY run-scheme.sh .
 
-ENTRYPOINT ["./run-scheme.sh", "loops.scm"]
+ENTRYPOINT ["mit-scheme", "--quiet", "--load", "loops.scm", "--"]

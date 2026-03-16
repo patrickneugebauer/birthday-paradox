@@ -45,7 +45,7 @@
 
 (define iterations
   (string->number
-     (car (readfile "scheme-input.txt"))))
+    (car (command-line-arguments))))
 
 (define sample-size 23)
 
@@ -94,3 +94,5 @@
 
 (define (main args)
   (display args))
+
+(exit)
