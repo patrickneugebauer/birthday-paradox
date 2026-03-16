@@ -1,0 +1,11 @@
+FROM dlang2/gdc-ubuntu
+
+WORKDIR /root
+
+ADD loops.d .
+
+# BREAKS
+RUN apt-get update && apt-get install -y libphobos2-ldc-dev
+RUN gdc loops.d -o loops -lphobos2
+
+ENTRYPOINT ["./loops"]

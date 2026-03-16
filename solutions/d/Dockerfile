@@ -1,4 +1,4 @@
-FROM dlang2/dmd-ubuntu:latest
+FROM dlang2/dmd-ubuntu
 
 WORKDIR /root
 

@@ -1,0 +1,10 @@
+FROM dlang2/ldc-ubuntu
+
+WORKDIR /root
+
+ADD loops.d .
+
+# RUN ldc2 loops.d -of=loops
+RUN ldc2 -O3 -release -mcpu=native -flto=full loops.d -of=loops
+
+ENTRYPOINT ["./loops"]
