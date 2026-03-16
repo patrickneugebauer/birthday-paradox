@@ -7,7 +7,8 @@
 | :--: | :-- | --: | --: | --: | :-- | :--: |
 | 1 | c-gcc | 3,318,584 | 208 | 1972 | imperative | |
 | 1 | c-clang | x | 521 | 1972 | imperative | |
-| 2 | c++ | 3,177,966 | 193 | 1985 | imperative | |
+| 2 | c++-gcc | 3,177,966 | 278 | 1985 | imperative | |
+| 2 | c++-clang | 3,177,966 | 521 | 1985 | imperative | |
 | 3 | nim | 3,125,000 | 786 | 2008 | imperative | |
 | 4 | crystal | 2,777,777 | 509 | 2014 | imperative | |
 | 5 | rust | 2,500,000 | 916 | 2010 | imperative | x |

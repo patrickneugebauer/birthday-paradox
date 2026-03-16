@@ -3,10 +3,10 @@ FROM alpine
 WORKDIR /root
 
 # musl-dev is headers
-RUN apk add --no-cache g++ musl-dev
+RUN apk add --no-cache clang musl-dev
 
 ADD loops.cpp .
 
-RUN g++ loops.cpp -O3 -o loops.out
+RUN clang++ loops.cpp -O3 -o loops.out
 
 ENTRYPOINT ["./loops.out"]
