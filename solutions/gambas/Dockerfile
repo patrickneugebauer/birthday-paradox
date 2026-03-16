@@ -1,10 +1,14 @@
-FROM ghcr.io/mdwagner/gambas:latest
+FROM debian:stable-slim
 
-WORKDIR /root
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    gambas3
+
+WORKDIR /app
 
 COPY .project .
-COPY .src/* .src/
+COPY .src .
 
-RUN gbc3
+RUN gbc3 && gba3 -o loops
 
-ENTRYPOINT ["gbx3", "--"]
+ENTRYPOINT ["gbr3", "./loops"]

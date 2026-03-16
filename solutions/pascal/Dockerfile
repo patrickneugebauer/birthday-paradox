@@ -1,4 +1,4 @@
-FROM cmplopes/alpine-freepascal
+FROM freepascal/fpc:latest-slim
 
 WORKDIR /root
 

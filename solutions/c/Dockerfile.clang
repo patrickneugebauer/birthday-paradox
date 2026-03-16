@@ -1,9 +1,6 @@
-FROM alpine
+FROM silkeh/clang
 
 WORKDIR /root
-
-# musl-dev is headers
-RUN apk add --no-cache gcc musl-dev
 
 ADD loops.c .
 

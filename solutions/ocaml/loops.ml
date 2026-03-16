@@ -1,3 +1,6 @@
+#directory "+unix";;
+#load "unix.cma";;
+
 (* constants *)
 let start = Unix.gettimeofday ();;
 let iterations = Sys.argv.(1) |> int_of_string;;
@@ -6,7 +9,7 @@ Random.self_init();;
 
 (* create intset module *)
 module IntSet = Set.Make(
-  struct let compare = Pervasives.compare
+  struct let compare = Stdlib.compare
   type t = int
 end)
 

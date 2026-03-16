@@ -6,7 +6,7 @@
 
 #define sampleSize 23
 
-void simulate();
+void simulate(int iterations);
 
 int main(int argc, char *argv[]) {
   int iterations = atoi(argv[1]);

@@ -1,11 +1,7 @@
-FROM ubuntu
+FROM ocaml/opam:alpine
 
-WORKDIR /root
-
-RUN apt update && apt install -y ocaml
+WORKDIR /home/opam
 
 COPY loops.ml .
 
-RUN ocamlopt -o loops unix.cmxa loops.ml
-
-ENTRYPOINT ["./loops"]
+ENTRYPOINT ["opam", "exec", "--", "ocaml", "loops.ml"]

@@ -1,4 +1,4 @@
-FROM openmicroscopy/octave
+FROM gnuoctave/octave
 
 COPY iterate.m .
 COPY loops.m .

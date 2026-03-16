@@ -1,4 +1,4 @@
-FROM thevlang/vlang
+FROM thevlang/vlang:alpine
 
 WORKDIR /root
 

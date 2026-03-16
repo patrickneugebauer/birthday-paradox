@@ -1,5 +1,4 @@
-# FROM hseeberger/scala-sbt:16.0.1_1.5.3_3.0.0
-FROM hseeberger/scala-sbt:graalvm-ce-21.1.0-java11_1.5.3_3.0.0
+FROM sbtscala/scala-sbt:eclipse-temurin-alpine-25.0.1_8_1.12.5_3.3.7
 
 WORKDIR /root
 

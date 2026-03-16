@@ -13,7 +13,7 @@ fn main() {
 	for _ in 0..iterations {
 		mut data := []int{len: 365}
     for _ in 0..sample_size {
-			sample := rand.intn(365)
+			sample := rand.intn(365)!
 			if data[sample] == 1 {
 				count++
 				break

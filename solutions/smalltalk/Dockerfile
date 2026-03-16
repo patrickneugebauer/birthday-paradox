@@ -1,4 +1,4 @@
-FROM nacyot/smalltalk-gnu:apt
+FROM codesignal/smalltalk:v14.1.0
 
 WORKDIR /root
 

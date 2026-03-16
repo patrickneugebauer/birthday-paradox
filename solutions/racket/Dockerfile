@@ -1,4 +1,4 @@
-FROM jackfirth/racket
+FROM racket/racket
 
 WORKDIR /root
 
