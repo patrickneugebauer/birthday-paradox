@@ -1,4 +1,4 @@
-FROM google/dart
+FROM dart
 
 WORKDIR /root
 

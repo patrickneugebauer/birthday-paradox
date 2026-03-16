@@ -20,7 +20,7 @@
 | 13 | pascal | 1,369,863 | 79 | 1970 | imperative | |
 | 14 | java | 1,348,920 | 302 | 1995 | imperative | x |
 | 15 | javascript | 1,219,512 | 170 | 1995 | imperative | x |
-| 16 | dart | 1,206,896 | 733 | 2011 | imperative | x |
+| 16 | dart | 1,206,896 | 837 | 2011 | imperative | x |
 | 17 | php | 630,136 | 138 | 1995 | imperative | x |
 | 18 | groovy | 588,235 | 327 | 2003 | imperative | |
 | 19 | v | 416,666 | 755 | 2019 | imperative | |
