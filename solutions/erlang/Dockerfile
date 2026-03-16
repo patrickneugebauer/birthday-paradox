@@ -1,4 +1,4 @@
-FROM erlang
+FROM erlang:alpine
 
 WORKDIR /root
 

@@ -35,9 +35,9 @@
 | 28 | racket | 144,230 | 931 | 1995 | lisp | x |
 | 29 | lua | 128,205 | 50 | 1993 | imperative | x |
 | 30 | perl | 120,689 | 194 | 1987 | imperative | |
-| 31 | erlang | 120,000 | 1280 | 1986 | functional | x |
+| 31 | erlang | 120,000 | 89 | 1986 | functional | x |
 | 32 | f# | 113,636 | 771 | 2005 | functional | x |
-| 33 | elixir | 102,941 | 1290 | 2011 | functional | x |
+| 33 | elixir | 102,941 | 105 | 2011 | functional | x |
 | 34 | r | 101,351 | 763 | 1993 | scientific | x |
 | 35 | clojure | 66,666 | 339 | 2007 | lisp | x |
 | 36 | smalltalk | 30,534 | 671 | 1972 | functional | x |

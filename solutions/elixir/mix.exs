@@ -5,7 +5,7 @@ defmodule Elixir.MixProject do
     [
       app: :loops,
       version: "0.1.0",
-      escript: escript
+      escript: escript()
     ]
   end
 
