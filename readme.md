@@ -22,7 +22,7 @@
 | 15 | javascript | 1,219,512 | 170 | 1995 | imperative | x |
 | 16 | dart | 1,206,896 | 837 | 2011 | imperative | x |
 | 17 | php | 630,136 | 138 | 1995 | imperative | x |
-| 18 | groovy | 588,235 | 327 | 2003 | imperative | |
+| 18 | groovy | 588,235 | 401 | 2003 | imperative | |
 | 19 | v | 416,666 | 755 | 2019 | imperative | |
 | 20 | ocaml | 416,666 | 605 | 1996 | functional | x |
 | 21 | common-lisp | 416,666 | 339 | 1984 | lisp | x |
