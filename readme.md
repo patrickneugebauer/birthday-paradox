@@ -16,7 +16,7 @@
 | 8 | go | 2,045,454 | 300 | 2009 | imperative | |
 | 9 | d-ldc | x | 1010 | 2001 | imperative | |
 | 10 | d-dmd | 1,902,173 | 840 | 2001 | imperative | |
-| 11 | vala | 1,428,571 | 438 | 2006 | imperative | |
+| 11 | vala | 1,428,571 | 384 | 2006 | imperative | |
 | 12 | kotlin | 1,398,601 | 404 | 2011 | imperative | x |
 | 13 | pascal | 1,369,863 | 156 | 1970 | imperative | |
 | 14 | java | 1,348,920 | 302 | 1995 | imperative | x |

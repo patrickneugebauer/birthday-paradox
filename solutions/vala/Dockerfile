@@ -1,7 +1,7 @@
-FROM debian
+FROM debian:stable-slim
 
 RUN apt update \
- && apt install -y valac
+ && apt install -y --no-install-recommends valac gcc
 
 WORKDIR /root
 
