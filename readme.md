@@ -38,7 +38,7 @@
 | 31 | f# | 113,636 | 771 | 2005 | functional | x |
 | 32 | elixir | 102,941 | 1290 | 2011 | functional | x |
 | 33 | r | 101,351 | 763 | 1993 | scientific | x |
-| 34 | clojure | 66,666 | 666 | 2007 | lisp | x |
+| 34 | clojure | 66,666 | 339 | 2007 | lisp | x |
 | 35 | smalltalk | 30,534 | 671 | 1972 | functional | x |
 | 36 | swift | 28,169 | 2160 | 2014 | imperative | x |
 | 37 | octave | 15,789 | 853 | 1988 | scientific | x |

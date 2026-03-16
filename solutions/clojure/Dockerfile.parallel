@@ -1,0 +1,7 @@
+FROM clojure:temurin-25-alpine
+
+WORKDIR /root
+
+ADD loops-parallel.clj .
+
+ENTRYPOINT ["clj", "-M", "loops-parallel.clj"]

@@ -1,8 +1,7 @@
-FROM clojure:lein
+FROM clojure:temurin-25-alpine
 
 WORKDIR /root
 
-ADD project.clj .
-ADD src/ src/
+ADD loops.clj .
 
-ENTRYPOINT ["lein", "run"]
+ENTRYPOINT ["clj", "-M", "loops.clj"]
