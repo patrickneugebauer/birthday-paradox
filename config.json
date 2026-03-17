@@ -199,7 +199,8 @@
     "execution": "compiled",
     "solution": "functional",
     "executionsPerSecond": 100000,
-    "version": "ghc --version"
+    "version": "ghc --version",
+    "tooBig": true
   }, {
     "name": "java",
     "isScript": false,
@@ -283,7 +284,8 @@
     "execution": "imperative",
     "solution": "scientific",
     "executionsPerSecond": 9000,
-    "version": "octave --version"
+    "version": "octave --version",
+    "tooBig": true
   }, {
     "name": "pascal",
     "isScript": false,
@@ -416,7 +418,8 @@
     "execution": "interpreted",
     "solution": "functional",
     "executionsPerSecond": 40000,
-    "version": "gst --version"
+    "version": "gst --version",
+    "tooBig": true
   }, {
     "name": "swift",
     "isScript": false,
@@ -427,7 +430,8 @@
     "execution": "compiled",
     "solution": "imperative",
     "executionsPerSecond": 80000,
-    "version": "swift --version"
+    "version": "swift --version",
+    "tooBig": true
   }, {
     "name": "v",
     "isScript": false,

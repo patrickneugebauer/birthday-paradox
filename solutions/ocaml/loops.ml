@@ -1,5 +1,4 @@
-#directory "+unix";;
-#load "unix.cma";;
+open Unix
 
 (* constants *)
 let start = Unix.gettimeofday ();;

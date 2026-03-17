@@ -29,7 +29,7 @@
 | 17 | php | 630,136 | 138 | 1995 | imperative | x |
 | 18 | groovy | 588,235 | 401 | 2003 | imperative | |
 | 19 | v | 416,666 | 267 | 2019 | imperative | |
-| 20 | ocaml | 416,666 | 1420 | 1996 | functional | x |
+| 20 | ocaml | 416,666 | 502 | 1996 | functional | x |
 | 21 | common-lisp | 416,666 | 339 | 1984 | lisp | x |
 | 22 | haskell | 370,370 | 5510 | 1990 | functional | x |
 | 23 | gambas | 224,719 | 808 | 1999 | imperative | |

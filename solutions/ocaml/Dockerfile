@@ -1,7 +1,10 @@
-FROM ocaml/opam:alpine
+FROM alpine:latest
 
-WORKDIR /home/opam
+RUN apk add --no-cache \
+    ocaml build-base dune musl-dev
 
+WORKDIR /app
 COPY loops.ml .
+RUN ocamlopt -o loops unix.cmxa loops.ml
 
-ENTRYPOINT ["opam", "exec", "--", "ocaml", "loops.ml"]
+ENTRYPOINT ["./loops"]
