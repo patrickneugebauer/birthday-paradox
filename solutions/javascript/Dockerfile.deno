@@ -1,0 +1,9 @@
+FROM denoland/deno:alpine
+
+WORKDIR /root
+
+COPY loops.js .
+
+RUN deno cache loops.js
+
+ENTRYPOINT ["deno", "run", "loops.js"]

@@ -1,0 +1,7 @@
+FROM oven/bun:alpine
+
+WORKDIR /root
+
+COPY loops.js .
+
+ENTRYPOINT ["bun", "loops.js"]

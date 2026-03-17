@@ -1,0 +1,20 @@
+# https://github.com/saghul/txiki.js/blob/master/Dockerfile
+
+FROM alpine AS builder
+RUN apk add build-base cmake libffi-dev git --update-cache
+WORKDIR /txiki.js
+
+# only pull last commit of most recent verified tag
+RUN git clone --depth 1 --branch v26.3.0 https://github.com/saghul/txiki.js .
+RUN git submodule update --init --recursive && make distclean && make
+
+FROM alpine:latest
+RUN apk add libstdc++ libffi tini --no-cache
+
+# 1. Copy the compiled txiki.js binary from the builder
+COPY --from=builder /txiki.js/build/tjs /bin/tjs
+
+WORKDIR /app
+COPY loops-tjs.js .
+
+ENTRYPOINT ["tini", "--", "tjs", "run", "loops-tjs.js"]
