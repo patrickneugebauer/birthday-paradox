@@ -22,9 +22,9 @@
 | 13 | pascal | 1,369,863 | 156 | 1970 | imperative | |
 | 14 | java | 1,348,920 | 302 | 1995 | imperative | x |
 | 15 | javascript-node | 1,219,512 | 170 | 1995 | imperative | x |
-| 15 | javascript-deno | x | 135 | 1995 | imperative | x |
-| 15 | javascript-bun | x | 109 | 1995 | imperative | x |
-| 15 | javascript-txiki | x | 20 | 1995 | imperative | x |
+| 15 | javascript-deno | x | 135 | 2018 | imperative | x |
+| 15 | javascript-bun | x | 109 | 2021 | imperative | x |
+| 15 | javascript-txiki | x | 20 | 2019 | imperative | x |
 | 16 | dart | 1,206,896 | 837 | 2011 | imperative | x |
 | 17 | php | 630,136 | 138 | 1995 | imperative | x |
 | 18 | groovy | 588,235 | 401 | 2003 | imperative | |
