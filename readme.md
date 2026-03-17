@@ -32,7 +32,7 @@
 | 20 | ocaml | 416,666 | 502 | 1996 | functional | x |
 | 21 | common-lisp | 416,666 | 339 | 1984 | lisp | x |
 | 22 | haskell | 370,370 | 5510 | 1990 | functional | x |
-| 23 | gambas | 224,719 | 808 | 1999 | imperative | |
+| 23 | gambas | 224,719 | 786 | 1999 | imperative | |
 | 24 | julia | 202,020 | 1050 | 2012 | scientific | x |
 | 25 | ruby | 193,277 | 89 | 1995 | imperative | x |
 | 26 | python3 | 148,305 | 47 | 1990 | imperative | x |
@@ -48,7 +48,7 @@
 | 36 | smalltalk | 30,534 | 1980 | 1972 | functional | x |
 | 37 | swift | 28,169 | 3860 | 2014 | imperative | x |
 | 38 | octave | 15,789 | 4590 | 1988 | scientific | x |
-| 39 | scheme | 4,123 | 163 | 1975 | lisp | x |
+| 39 | scheme | 4,123 | 141 | 1975 | lisp | x |
 | 40 | perl6 | 3,034 | 215 | 2015 | imperative | x |
 | 41 | bash | 2,868 | 8 | 1989 | imperative | x |
 | 42 | powershell | 318 | 758 | 2006 | imperative | x |

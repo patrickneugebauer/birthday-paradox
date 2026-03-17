@@ -1,8 +1,9 @@
 FROM debian:stable-slim
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    gambas3
+    apt-get install -y --no-install-recommends gambas3 && \
+    rm -rf /var/lib/apt/lists/*
+# rm -rf /var/lib/apt/lists/* saves 22mb
 
 WORKDIR /app
 
