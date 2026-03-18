@@ -53,5 +53,8 @@
 | 41 | bash | 2,868 | 8 | 1989 | imperative | x |
 | 42 | powershell | 318 | 758 | 2006 | imperative | x |
 | 42 | fish | 136 | 27 | 2005 | imperative | x |
+| - | fortran | x | 320 | 1957 | imperative | x |
+| - | chapel | x | 2150 | 2009 | imperative | x |
+| - | pharo | x | 218 | 2008 | imperative | x |
 
 thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about randint and random speed in python

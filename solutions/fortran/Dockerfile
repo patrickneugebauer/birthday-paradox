@@ -1,0 +1,12 @@
+FROM debian:stable-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gfortran && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY hello.f90 .
+RUN gfortran hello.f90 -o hello
+
+ENTRYPOINT ["./hello"]
