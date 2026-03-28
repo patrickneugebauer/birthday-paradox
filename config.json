@@ -20,6 +20,9 @@
     "executionsPerSecond": 3750000,
     "version": "cc --version"
   }, {
+    "name": "chapel",
+    "tooBig": true
+  }, {
     "name": "clojure",
     "isScript": true,
     "scriptRun": "clojure clojure/src/clj/loops.clj",

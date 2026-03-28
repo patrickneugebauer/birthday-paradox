@@ -13,3 +13,5 @@ docker images | grep go | rev | cut -d " " -f 1 | rev
 docker image ls --filter "reference=*go*" --format "{{.Size}}"
 docker image ls go --format "{{.Size}}"
 docker image ls go:latest --format "{{.Size}}"
+
+docker system df
