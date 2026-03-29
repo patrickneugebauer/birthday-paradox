@@ -57,5 +57,6 @@
 | - | chapel | x | 2150 | 2009 | imperative | |
 | - | pharo | x | 218 | 2008 | imperative | x |
 | - | freebasic | x | 276 | 2004 | imperative | |
+| - | zig | x | 537 | 2016 | imperative | |
 
 thanks [Anthony Robinson](https://github.com/anthonycrobinson) for the tip about randint and random speed in python
