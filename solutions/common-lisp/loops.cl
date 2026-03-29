@@ -20,8 +20,8 @@
 ;; calcs
 (defvar percent (* (/ duplicates iterations) 100))
 (defvar finish (get-internal-real-time))
-(defvar milliseconds (- finish start))
-(defvar seconds (/ milliseconds 1000))
+(defvar time-units (- finish start))
+(defvar seconds (/ time-units internal-time-units-per-second))
 
 ;; output
 (format t "iterations: ~d~%" iterations)
