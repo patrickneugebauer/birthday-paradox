@@ -20,3 +20,9 @@ docker image ls --filter "reference=*bday/*"
 
 # make tabs 4 spaces in git CLI
 git config --global core.pager 'less -x1,5'
+
+docker images --format '{{.Repository}}:{{.Tag}} {{.ID}}' | sort > images.txt
+cut -d' ' -f1 images.txt > tags-to-delete.txt
+docker rmi $(cat tags-to-delte.txt)
+cut -d' ' -f2 images.txt > images-to-delete.txt
+docker image rm $(cat images-to-delete.txt)

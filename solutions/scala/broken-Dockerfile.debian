@@ -1,0 +1,13 @@
+FROM debian:stable-slim
+
+RUN apt-get update && apt-get install -y \
+    curl clang libz-dev && \
+    curl -sSLf https://scala-cli.virtuslab.org/get | sh && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY Loops.scala .
+RUN scala-cli --power package Loops.scala --native -o loops
+
+ENTRYPOINT ["./loops"]

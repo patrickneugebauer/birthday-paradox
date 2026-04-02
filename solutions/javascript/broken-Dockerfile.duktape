@@ -1,0 +1,15 @@
+FROM alpine AS builder
+
+RUN apk --no-cache add gcc make musl-dev
+WORKDIR /tmp
+RUN wget https://duktape.org/duktape-2.7.0.tar.xz
+RUN tar xvfJ duktape-2.7.0.tar.xz
+WORKDIR /tmp/duktape-2.7.0
+RUN make -f Makefile.cmdline
+
+FROM alpine
+
+WORKDIR /app
+COPY --from=builder /tmp/duktape-2.7.0/duk .
+COPY hello.js .
+ENTRYPOINT ["./duk", "hello.js"]

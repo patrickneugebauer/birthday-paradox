@@ -10,12 +10,12 @@ import (
 )
 
 func main() {
-	f, err := os.OpenFile("solutions.tsv", os.O_RDWR, 0644)
+	solutionsFile, err := os.OpenFile("solutions.tsv", os.O_RDWR, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer f.Close()
-	r := csv.NewReader(f)
+	defer solutionsFile.Close()
+	r := csv.NewReader(solutionsFile)
 	r.Comma = '\t'
 	records, err := r.ReadAll()
 	if err != nil {
@@ -23,12 +23,12 @@ func main() {
 	}
 	// fmt.Print(records)
 
-	outfile, err := os.Create("images.tsv")
+	outFile, err := os.Create("images.tsv")
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer outfile.Close()
-	w := csv.NewWriter(f)
+	defer outFile.Close()
+	w := csv.NewWriter(outFile)
 	w.Comma = '\t'
 	defer w.Flush()
 	w.Write([]string{"lang", "solution", "image"})
@@ -54,9 +54,11 @@ func main() {
 		// fmt.Println(string(out))
 		row := []string{lang, solution, image}
 		fmt.Println(row)
+		w.Write(row)
+		w.Flush() // needed to get it to write now
 		results = append(results, row)
 		fmt.Println()
 	}
 	fmt.Println(results)
-	w.WriteAll(results)
+	// w.WriteAll(results)
 }

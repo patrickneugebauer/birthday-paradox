@@ -1,0 +1,19 @@
+FROM alpine AS downloader
+
+WORKDIR /app
+
+RUN wget https://github.com/eGenix/egenix-pyrun/releases/download/egenix-pyrun-2.6.0/egenix-pyrun-2.6.0-py3.12_ucs4-linux-x86_64.tgz && \
+  tar -xzf egenix-pyrun-2.6.0-py3.12_ucs4-linux-x86_64.tgz && \
+  rm egenix-pyrun-2.6.0-py3.12_ucs4-linux-x86_64.tgz && \
+  mv egenix-pyrun-2.6.0-py3.12_ucs4-linux-x86_64 pyrun && \
+  chmod u+x pyrun
+
+COPY loops.py .
+
+ENTRYPOINT ["./pyrun", "loops.py"]
+
+mkdir -p /usr/local/bin/pyrun && wget -qO- https://github.com/eGenix/egenix-pyrun/releases/download/egenix-pyrun-2.6.0/egenix-pyrun-2.6.0-py3.12_ucs4-linux-x86_64.tgz | tar -xzC /usr/local/bin/pyrun
+
+mkdir -p /opt/pyrun && \
+  wget -qO- https://github.com/eGenix/egenix-pyrun/releases/download/egenix-pyrun-2.6.0/egenix-pyrun-2.6.0-py3.12_ucs4-linux-x86_64.tgz | tar -xzC /opt/pyrun && \
+  ln -s /opt/pyrun/bin/pyrun3.12 /usr/local/bin/pyrun
