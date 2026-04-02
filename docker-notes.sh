@@ -15,3 +15,5 @@ docker image ls go --format "{{.Size}}"
 docker image ls go:latest --format "{{.Size}}"
 
 docker system df
+
+docker image ls --filter "reference=*bday/*"
