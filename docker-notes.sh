@@ -17,3 +17,6 @@ docker image ls go:latest --format "{{.Size}}"
 docker system df
 
 docker image ls --filter "reference=*bday/*"
+
+# make tabs 4 spaces in git CLI
+git config --global core.pager 'less -x1,5'
