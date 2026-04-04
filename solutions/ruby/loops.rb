@@ -23,7 +23,7 @@ def simulate
   results = (count.to_f / iterations * 100).round(2)
   puts "percent: #{results}"
   fin = Time.new
-  diff = (fin - start).round(3)
+  diff = (fin - start).round(6)
   puts "seconds: #{diff}"
 end
 

@@ -17,10 +17,14 @@
 (define duplicates (length (filter identity data)))
 (define percent (* (/ duplicates iterations) 100))
 (define end-ms (current-inexact-milliseconds))
-(define seconds (/ (round (- end-ms start-ms)) 1000))
+(define seconds (/
+  (round (*
+    (- end-ms start-ms)
+    1000))
+  1000000))
 
 ; output
 (printf "iterations: ~a~n" iterations)
 (printf "sample-size: ~a~n" sample-size)
 (printf "percent: ~a~n" (round-to 2 (exact->inexact percent)))
-(printf "seconds: ~a~n" (exact->inexact seconds))
+(printf "seconds: ~a~n" (real->decimal-string seconds 6))

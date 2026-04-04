@@ -5,7 +5,7 @@ import times
 import math
 
 # variables
-let start = epochTime()
+let start = getTime()
 let iterations = parseInt(paramStr(1))
 const sampleSize = 23
 var count = 0
@@ -29,11 +29,11 @@ for i in countup(1, iterations):
 
 # calcs
 let percent = count / iterations * 100
-let fin = epochTime()
-let diff = fin - start
+let fin = getTime()
+let diff = (fin - start).inMicroseconds.float / 1_000_000.0
 
 # output
 echo "iterations: " & $iterations
 echo "sample-size: " & $sampleSize
 echo "percent: " & $roundTo(percent, 2)
-echo "seconds: " & $roundTo(diff, 3)
+echo "seconds: " & diff.formatFloat(ffDecimal, 6)

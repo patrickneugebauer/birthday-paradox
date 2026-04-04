@@ -1,5 +1,5 @@
 " variables "
-start := Time millisecondClock.
+start := Time nanosecondClock.
 args := Smalltalk arguments.
 iterations := (args at: 1) asNumber.
 sampleSize := 23.
@@ -29,9 +29,9 @@ duplicates := ((1 to: iterations) select: [ :i |
 " calcs "
 percent := duplicates / iterations * 100.
 formattedPercent := percent asScaledDecimal: 2.
-fin := Time millisecondClock.
-seconds := (fin - start) / 1000.
-formattedSeconds := seconds asScaledDecimal: 3.
+fin := Time nanosecondClock.
+seconds := (fin - start) / 1000 / 1000 / 1000.
+formattedSeconds := seconds asScaledDecimal: 6.
 
 " output "
 ('iterations: ',(iterations asString)) displayNl.

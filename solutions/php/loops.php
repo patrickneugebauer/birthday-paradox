@@ -24,7 +24,7 @@
     $percent = round($count / $iterations * 100, 2);
     print "percent: $percent\n";
     $end = microtime(true);
-    $seconds = round($end - $start, 3);
+    $seconds = round($end - $start, 6);
     print "seconds: $seconds\n";
   }
 

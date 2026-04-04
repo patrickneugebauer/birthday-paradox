@@ -27,4 +27,4 @@ seconds = finish - start
 print(string.format("iterations: %d", iterations))
 print(string.format("sample-size: %d", sample_size))
 print(string.format("percent: %.2f", percent))
-print(string.format("seconds: %.3f", seconds))
+print(string.format("seconds: %.6f", seconds))

@@ -4,4 +4,4 @@ WORKDIR /home/opam
 
 COPY loops.ml .
 
-ENTRYPOINT ["opam", "exec", "--", "ocaml", "loops.ml"]
+ENTRYPOINT ["opam", "exec", "--", "ocaml", "-I", "+unix", "unix.cma", "loops.ml"]

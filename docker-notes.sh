@@ -26,3 +26,6 @@ cut -d' ' -f1 images.txt > tags-to-delete.txt
 docker rmi $(cat tags-to-delte.txt)
 cut -d' ' -f2 images.txt > images-to-delete.txt
 docker image rm $(cat images-to-delete.txt)
+
+sqlite3 app.db < schema.sql
+sqlite3 app.db -header -box "select * from sessions"

@@ -1,7 +1,19 @@
 ' Gambas module file
+Library "libc:6"
+
+Public Struct Timeval
+  tv_sec As Long
+  tv_usec As Long
+End Struct
+
+Extern gettimeofday(tv As Timeval, tz As Pointer) As Integer In "libc:6"
 
 Public Sub Main()
-  Dim start As Date = Time(Now)
+  Dim tStart As New Timeval
+  Dim tEnd As New Timeval
+  Dim fDiff As Float
+  gettimeofday(tStart, Null)
+
   Dim iterations As Integer = Val(Args[1])
   Dim sampleSize As Integer = 23
   Dim count As Integer = 0
@@ -25,8 +37,7 @@ Public Sub Main()
   Print "sample-size: " & sampleSize
   Dim percent As Float = count / iterations * 100
   Print "percent: " & Format(percent, ".00")
-  Dim finish As Date = Time(Now)
-  Dim milliseconds As Integer = DateDiff(start, finish, gb.Millisecond)
-  Dim seconds As Float = milliseconds / 1000
-  Print "seconds: " & seconds
+  gettimeofday(tEnd, Null)
+  fDiff = (tEnd.tv_sec - tStart.tv_sec) + ((tEnd.tv_usec - tStart.tv_usec) / 1000000.0)
+  Print "seconds: " & Format$(fDiff, "0.000000")
 End

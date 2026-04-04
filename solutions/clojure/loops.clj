@@ -22,4 +22,4 @@
 (println (str "iterations: " iterations))
 (println (str "sample-size: " sample-size))
 (printf "percent: %.2f%n" percent)
-(printf "seconds: %.3f%n" seconds)
+(printf "seconds: %.6f%n" seconds)

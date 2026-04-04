@@ -2,7 +2,7 @@
 const iterations = tjs.args[3];
 
 function simulate() {
-  const start = new Date().getTime()
+  const start = performance.now()
   const sampleSize = 23
 
   let count = 0
@@ -22,8 +22,8 @@ function simulate() {
   console.log(`sample-size: ${sampleSize}`)
   const results = (count / iterations * 100).toFixed(2)
   console.log(`percent: ${results}`)
-  const end = new Date().getTime()
-  const diff = ((end - start) / 1000).toFixed(3)
+  const end = performance.now()
+  const diff = ((end - start) / 1000).toFixed(6)
   console.log(`seconds: ${diff}`)
 }
 

@@ -6,7 +6,7 @@ fun main(args: Array<String>) {
 }
 
 fun simulate(iterations: Int) {
-  val start = System.currentTimeMillis();
+  val start = System.nanoTime();
   val sample_size = 23
   val random = Random()
 
@@ -27,7 +27,7 @@ fun simulate(iterations: Int) {
   println("sample-size: ${sample_size}")
   val percent = count * 100.0 / iterations
   println("percent: %.2f".format(percent))
-  val end = System.currentTimeMillis();
-  val diff = (end - start) / 1000.0
-  println("seconds: ${diff}")
+  val end = System.nanoTime();
+  val diff = (end - start) / 1_000_000_000.0
+  println("seconds: %.6f".format(diff))
 }

@@ -8,7 +8,7 @@ public class Loops {
   }
 
   private static void simulate(int iterations) {
-    long start = System.currentTimeMillis();
+    long start = System.nanoTime();
     final int SAMPLE_SIZE = 23;
     Random rand = new Random();
     rand.setSeed(start);
@@ -29,9 +29,9 @@ public class Loops {
     System.out.println("sample-size: " + SAMPLE_SIZE);
     double results = duplicates * 100.0 / iterations;
     System.out.format("percent: %.2f%n", results);
-    long end = System.currentTimeMillis();
-    double diff = (end-start) / 1_000.0;
-    System.out.format("seconds: %.3f%n", diff);
+    long end = System.nanoTime();
+    double diff = (end-start) / 1_000_000_000.0;
+    System.out.format("seconds: %.6f%n", diff);
   }
 
 }

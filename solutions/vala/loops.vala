@@ -30,7 +30,7 @@ class HelloWorld : GLib.Object {
     stdout.printf("iterations: %d\n", iterations);
     stdout.printf("sample-size: %d\n", sample_size);
     stdout.printf("percent: %.2f\n", percent);
-    stdout.printf("seconds: %.3f\n", seconds);
+    stdout.printf("seconds: %.6f\n", seconds);
 
     //  exit code
     return 0;

@@ -1,29 +1,56 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/csv"
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	// The underscore import registers the driver with database/sql
+	_ "github.com/mattn/go-sqlite3"
 )
 
+const dbname = "./dev.db"
+const basepath = "./solutions"
+const outfile = "solutions.tsv"
+const comma = '\t'
+
 func main() {
-	basePath := "./solutions"
-	entries, err := os.ReadDir(basePath)
+	fmt.Println("hello")
+	// database setup
+	db, err := sql.Open("sqlite3", dbname)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+	stmt, err := db.Prepare("INSERT OR IGNORE INTO languages(name) VALUES(?)")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close()
+
+	// get dirs
+	entries, err := os.ReadDir(basepath)
 	if err != nil {
 		log.Fatal(err)
 	}
 	dirs := make([]string, 0, len(entries))
 	for _, v := range entries {
 		if v.IsDir() {
-			dirs = append(dirs, v.Name())
+			dirname := v.Name()
+			fmt.Println(dirname)
+			dirs = append(dirs, dirname)
+			_, err = stmt.Exec(dirname)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
-	fmt.Println(strings.Join(dirs, ", "))
 
+	// get dockerfiles
 	numDirs := len(dirs)
 	type result struct {
 		Dir        string `json:"dir"`
@@ -32,7 +59,7 @@ func main() {
 	}
 	results := make([]result, 0, numDirs*2)
 	for _, dir := range dirs {
-		entries, err := os.ReadDir(filepath.Join(basePath, dir))
+		entries, err := os.ReadDir(filepath.Join(basepath, dir))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -55,23 +82,16 @@ func main() {
 				results = append(results, result)
 			}
 		}
-		fmt.Println(strings.Join(dockerfiles, ","))
 	}
-	fmt.Println(results)
-	jsonData, err := json.MarshalIndent(results, "", "  ")
-	if err != nil {
-		log.Fatal(err)
-	}
-	os.WriteFile("solutions.json", jsonData, 0644)
 
-	f, err := os.Create("solutions.tsv")
+	f, err := os.Create(outfile)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer f.Close()
 	// the type signature says it takes a io.Writer, but we pass a os.File
 	w := csv.NewWriter(f)
-	w.Comma = '\t'
+	w.Comma = comma
 	defer w.Flush()
 	w.Write([]string{"dir", "dockerfile", "name"})
 	rows := make([][]string, 0, len(results))
@@ -79,6 +99,5 @@ func main() {
 		row := []string{v.Dir, v.Dockerfile, v.Name}
 		rows = append(rows, row)
 	}
-	fmt.Println(rows)
 	w.WriteAll(rows)
 }

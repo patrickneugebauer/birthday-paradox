@@ -19,13 +19,13 @@ function simulate {
       }
     }
   }
-  Write-Host "iterations: $iterations "
+  Write-Host "iterations: $iterations"
   Write-Host "sample-size: $sample_size"
   $percent = $count / $iterations * 100
   Write-Host "percent: $percent"
   $end = Get-Date
   $diff = ($end - $start).TotalSeconds
-  Write-Host "seconds: $([Math]::Round($diff, 3))"
+  Write-Host "seconds: $([Math]::Round($diff, 6))"
 }
 
 simulate

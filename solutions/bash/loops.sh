@@ -17,7 +17,7 @@ function padl {
 
 function simulate {
   sample_size=23
-  start=$(($(date +%s%N)/1000/1000))
+  start=$(($(date +%s%N)/1000))
 
   count=0
   for (( i=0; i<iterations; i++ )); do
@@ -39,12 +39,12 @@ function simulate {
   percent=$((percent_x100/100))
   percent_decimal=$((percent_x100-percent*100))
   echo "percent: $percent.$percent_decimal"
-  end=$(($(date +%s%N)/1000/1000))
+  end=$(($(date +%s%N)/1000))
   diff=$((end-start))
-  sdiff=$(((end-start)/1000))
-  msdiff=$((diff-sdiff*1000))
-  msdiffstring=$(padl $msdiff 3 0)
-  echo "seconds: $sdiff.$msdiffstring"
+  sdiff=$(((end-start)/1000/1000))
+  nsdiff=$((diff-sdiff*1000*1000))
+  nsdiffstring=$(padl $nsdiff 6 0)
+  echo "seconds: $sdiff.$nsdiffstring"
 }
 
 simulate

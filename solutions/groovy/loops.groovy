@@ -27,4 +27,4 @@ float diff = (fin - start) / 1000.0;
 printf("iterations: %d\n", iterations);
 printf("sample-size: %d\n", sampleSize);
 printf("percent: %.2f\n", percent);
-printf("seconds: %.3f\n", diff);
+printf("seconds: %.6f\n", diff);

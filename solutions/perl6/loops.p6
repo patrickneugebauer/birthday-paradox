@@ -24,5 +24,5 @@ sub MAIN($iterations) {
   printf("percent: %.2f\n", $percent);
   my $end = now;
   my $diff = $end - $start;
-  printf("seconds: %.3f\n", $diff);
+  printf("seconds: %.6f\n", $diff);
 }

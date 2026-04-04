@@ -3,9 +3,10 @@ import Data.Time.Clock.POSIX
 import Data.List.Split
 import qualified Data.IntSet as IntSet
 import System.Environment
+import Numeric (showFFloat)
 
 getTimeMillis :: (Integral a) => IO a
-getTimeMillis = round <$> (*1000) <$> getPOSIXTime
+getTimeMillis = round <$> (*1_000_000) <$> getPOSIXTime
 
 roundTo n =
   let shifter = 10^n
@@ -22,7 +23,7 @@ main = do
   putStrLn . ("sample-size: " ++) . show $ 23
   putStrLn . ("percent: " ++) . show . roundTo 2 . (*100) $ results
   end <- getTimeMillis
-  putStrLn . ("seconds: " ++) . show . (/1000) . fromIntegral $ (end - start)
+  putStrLn . ("seconds: " ++) . (\x -> showFFloat (Just 6) x "") . (/1_000_000) . fromIntegral $ (end - start)
 
 simulate :: Int -> Int -> (Int, Int) -> StdGen -> Int
 simulate iterations sampleSize range =

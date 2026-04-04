@@ -38,59 +38,24 @@
       (round (* x shifter))
       shifter)))
 
-; ==================================================
-; main method code
-; ==================================================
+; data
 (define start (real-time-clock))
-
-(define iterations
-  (string->number
-    (car (command-line-arguments))))
-
+(define iterations (string->number (car (command-line-arguments))))
 (define sample-size 23)
+(define data (repeat iterations (lambda () (repeat sample-size random-day))))
 
-(define data
-  (repeat iterations
-    (lambda () (repeat sample-size random-day))))
+; calcs
+(define percent (* (/ (length (filter has-duplicates data)) iterations) 100))
+(define formatted-percent (round-to 2 (exact->inexact percent)))
+(define fin (real-time-clock))
+(define seconds (internal-time/ticks->seconds (- fin start)))
+(define formatted-seconds (round-to 6 (exact->inexact seconds)))
 
-(define percent
-  (*
-    (/
-      (length (filter has-duplicates data))
-      iterations)
-    100))
-
-(define formatted-percent
-  (round-to 2
-    (exact->inexact percent)))
-
-(display
-  (string-append
-    "iterations: "
-    (number->string iterations)
-    "\n"))
-(display
-  (string-append
-    "sample-size: "
-    (number->string sample-size)
-    "\n"))
-(display
-  (string-append
-    "percent: "
-    (number->string formatted-percent)
-    "\n"))
-(define seconds
-  (exact->inexact
-    (/
-      (-
-        (real-time-clock)
-        start)
-      1000)))
-(display
-  (string-append
-    "seconds: "
-    (number->string seconds)
-    "\n"))
+; output
+(display (string-append "iterations: " (number->string iterations) "\n"))
+(display (string-append "sample-size: " (number->string sample-size) "\n"))
+(display (string-append "percent: " (number->string formatted-percent) "\n"))
+(display (string-append "seconds: " (number->string formatted-seconds) "\n"))
 
 (define (main args)
   (display args))

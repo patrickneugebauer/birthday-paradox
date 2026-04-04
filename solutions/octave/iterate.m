@@ -16,5 +16,5 @@ function iterate(iterations)
   printf("percent: %.2f\n", percent)
   finish = time();
   diff = finish - start;
-  printf("seconds: %.3f\n", diff)
+  printf("seconds: %.6f\n", diff)
 endfunction

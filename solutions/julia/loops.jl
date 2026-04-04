@@ -1,7 +1,8 @@
+using Printf
 import Dates
 
 function simulate()
-  start = Dates.now()
+  start = time_ns()
   iterations = parse(Int32, ARGS[1])
   sample_size = 23
 
@@ -16,9 +17,9 @@ function simulate()
   println("sample-size: ", sample_size)
   percent = count / iterations * 100
   println("percent: ", round(percent,digits=2))
-  finish = Dates.now()
-  diff = (finish - start) |> Dates.value |> x->x/1000
-  println("seconds: ", diff)
+  finish = time_ns()
+  diff = (finish - start) / 1_000_000_000
+  @printf("seconds: %.6f\n", diff)
 end
 
 simulate()

@@ -31,6 +31,6 @@ Module Program
     Console.WriteLine($"percent: {Math.Round(percent, 2)}")
     Dim endTime as DateTime = DateTime.Now
     Dim diff as Double = (endTime - start).TotalSeconds
-    Console.WriteLine($"seconds: {Math.Round(diff, 3)}")
+    Console.WriteLine($"seconds: {Math.Round(diff, 6)}")
   End Sub
 End Module

@@ -21,13 +21,17 @@ func simulate() {
       }
     }
   }
-  print("iterations: \(iterations)")
-  print("sample-size: \(sampleSize)")
+
+  // calcs
   let percent = Double(count) / Double(iterations) * 100
-  print("percent: \( String(format: "%.2f", percent) )")
   let end = Date()
   let diff = end.timeIntervalSince(start)
-  print("seconds: \( String(format: "%.3f", diff) )")
+
+  // output
+  print("iterations: \(iterations)")
+  print("sample-size: \(sampleSize)")
+  print("percent: \( String(format: "%.2f", percent) )")
+  print("seconds: \( String(format: "%.6f", diff) )")
 }
 
 simulate()

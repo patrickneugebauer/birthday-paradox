@@ -93,7 +93,7 @@ let seconds = (finish -. start);;
 Printf.printf "iterations: %d\n" iterations;;
 Printf.printf "sample-size: %d\n" sampleSize;;
 Printf.printf "percent: %.2f\n" percent;;
-Printf.printf "seconds: %.3f\n" seconds;;
+Printf.printf "seconds: %.6f\n" seconds;;
 
 (*
 iterations      400000

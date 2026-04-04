@@ -13,7 +13,7 @@ simulate <- function() {
   percent <- round(count / iterations * 100, digits = 2)
   cat(paste("percent:", percent, "\n"))
   end <- Sys.time()
-  diff <- round(as.numeric(end - start), digits = 3)
+  diff <- round(as.numeric(end - start), digits = 6)
   cat(paste("seconds:", diff, "\n"))
 }
 

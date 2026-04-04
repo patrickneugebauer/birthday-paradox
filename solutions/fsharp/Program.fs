@@ -36,7 +36,7 @@ let simulate iterations =
   let fin = DateTime.Now
   fin - start
     |> fun x -> x.TotalSeconds
-    |> roundTo 3
+    |> roundTo 6
     |> println "seconds: "
   ()
 

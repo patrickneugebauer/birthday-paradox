@@ -6,7 +6,7 @@ void main(List<String> arguments) {
 }
 
 void simulate(int iterations) {
-  final start = new DateTime.now().millisecondsSinceEpoch;
+  final start = new DateTime.now().microsecondsSinceEpoch;
   const sampleSize = 23;
 
   var count = 0;
@@ -27,7 +27,7 @@ void simulate(int iterations) {
   print('sample-size: $sampleSize');
   final results = (count / iterations * 100).toStringAsFixed(2);
   print('percent: $results');
-  final end = new DateTime.now().millisecondsSinceEpoch;
-  final diff = ((end - start) / 1000).toStringAsFixed(3);
+  final end = new DateTime.now().microsecondsSinceEpoch;
+  final diff = ((end - start) / 1000 / 1000).toStringAsFixed(6);
   print('seconds: $diff');
 }

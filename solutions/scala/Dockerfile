@@ -5,4 +5,4 @@ WORKDIR /root
 COPY Loops.scala .
 RUN scalac Loops.scala
 
-ENTRYPOINT [ "scala", "Loops" ]
+ENTRYPOINT [ "scala", "-J--sun-misc-unsafe-memory-access=allow", "Loops" ]

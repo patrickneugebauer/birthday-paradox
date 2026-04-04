@@ -1,7 +1,7 @@
 object Loops {
   def main(args: Array[String]) = {
     // constants
-    val start = System.currentTimeMillis()
+    val start = System.nanoTime()
     val iterations = args(0).toInt
     val sampleSize = 23
 
@@ -14,13 +14,13 @@ object Loops {
     // calcs
     val count = data.filter(sample => (sample.distinct.length != sampleSize)).length
     val percent = count.toFloat / iterations * 100
-    val finish = System.currentTimeMillis()
-    val seconds = (finish - start).toFloat / 1000
+    val finish = System.nanoTime()
+    val seconds = (finish - start).toFloat / 1_000_000_000
 
     // output
     println(s"iterations: $iterations")
     println(s"sample-size: $sampleSize")
     println(f"percent: $percent%.2f")
-    println(f"seconds: $seconds%.3f")
+    println(f"seconds: $seconds%.6f")
   }
 }

@@ -1,3 +1,2 @@
-.vscode
-*.out
-node_modules
+*.db
+*.tsv

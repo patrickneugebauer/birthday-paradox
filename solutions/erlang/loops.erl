@@ -34,4 +34,4 @@ main(Args) ->
   io:fwrite("iterations: ~w~n", [Iterations]),
   io:fwrite("sample-size: ~w~n", [?SampleSize]),
   io:fwrite("percent: ~.2f~n", [Percent]),
-  io:fwrite("seconds: ~.3f~n", [Seconds]).
+  io:fwrite("seconds: ~.6f~n", [Seconds]).

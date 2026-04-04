@@ -28,5 +28,5 @@ void Simulate(int iterations) {
   Console.WriteLine($"percent: {Math.Round(percent, 2)}");
   DateTime end = DateTime.Now;
   double diff = (end - start).TotalSeconds;
-  Console.WriteLine($"seconds: {Math.Round(diff, 3)}");
+  Console.WriteLine($"seconds: {Math.Round(diff, 6)}");
 }

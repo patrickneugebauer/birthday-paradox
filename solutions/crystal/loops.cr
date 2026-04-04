@@ -24,7 +24,7 @@ def simulate
   puts "percent: #{results}"
   fin = Time.local
   time_diff = (fin - start)
-  diff = time_diff.seconds + time_diff.milliseconds / 1000.0
+  diff = time_diff.seconds + time_diff.microseconds / 1_000_000.0
   puts "seconds: #{diff}"
 end
 

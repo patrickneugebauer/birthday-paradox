@@ -30,5 +30,5 @@ fn main() {
   let end_time = end.sec as f64 + end.nsec as f64 / 1_000_000_000.0;
   let start_time = start.sec as f64 + start.nsec as f64 / 1_000_000_000.0;
   let diff = end_time - start_time;
-  println!("seconds: {:.3}", diff);
+  println!("seconds: {:.6}", diff);
 }

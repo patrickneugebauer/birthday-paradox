@@ -40,5 +40,5 @@ void simulate(int iterations) {
   double startTime = start.tv_sec + start.tv_usec / 1000000.0;
   double endTime = end.tv_sec + end.tv_usec / 1000000.0;
   float diff = endTime - startTime;
-  printf("seconds: %.3f\n", diff);
+  printf("seconds: %.6f\n", diff);
 }

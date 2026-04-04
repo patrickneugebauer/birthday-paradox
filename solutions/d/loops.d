@@ -29,12 +29,12 @@ void main(string[] args) {
   // calcs
   immutable auto percent = to!float(count) / iterations * 100;
   immutable auto finish = Clock.currTime();
-  immutable auto milliseconds = (finish - start).total!"msecs";
-  immutable auto seconds = to!float(milliseconds) / 1000;
+  immutable auto micros = (finish - start).total!"usecs";
+  immutable auto seconds = to!float(micros) / 1000 / 1000;
 
   // output
   writefln("iterations: %d", iterations);
   writefln("sample-size: %d", sampleSize);
   writefln("percent: %.2f", percent);
-  writefln("seconds: %.3f", seconds);
+  writefln("seconds: %.6f", seconds);
 }

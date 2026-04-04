@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
-	"time"
-	"strconv"
 	"os"
+	"strconv"
+	"time"
 )
 
 func main() {
@@ -37,5 +37,5 @@ func simulate(iterations int) {
 	fmt.Printf("percent: %.2f\n", math.Floor(percent*100)/100) // format with printf
 	end := time.Now().UnixNano()
 	diff := float64(end-start) / 1000 / 1000 / 1000
-	fmt.Printf("seconds: %.3f\n", diff)
+	fmt.Printf("seconds: %.6f\n", diff)
 }

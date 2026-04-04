@@ -30,9 +30,9 @@ defmodule Loops do
       |> Kernel.*(100)
       |> Float.round(2)
     seconds = Time.utc_now()
-      |> Time.diff(start, :millisecond)
-      |> Kernel./(1000)
-      |> Float.round(3)
+      |> Time.diff(start, :microsecond)
+      |> Kernel./(1_000_000)
+      |> Float.round(6)
     # output
     IO.puts "iterations: #{iterations}"
     IO.puts "sample-size: #{sample_size}"

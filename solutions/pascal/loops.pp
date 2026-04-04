@@ -1,10 +1,10 @@
 program Loops;
-uses sysutils, math, dateutils;
+uses BaseUnix, Unix, sysutils, math, dateutils;
 
 const
   SAMPLE_SIZE = 23;
 var
-  start: TDateTime;
+  start: timeval;
   iterations: LongInt;
   // data
   data: array [1..365] of Integer;
@@ -14,12 +14,12 @@ var
   count: LongInt = 0;
   // calcs
   percent: Single;
-  fin: TDateTime;
+  fin: timeval;
   milliseconds: Comp;
   seconds: Single;
 begin
   // data
-  start := time;
+  fpGetTimeOfDay(@start, nil);
   iterations := StrToInt(ParamStr(1));
   for i := 1 to iterations do
   begin
@@ -39,13 +39,12 @@ begin
 
   // calcs
   percent := count / iterations * 100;
-  fin := time;
-  milliseconds := (TimeStampToMSecs(DateTimeToTimeStamp(fin)) - TimeStampToMSecs(DateTimeToTimeStamp(start)));
-  seconds := milliseconds / 1000;
+  fpGetTimeOfDay(@fin, nil);
+  seconds := (fin.tv_sec - start.tv_sec) + (fin.tv_usec - start.tv_usec) / 1000000.0;
 
   // output
   writeln('iterations: ', iterations);
   writeln('sample-size: ', SAMPLE_SIZE);
   writeln('percent: ', FormatFloat('0.00', percent));
-  writeln('seconds: ', FormatFloat('0.000', seconds));
+  writeln('seconds: ', FormatFloat('0.000000', seconds));
 end.

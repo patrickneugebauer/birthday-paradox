@@ -4,7 +4,7 @@ import os
 
 fn main() {
 	// vars
-	start := time.ticks()
+	start := time.sys_mono_now()
 	iterations := os.args[1].int()
 	sample_size := 23
 	mut count := 0
@@ -26,11 +26,12 @@ fn main() {
 	// calcs
 	percent := f64(count) / iterations * 100
 	formatted_percent := f64(int(percent * 100)) / 100
-	diff := f64(time.ticks() - start) / 1000
+	fin := time.sys_mono_now()
+	diff := f64(fin - start) / 1_000_000_000
 
 	// output
 	println('iterations: $iterations')
 	println('sample-size: $sample_size')
 	println('percent: $formatted_percent')
-	println('seconds: $diff')
+	println('seconds: ${diff:.6f}')
 }

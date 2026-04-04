@@ -23,7 +23,7 @@ function simulate
   set percent (math --scale=2 $count \* 100 / $iterations)
   echo "percent: $percent"
   set end (math (date +%s%N) / 1000 / 1000 / 1000)
-  set diff (math --scale=3 $end - $start)
+  set diff (math --scale=6 $end - $start)
   echo "seconds: $diff"
 end
 
