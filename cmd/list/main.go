@@ -8,9 +8,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-
-	// The underscore import registers the driver with database/sql
-	_ "github.com/mattn/go-sqlite3"
 )
 
 const dbname = "./dev.db"

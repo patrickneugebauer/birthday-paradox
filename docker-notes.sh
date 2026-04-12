@@ -29,3 +29,27 @@ docker image rm $(cat images-to-delete.txt)
 
 sqlite3 app.db < schema.sql
 sqlite3 app.db -header -box "select * from sessions"
+
+# AI says 3 ways to insert 100 records:
+# individual calls (no transaction) - slowest
+# loop of calls inside transaction - 100x faster
+# one sql statement - 2x faster than transaction
+# ^ NEED TO TEST THIS
+
+# 60/hr
+curl -i -H "Accept: application/vnd.github+json" \
+    https://api.github.com/repos/golang/go \
+    > ghub-golang.json
+
+# 5000/hr
+curl -i -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer $ghtoken" \
+    https://api.github.com/repos/golang/go \
+    > ghub-golang-authed.json
+
+curl -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer $ghtoken" \
+    https://api.github.com/repos/golang/go \
+    | jq '.stargazers_count'
+
+sqlite3 app.db ".schema --indent" > schema.sql
