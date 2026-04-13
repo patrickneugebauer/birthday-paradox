@@ -13,28 +13,41 @@ type Session struct {
 
 type Language struct {
 	gorm.Model
-	Name     string    `gorm:"not null;unique"`
-	Runtimes []Runtime `gorm:"foreignKey:LanguageID"`
+	Directory string    `gorm:"not null;unique"`
+	Runtimes  []Runtime `gorm:"foreignKey:LanguageID"`
 }
+
+type Style string
+
+const (
+	Functional Style = "functional"
+	Imperative Style = "imperative"
+	Lisp       Style = "lisp"
+	Scientific Style = "scientific"
+)
 
 type LanguageData struct {
 	gorm.Model
-	Name           string `gorm:"not null;unique"`
-	Compiled       bool
-	StaticType     bool
-	ObjectOriented bool
-	Functional     bool
-	Style          string
+	DisplayName    string  `gorm:"not null;unique"`
+	DirectoryAlias *string `gorm:"uniqueIndex"`
+	Year           *int
+	HasREPL        *bool
+	IsCompiled     *bool
+	IsStaticTyped  *bool
+	IsOO           *bool
+	IsFunctional   *bool
+	Style          *Style    `gorm:"check:style IN ('functional', 'imperative', 'lisp', 'scientific')"`
 	LanguageID     *uint     `gorm:"index"`
-	Language       *Language `gorm:"foreignKey:LanguageID"`
+	Language       *Language `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 type Runtime struct {
 	gorm.Model
-	Filename    string       `gorm:"not null;uniqueIndex:idx_lang_file"`
-	LanguageID  uint         `gorm:"not null;uniqueIndex:idx_lang_file"`
-	Language    *Language    `gorm:"foreignKey:LanguageID"`
-	DockerImage *DockerImage `gorm:"foreignKey:RuntimeID"`
+	RuntimeName    *string      `gorm:"uniqueIndex:idx_lang_sol"`
+	DockerfileName string       `gorm:"not null"`
+	LanguageID     uint         `gorm:"not null;uniqueIndex:idx_lang_sol"`
+	Language       *Language    `gorm:"foreignKey:LanguageID"`
+	DockerImage    *DockerImage `gorm:"foreignKey:RuntimeID"`
 }
 
 type RuntimeData struct {
@@ -78,47 +91,4 @@ type ContainerRun struct {
 	IterationsPerSecond int          `gorm:"not null"`
 	ImageID             uint         `gorm:"not null"`
 	Image               *DockerImage `gorm:"foreignKey:ImageID"`
-}
-
-// ==================================================
-
-type LanguageReport struct {
-	Name                string
-	Size                string
-	IterationsPerSecond int
-	Compiled            bool
-	StaticType          bool
-	ObjectOriented      bool
-	Functional          bool
-	Style               string
-}
-
-func ReadMeQuery(db *gorm.DB) ([]LanguageReport, error) {
-	var results []LanguageReport
-
-	tx := db.Table("languages").
-		Select(`
-			languages.name,
-			CASE
-				WHEN dockerfiles.filename LIKE '%.%'
-				THEN SUBSTR(dockerfiles.filename, INSTR(dockerfiles.filename, '.') + 1)
-				ELSE NULL
-			END AS extension,
-			image_sizes.size,
-			container_runs.iterations_per_second,
-			languages.compiled,
-			languages.static_type,
-			languages.object_oriented,
-			languages.functional,
-			languages.style"
-		`).Joins("JOIN directories ON directories.language_id = languages.id").
-		Joins("JOIN dockerfiles ON dockerfiles.directory_id = directories.id").
-		Joins("JOIN docker_images ON docker_images.dockerfile_id = dockerfiles.id").
-		Joins("JOIN image_sizes ON image_sizes.image_id = docker_images.id").
-		Joins("JOIN container_runs ON container_runs.image_id = docker_images.id").
-		Scan(&results)
-	if tx.Error != nil {
-		return nil, tx.Error
-	}
-	return results, nil
 }

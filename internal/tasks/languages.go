@@ -1,33 +1,16 @@
-package main
+package tasks
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/patrickneugebauer/birthday-paradox/internal/database"
 	"gorm.io/gorm"
 )
 
-const sessionType = "languages"
 const solutionsDir = "./solutions"
 
-func main() {
-	if err := run(); err != nil {
-		log.Fatalf("Critical failure: %v", err)
-	}
-}
-
-func run() error {
-	db, err := database.StartSession(sessionType)
-	if err != nil {
-		return fmt.Errorf("session start: %w", err)
-	}
-	defer func() {
-		if endErr := database.EndSession(db, nil); endErr != nil {
-			log.Printf("ERR: session cleanup failed: %v", endErr)
-		}
-	}()
+func GetLanguages(db *database.DB) error {
 	// get data
 	dirs, err := getDirs(solutionsDir)
 	if err != nil {
@@ -38,12 +21,13 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("insert languages: %w", err)
 	}
+	// log and return
 	fmt.Printf("Skipped languages: %d\n", len(skipped))
 	insertedNames := make([]string, 0, len(inserted))
 	for _, v := range inserted {
-		insertedNames = append(insertedNames, v.Name)
+		insertedNames = append(insertedNames, v.Directory)
 	}
-	fmt.Printf("Inserted languages: %v\n", insertedNames)
+	fmt.Printf("Inserted languages: %d %v\n", len(insertedNames), insertedNames)
 	return nil
 }
 
@@ -67,8 +51,8 @@ func insertLanguages(db *database.DB, names []string) ([]database.Language, []da
 	var skipped []database.Language
 	err := db.DB.Transaction(func(tx *gorm.DB) error {
 		for _, name := range names {
-			lang := database.Language{Name: name}
-			result := tx.Where(database.Language{Name: name}).FirstOrCreate(&lang)
+			lang := database.Language{Directory: name}
+			result := tx.Where(database.Language{Directory: name}).FirstOrCreate(&lang)
 			if result.Error != nil {
 				return result.Error // Returning error rolls back the transaction
 			}

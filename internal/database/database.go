@@ -2,11 +2,13 @@ package database
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
+	"log"
+	"os"
+	"time"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 const dbname = "./app.db"
@@ -19,7 +21,19 @@ type DB struct {
 
 func StartSession(sessionType string) (*DB, error) {
 	ctx := context.Background()
-	db, err := gorm.Open(sqlite.Open(dbname), &gorm.Config{})
+	// Inside your database initialization function:
+	newLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		logger.Config{
+			SlowThreshold:             time.Second, // Slow SQL threshold
+			LogLevel:                  logger.Warn, // Log level
+			IgnoreRecordNotFoundError: true,        // <--- THIS IS THE KEY
+			Colorful:                  true,        // Enable color
+		},
+	)
+	db, err := gorm.Open(sqlite.Open(dbname), &gorm.Config{
+		Logger: newLogger,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -31,8 +45,6 @@ func StartSession(sessionType string) (*DB, error) {
 		return nil, err
 	}
 	wrapper := &DB{db, session, ctx}
-	jsonData, err := json.Marshal(session)
-	fmt.Println(string(jsonData))
 	return wrapper, nil
 }
 
