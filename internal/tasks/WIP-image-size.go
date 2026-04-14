@@ -1,4 +1,4 @@
-package main
+package tasks
 
 import (
 	"encoding/csv"
@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	solutionsFile, err := os.OpenFile("solutions.tsv", os.O_RDWR, 0644)
+	solutionsFile, err := os.OpenFile("images.tsv", os.O_RDWR, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -23,7 +23,7 @@ func main() {
 	}
 	// fmt.Print(records)
 
-	outFile, err := os.Create("images.tsv")
+	outFile, err := os.Create("sizes.tsv")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,28 +31,23 @@ func main() {
 	w := csv.NewWriter(outFile)
 	w.Comma = '\t'
 	defer w.Flush()
-	w.Write([]string{"lang", "solution", "image"})
+	w.Write([]string{"lang", "solution", "image", "size"})
 	results := make([][]string, 0, len(records))
 	// skip header
 	for _, v := range records[1:] {
 		fmt.Println(v)
-		lang, dockerfile, solution := v[0], v[1], v[2]
-		dir := "./solutions/" + lang
-		fname := dir + "/" + dockerfile
-		image := "bday/" + solution
-		command := fmt.Sprintf("docker build -f %s %s -t %s", fname, dir, image)
+		lang, solution, image := v[0], v[1], v[2]
+		command := fmt.Sprintf("docker image ls %s --format \"{{.Size}}\"", image)
 		fields := strings.Fields(command)
 		fmt.Println(strings.Join(fields, " "))
 		c := exec.Command(fields[0], fields[1:]...)
-		c.Stdout = os.Stdout
-		c.Stderr = os.Stderr
-		err := c.Run()
-		// _, err := c.Output()
+		size, err := c.Output()
 		if err != nil {
 			log.Fatal(err)
 		}
-		// fmt.Println(string(out))
-		row := []string{lang, solution, image}
+		sizeString := strings.TrimSpace(strings.ReplaceAll(string(size), "\"", ""))
+		fmt.Println(sizeString)
+		row := []string{lang, solution, image, sizeString}
 		fmt.Println(row)
 		w.Write(row)
 		w.Flush() // needed to get it to write now

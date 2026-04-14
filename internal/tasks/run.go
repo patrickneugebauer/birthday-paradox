@@ -1,0 +1,106 @@
+package tasks
+
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"os/exec"
+	"strconv"
+	"strings"
+)
+
+const (
+	resultsFile         = "results.json"
+	previousResultsFile = "previous-results.json"
+	tempResultsFile     = "temp-results.json"
+	defaultIterations   = 1000
+)
+
+type RunResult struct {
+	Image      string  `json:"image"`
+	Iterations int     `json:"iterations"`
+	SampleSize int     `json:"sample_size"`
+	Percent    float64 `json:"percent"`
+	Seconds    float64 `json:"seconds"`
+	IPS        int     `json:"ips"`
+}
+
+func Run() error {
+	// 1. Archive the previous results
+	if _, err := os.Stat(resultsFile); err == nil {
+		os.Rename(resultsFile, previousResultsFile)
+	}
+
+	content, err := os.ReadFile(runScript)
+	if err != nil {
+		return fmt.Errorf("run script missing: %w", err)
+	}
+
+	var currentResults []RunResult
+	lines := strings.Split(string(content), "\n")
+
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+
+		fields := strings.Fields(line)
+		if len(fields) < 4 {
+			continue
+		}
+		imageTag := fields[3]
+
+		fmt.Printf("Benchmarking %s...\n", imageTag)
+
+		cmd := exec.Command(fields[0], fields[1:]...)
+		out, err := cmd.CombinedOutput()
+		if err != nil {
+			fmt.Printf("Skipping %s: %v\n", imageTag, err)
+			continue
+		}
+
+		// 2. Parse and append
+		res := parseOutput(string(out))
+		res.Image = imageTag
+		currentResults = append(currentResults, res)
+
+		// 3. Update temporary file after each run
+		tempData, _ := json.MarshalIndent(currentResults, "", "  ")
+		os.WriteFile(tempResultsFile, tempData, 0644)
+	}
+
+	// 4. Rename temp file to final results file
+	if err := os.Rename(tempResultsFile, resultsFile); err != nil {
+		return fmt.Errorf("failed to finalize results: %w", err)
+	}
+
+	fmt.Println("Benchmarks complete. Results saved to", resultsFile)
+	return nil
+}
+
+func parseOutput(raw string) RunResult {
+	res := RunResult{}
+	lines := strings.Split(raw, "\n")
+	for _, l := range lines {
+		parts := strings.SplitN(strings.TrimSpace(l), ": ", 2)
+		if len(parts) < 2 {
+			continue
+		}
+		key, val := parts[0], parts[1]
+		switch key {
+		case "iterations":
+			res.Iterations, _ = strconv.Atoi(val)
+		case "sample-size":
+			res.SampleSize, _ = strconv.Atoi(val)
+		case "percent":
+			res.Percent, _ = strconv.ParseFloat(val, 64)
+		case "seconds":
+			res.Seconds, _ = strconv.ParseFloat(val, 64)
+			if res.Seconds > 0 {
+				res.IPS = int(float64(res.Iterations) / res.Seconds)
+			}
+		}
+	}
+	return res
+}
