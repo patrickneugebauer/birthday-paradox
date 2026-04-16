@@ -9,22 +9,6 @@ import (
 	"strings"
 )
 
-const (
-	resultsFile         = "results.json"
-	previousResultsFile = "previous-results.json"
-	tempResultsFile     = "temp-results.json"
-	defaultIterations   = 1000
-)
-
-type RunResult struct {
-	Image      string  `json:"image"`
-	Iterations int     `json:"iterations"`
-	SampleSize int     `json:"sample_size"`
-	Percent    float64 `json:"percent"`
-	Seconds    float64 `json:"seconds"`
-	IPS        int     `json:"ips"`
-}
-
 func Run() error {
 	// 1. Archive the previous results
 	if _, err := os.Stat(resultsFile); err == nil {

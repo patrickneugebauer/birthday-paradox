@@ -1,6 +1,1 @@
-dockerfiles.yaml
-build.sh
-run.sh
-temp-results.json
-results.json
-previous-results.json
+artifacts

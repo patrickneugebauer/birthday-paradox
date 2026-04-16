@@ -25,6 +25,12 @@ func main() {
 		err = tasks.PreRun()
 	case "run":
 		err = tasks.Run()
+	case "pre-weigh":
+		err = tasks.PreWeigh()
+	case "weigh":
+		err = tasks.Weigh()
+	case "post-weigh":
+		err = tasks.PostWeigh()
 	default:
 		err = fmt.Errorf("unknown command: %s", command)
 	}

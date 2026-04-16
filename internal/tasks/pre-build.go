@@ -9,19 +9,6 @@ import (
 	"go.yaml.in/yaml/v4"
 )
 
-const solutionsDir = "./solutions"
-const dockerfilesList = "dockerfiles.yaml"
-const buildScript = "build.sh"
-const runScript = "run.sh"
-
-// BuildConfig holds everything we need to know about a specific image
-type BuildConfig struct {
-	DirName    string
-	Dockerfile string
-	Tag        string
-	Context    string
-}
-
 func PreBuild() error {
 	// get map of dockerfiles
 	configs, dfMap, err := discoverBuilds(solutionsDir)
