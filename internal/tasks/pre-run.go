@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func PreRun() error {
@@ -37,9 +38,15 @@ func loadPreviousStats(path string) map[string]int {
 	if err != nil {
 		return stats
 	}
-	var results []RunResult
-	if err := json.Unmarshal(data, &results); err == nil {
-		for _, r := range results {
+	// Parse JSONL format (one result per line)
+	lines := strings.Split(string(data), "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue
+		}
+		var r RunResult
+		if err := json.Unmarshal([]byte(line), &r); err == nil {
 			stats[r.Image] = r.IPS
 		}
 	}

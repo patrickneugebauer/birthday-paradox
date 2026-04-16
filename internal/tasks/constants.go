@@ -13,13 +13,14 @@ const (
 var (
 	dockerfilesList     = filepath.Join(artifactDir, "dockerfiles.yaml")
 	buildScript         = filepath.Join(artifactDir, "build.sh")
+	buildArtifacts      = filepath.Join(artifactDir, "builds.jsonl")
 	runScript           = filepath.Join(artifactDir, "run.sh")
 	weighScript         = filepath.Join(artifactDir, "weigh.sh")
 	sizeFile            = filepath.Join(artifactDir, "image-sizes.jsonl")
 	sizeFileMB          = filepath.Join(artifactDir, "image-sizes-mb.jsonl")
-	resultsFile         = filepath.Join(artifactDir, "results.json")
-	previousResultsFile = filepath.Join(artifactDir, "previous-results.json")
-	tempResultsFile     = filepath.Join(artifactDir, "temp-results.json")
+	resultsFile         = filepath.Join(artifactDir, "results.jsonl")
+	previousResultsFile = filepath.Join(artifactDir, "previous-results.jsonl")
+	tempResultsFile     = filepath.Join(artifactDir, "temp-results.jsonl")
 )
 
 type BuildConfig struct {
@@ -29,9 +30,12 @@ type BuildConfig struct {
 	Context    string
 }
 
+type BuildArtifact struct {
+	Tag string `json:"tag"`
+}
+
 type ImageInfo struct {
 	Repository string  `json:"repository"`
-	Size       string  `json:"size"`
 	SizeMB     float64 `json:"size_mb"`
 }
 

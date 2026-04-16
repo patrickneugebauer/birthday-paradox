@@ -21,3 +21,6 @@ Write idiomatic Go.
 
 ## Responses
 Terse. Lead with the result. Keep this file minimal.
+
+## Models
+Chose lowest cost model for each task unless specified.

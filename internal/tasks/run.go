@@ -20,7 +20,13 @@ func Run() error {
 		return fmt.Errorf("run script missing: %w", err)
 	}
 
-	var currentResults []RunResult
+	// Open JSONL file for writing results
+	output, err := os.Create(tempResultsFile)
+	if err != nil {
+		return fmt.Errorf("failed to create temp results file: %w", err)
+	}
+	defer output.Close()
+
 	lines := strings.Split(string(content), "\n")
 
 	for _, line := range lines {
@@ -44,14 +50,14 @@ func Run() error {
 			continue
 		}
 
-		// 2. Parse and append
+		// 2. Parse and write
 		res := parseOutput(string(out))
 		res.Image = imageTag
-		currentResults = append(currentResults, res)
 
-		// 3. Update temporary file after each run
-		tempData, _ := json.MarshalIndent(currentResults, "", "  ")
-		os.WriteFile(tempResultsFile, tempData, 0644)
+		// 3. Write result to JSONL file immediately
+		data, _ := json.Marshal(res)
+		output.Write(data)
+		output.WriteString("\n")
 	}
 
 	// 4. Rename temp file to final results file
