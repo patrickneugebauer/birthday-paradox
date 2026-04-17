@@ -1,0 +1,8 @@
+{
+  "name": "@birthday-paradox/rescript",
+  "sources": [{ "dir": "src", "subdirs": true }],
+  "package-specs": [{ "module": "esmodule", "in-source": true }],
+  "suffix": ".res.js",
+  "dependencies": ["@rescript/core", "rescript-nodejs"],
+  "compiler-flags": ["-open RescriptCore"]
+}
