@@ -1,0 +1,10 @@
+FROM node:alpine
+
+WORKDIR /app
+
+RUN npm i ts-node @types/node
+
+COPY loops.ts .
+COPY tsconfig.json .
+
+ENTRYPOINT ["./node_modules/.bin/ts-node", "loops.ts"]
