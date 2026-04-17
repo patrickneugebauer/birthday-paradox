@@ -1,0 +1,8 @@
+FROM golang:tip-alpine
+
+WORKDIR /root
+
+COPY loops.go .
+COPY go.mod .
+
+ENTRYPOINT ["go", "run", "loops.go"]
