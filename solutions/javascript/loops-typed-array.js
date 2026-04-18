@@ -5,8 +5,8 @@ function simulate() {
   const start = process.hrtime.bigint();
   const sampleSize = 23
   let count = 0
-  const arr = new Array(365)
-  let rand
+  const arr = new Int32Array(365).fill(-1);
+  let rand;
   // loop
   for (let i = 0; i < iterations; i++) {
     for (let j = 0; j < sampleSize; j++) {

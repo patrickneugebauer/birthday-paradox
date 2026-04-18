@@ -1,0 +1,7 @@
+FROM node:alpine
+
+WORKDIR /root
+
+COPY loops-set.js .
+
+ENTRYPOINT ["node", "loops-set.js"]

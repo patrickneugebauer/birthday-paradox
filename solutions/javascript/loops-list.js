@@ -5,19 +5,20 @@ function simulate() {
   const start = process.hrtime.bigint();
   const sampleSize = 23
   let count = 0
-  const arr = new Array(365)
+  const arr = []
   let rand
   // loop
   for (let i = 0; i < iterations; i++) {
     for (let j = 0; j < sampleSize; j++) {
       rand = Math.floor(Math.random() * 365)
-      if (arr[rand] === i) {
+      if (arr.includes(rand)) {
         count++
         break
       } else {
-        arr[rand] = i
+        arr.push(rand)
       }
     }
+    arr.length = 0
   }
   // calcs
   const results = (count / iterations * 100).toFixed(2)
