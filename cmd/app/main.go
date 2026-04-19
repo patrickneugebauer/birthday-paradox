@@ -17,18 +17,22 @@ func main() {
 	var err error
 	// run cpmmand
 	switch command {
+	case "map-files":
+		err = tasks.MakeFileTree()
 	case "pre-build":
 		err = tasks.PreBuild()
 	case "build":
 		err = tasks.Build()
-	case "pre-run":
-		err = tasks.PreRun()
-	case "run":
-		err = tasks.Run()
 	case "pre-weigh":
 		err = tasks.PreWeigh()
 	case "weigh":
 		err = tasks.Weigh()
+	case "github-links":
+		err = tasks.CheckGithubLinks()
+	case "pre-run":
+		err = tasks.PreRun()
+	case "run":
+		err = tasks.Run()
 	default:
 		err = fmt.Errorf("unknown command: %s", command)
 	}

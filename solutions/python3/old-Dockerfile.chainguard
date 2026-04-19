@@ -1,7 +1,0 @@
-FROM cgr.dev/chainguard/python
-
-WORKDIR /app
-
-ADD loops.py .
-
-ENTRYPOINT ["python3", "loops.py"]

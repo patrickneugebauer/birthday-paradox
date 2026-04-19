@@ -60,7 +60,5 @@ func Build() error {
 		output.Write(data)
 		output.WriteString("\n")
 	}
-
-	fmt.Println("Build complete. Build artifacts saved to", buildArtifacts)
 	return nil
 }

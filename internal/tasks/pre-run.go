@@ -1,35 +1,64 @@
 package tasks
 
 import (
+	"bufio"
+	"cmp"
 	"encoding/json"
 	"fmt"
 	"os"
+	"slices"
 	"strings"
 )
 
 func PreRun() error {
-	configs, _, err := discoverBuilds(solutionsDir)
-	if err != nil {
-		return err
-	}
-
+	infileName := buildArtifacts
+	outfileName := runScript
 	prevStats := loadPreviousStats(resultsFile)
-
-	var runLines []string
-	for _, c := range configs {
+	var transformer Transformer = func(scanner *bufio.Scanner, writer *bufio.Writer) error {
+		// read
+		bytes := scanner.Bytes()
+		var tag Tag
+		err := json.Unmarshal(bytes, &tag)
+		if err != nil {
+			return fmt.Errorf("failed to unmarshall %w", err)
+		}
+		// transform
+		tagName := tag.Name
 		iters := defaultIterations
-		if ips, ok := prevStats[c.Tag]; ok && ips > 0 {
+		if ips, ok := prevStats[tagName]; ok && ips > 0 {
 			iters = ips
 		}
-		runLines = append(runLines, fmt.Sprintf("docker run --rm %s %d", c.Tag, iters))
+		line := fmt.Sprintf("docker run --rm %s %d", tagName, iters)
+		// write
+		_, err = writer.WriteString(line + "\n")
+		if err != nil {
+			return fmt.Errorf("failed to write %w", err)
+		}
+		return nil
 	}
-
-	if err := saveScript(runScript, runLines, false); err != nil {
-		return fmt.Errorf("failed to save run script: %w", err)
+	err := transform(infileName, transformer, outfileName)
+	if err != nil {
+		return fmt.Errorf("failed to transform %w", err)
 	}
-
-	fmt.Printf("Pre-run complete. Generated run.sh with %d targets.\n", len(configs))
+	// log and return
+	fmt.Printf("wrote to file: %s\n", outfileName)
 	return nil
+}
+
+type Tag struct {
+	Name string `json:"tag"`
+}
+
+func ReadBuildList() ([]Tag, error) {
+	fname := buildArtifacts
+	list, err := readJsonl[Tag](fname)
+	if err != nil {
+		return nil, err
+	}
+	slices.SortFunc(list, func(a, b Tag) int {
+		return cmp.Compare(a.Name, b.Name)
+	})
+	return list, nil
 }
 
 func loadPreviousStats(path string) map[string]int {
