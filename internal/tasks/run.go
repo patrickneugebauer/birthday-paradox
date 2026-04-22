@@ -1,71 +1,110 @@
 package tasks
 
 import (
+	"bufio"
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
+	"os/signal"
 	"strconv"
 	"strings"
 )
 
+func loadPreviousStats() (map[string]int, error) {
+	infileName := runResultsFile
+	stats := make(map[string]int)
+	_, err := os.Stat(infileName)
+	if errors.Is(err, os.ErrNotExist) {
+		fmt.Printf("no previous results: %s\n", infileName)
+		return stats, nil
+	}
+	infile, err := os.Open(infileName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open file: %w", err)
+	}
+	scanner := bufio.NewScanner(infile)
+	// scan
+	for scanner.Scan() {
+		bytes := scanner.Bytes()
+		var result RunResult
+		if err := json.Unmarshal(bytes, &result); err == nil {
+			stats[result.Tag] = result.IPS
+		}
+	}
+	// cleanup
+	err = infile.Close()
+	if err != nil {
+		return nil, fmt.Errorf("failed to close infile %w", err)
+	}
+	return stats, nil
+}
+
 func Run() error {
-	// 1. Archive the previous results
-	if _, err := os.Stat(resultsFile); err == nil {
-		os.Rename(resultsFile, previousResultsFile)
-	}
-
-	content, err := os.ReadFile(runScript)
+	// Create a context that listens for Ctrl+C
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop() // Restore default behavior when Build returns
+	infileName := buildResultsFile
+	cmdFileName := runCommandsFile
+	tempfileName := runTempResultsFile
+	savefileName := runResultsFile
+	prevStats, err := loadPreviousStats()
 	if err != nil {
-		return fmt.Errorf("run script missing: %w", err)
+		return err
 	}
-
-	// Open JSONL file for writing results
-	output, err := os.Create(tempResultsFile)
-	if err != nil {
-		return fmt.Errorf("failed to create temp results file: %w", err)
-	}
-	defer output.Close()
-
-	lines := strings.Split(string(content), "\n")
-
-	for _, line := range lines {
-		line = strings.TrimSpace(line)
-		if line == "" || strings.HasPrefix(line, "#") {
-			continue
+	fmt.Printf("writing to: %s...\n", tempfileName)
+	transformer := func(ctx context.Context, scanner *bufio.Scanner, cmdWriter *bufio.Writer, encoder *json.Encoder) error {
+		// read input
+		inBytes := scanner.Bytes()
+		var buildResult BuildResult
+		if err := json.Unmarshal(inBytes, &buildResult); err != nil {
+			return fmt.Errorf("failed to unmarshall %w", err)
 		}
-
-		fields := strings.Fields(line)
-		if len(fields) < 4 {
-			continue
+		// write command
+		tagName := buildResult.Tag
+		iters := defaultIterations
+		if ips, ok := prevStats[tagName]; ok && ips > 0 {
+			iters = ips
 		}
-		imageTag := fields[3]
-
-		fmt.Printf("Benchmarking %s...\n", imageTag)
-
-		cmd := exec.Command(fields[0], fields[1:]...)
+		commandText := fmt.Sprintf("docker run --rm %s %d\n", tagName, iters)
+		if _, err := cmdWriter.WriteString(commandText); err != nil {
+			return fmt.Errorf("failed to write command %w", err)
+		}
+		// run command
+		fmt.Printf("Benchmarking %s %d...\n", tagName, iters)
+		cmd := exec.CommandContext(ctx,
+			"docker", "run",
+			"--rm",
+			tagName,
+			strconv.Itoa(iters),
+		)
 		out, err := cmd.CombinedOutput()
 		if err != nil {
-			fmt.Printf("Skipping %s: %v\n", imageTag, err)
-			continue
+			fmt.Printf("Skipping %s: %v\n", tagName, err)
+			emptyResult := RunResult{Tag: tagName, IPS: defaultIterations}
+			if err := encoder.Encode(emptyResult); err != nil {
+				return fmt.Errorf("Failed to serialize failure %s: %v\n", tagName, err)
+			}
+			return nil
 		}
-
-		// 2. Parse and write
-		res := parseOutput(string(out))
-		res.Image = imageTag
-
-		// 3. Write result to JSONL file immediately
-		data, _ := json.Marshal(res)
-		output.Write(data)
-		output.WriteString("\n")
+		// print results
+		result := parseOutput(string(out))
+		result.Tag = tagName
+		if err := encoder.Encode(result); err != nil {
+			return fmt.Errorf("Failed to encode %s: %v\n", tagName, err)
+		}
+		return nil
 	}
-
-	// 4. Rename temp file to final results file
-	if err := os.Rename(tempResultsFile, resultsFile); err != nil {
+	if err = transform(ctx, infileName, transformer, cmdFileName, tempfileName); err != nil {
+		return fmt.Errorf("failed to transform %w", err)
+	}
+	if err := os.Rename(tempfileName, savefileName); err != nil {
 		return fmt.Errorf("failed to finalize results: %w", err)
 	}
-
-	fmt.Println("Benchmarks complete. Results saved to", resultsFile)
+	// log and return
+	fmt.Printf("renamed: %s to %s\n", tempfileName, savefileName)
 	return nil
 }
 

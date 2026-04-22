@@ -1,84 +1,81 @@
 package tasks
 
 import (
+	"bufio"
+	"context"
 	"encoding/json"
 	"fmt"
 	"math"
 	"os"
 	"os/exec"
+	"os/signal"
 	"strconv"
 	"strings"
 )
 
 func Weigh() error {
-	if _, err := os.Stat(weighScript); os.IsNotExist(err) {
-		return fmt.Errorf("script not found: please run 'pre-weigh' command first to generate %s", weighScript)
-	}
-
-	content, err := os.ReadFile(weighScript)
-	if err != nil {
-		return fmt.Errorf("failed to read weigh script: %w", err)
-	}
-
-	// Open JSONL file for writing
-	output, err := os.Create(sizeFile)
-	if err != nil {
-		return fmt.Errorf("failed to create output file: %w", err)
-	}
-	defer output.Close()
-
-	lines := strings.Split(string(content), "\n")
-
-	for _, line := range lines {
-		line = strings.TrimSpace(line)
-		if line == "" || strings.HasPrefix(line, "#") {
-			continue
+	// Create a context that listens for Ctrl+C
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop() // Restore default behavior when Build returns
+	infileName := buildResultsFile
+	cmdFileName := weighCommandsFile
+	outfileName := weighResultsFile
+	transformer := func(ctx context.Context, scanner *bufio.Scanner, cmdWriter *bufio.Writer, encoder *json.Encoder) error {
+		// read data
+		inBytes := scanner.Bytes()
+		var buildResult BuildResult
+		if err := json.Unmarshal(inBytes, &buildResult); err != nil {
+			return fmt.Errorf("failed to unmarshall %w", err)
 		}
-
-		fields := strings.Fields(line)
-		if len(fields) < 4 {
-			continue
+		// write command
+		tagName := buildResult.Tag
+		commandText := fmt.Sprintf("docker image inspect %s --format {{.Size}}\n", tagName)
+		if _, err := cmdWriter.WriteString(commandText); err != nil {
+			return fmt.Errorf("failed to write command %w", err)
 		}
-
-		tag := fields[3] // tag is after "docker image inspect"
-		fmt.Printf("Checking size of %s...\n", tag)
-
-		cmd := exec.Command(fields[0], fields[1:]...)
+		// run command
+		cmd := exec.Command(
+			"docker", "image", "inspect",
+			tagName,
+			"--format", "{{.Size}}",
+		)
 		out, err := cmd.CombinedOutput()
 		if err != nil {
-			fmt.Printf("Skipping %s: %v\n", tag, err)
-			continue
+			return fmt.Errorf("Failed to run %s: %v\n", tagName, err)
 		}
-
-		// Parse output as integer bytes
-		sizeStr := strings.TrimSpace(string(out))
-		sizeBytes, err := strconv.ParseInt(sizeStr, 10, 64)
+		// write results
+		roundedSize, err := parseSize(out)
 		if err != nil {
-			fmt.Printf("Failed to parse size for %s: %v\n", tag, err)
-			continue
+			return fmt.Errorf("Failed to parse size %v\n", err)
 		}
-
-		// Convert bytes to MB
-		sizeMB := float64(sizeBytes) / (1024 * 1024)
-		var roundedSize float64
-		if sizeMB < 100 {
-			roundedSize = roundToPrecision(sizeMB, 1)
-		} else {
-			roundedSize = math.Round(sizeMB)
+		imgInfo := WeighResult{Tag: tagName, SizeMB: roundedSize}
+		if err := encoder.Encode(imgInfo); err != nil {
+			return fmt.Errorf("failed to marshal json %w", err)
 		}
-
-		// Write to JSONL file immediately
-		imgInfo := ImageInfo{
-			Repository: tag,
-			SizeMB:     roundedSize,
-		}
-		data, _ := json.Marshal(imgInfo)
-		output.Write(data)
-		output.WriteString("\n")
+		return nil
 	}
-
-	fmt.Printf("Weigh complete. Image sizes saved to %s\n", sizeFile)
+	if err := transform(ctx, infileName, transformer, cmdFileName, outfileName); err != nil {
+		return fmt.Errorf("failed to tansform %w", err)
+	}
+	// log and return
+	fmt.Printf("wrote to file: %s\n", outfileName)
 	return nil
+}
+
+func parseSize(bytes []byte) (float64, error) {
+	sizeStr := strings.TrimSpace(string(bytes))
+	sizeBytes, err := strconv.ParseInt(sizeStr, 10, 64)
+	if err != nil {
+		fmt.Errorf("Failed to parse size %s: %v\n", err)
+	}
+	sizeMB := float64(sizeBytes) / (1024 * 1024)
+	var roundedSize float64
+	if sizeMB < 100 {
+		roundedSize = roundToPrecision(sizeMB, 1)
+	} else {
+		roundedSize = math.Round(sizeMB)
+	}
+	return roundedSize, nil
 }
 
 func roundToPrecision(f float64, precision int) float64 {

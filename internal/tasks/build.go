@@ -1,64 +1,77 @@
 package tasks
 
 import (
+	"bufio"
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
+	"os/signal"
+	"path/filepath"
 	"strings"
 )
 
+func getTagName(dir string, filename string) string {
+	tag := "bday/" + dir
+	if strings.Contains(filename, ".") {
+		extension := strings.SplitN(filename, ".", 2)[1]
+		tag += "-" + extension
+	}
+	return tag
+}
+
 func Build() error {
-	scriptName := buildScript
-	// 1. Check if the script exists
-	if _, err := os.Stat(scriptName); os.IsNotExist(err) {
-		return fmt.Errorf("build script not found: please run 'pre-build' first to generate %s", scriptName)
-	}
-
-	content, err := os.ReadFile(scriptName)
-	if err != nil {
-		return fmt.Errorf("failed to read build script: %w", err)
-	}
-
-	// Open JSONL file for writing build artifacts
-	output, err := os.Create(buildArtifacts)
-	if err != nil {
-		return fmt.Errorf("failed to create build artifacts file: %w", err)
-	}
-	defer output.Close()
-
-	fmt.Printf("Starting build process using %s...\n", scriptName)
-
-	lines := strings.Split(string(content), "\n")
-	for _, line := range lines {
-		line = strings.TrimSpace(line)
-		if line == "" || strings.HasPrefix(line, "#") {
-			continue
+	infileName := dockerfileList
+	cmdfileName := buildCommandsFile
+	tempfileName := buildTempResultsFile
+	resultsfileName := buildResultsFile
+	// Create a context that listens for Ctrl+C
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop() // Restore default behavior when Build returns
+	transformer := func(ctx context.Context, scanner *bufio.Scanner, cmdWriter *bufio.Writer, encoder *json.Encoder) error {
+		// read
+		inBytes := scanner.Bytes()
+		var dockerfile Dockerfile
+		err := json.Unmarshal(inBytes, &dockerfile)
+		if err != nil {
+			return fmt.Errorf("failed to unmarshall %w", err)
 		}
-
-		// Extract tag from the build command (everything after -t)
-		parts := strings.Split(line, " -t ")
-		var tag string
-		if len(parts) >= 2 {
-			tag = strings.Fields(parts[1])[0]
+		// write command
+		path := filepath.Join(solutionsDir, dockerfile.Language)
+		filename := dockerfile.Filename
+		tagName := getTagName(dockerfile.Language, dockerfile.Filename)
+		command := fmt.Sprintf("docker build -f %s/%s %s -t %s\n", path, filename, path, tagName)
+		if _, err := cmdWriter.WriteString(command); err != nil {
+			return fmt.Errorf("failed to write command %w", err)
 		}
-
-		fmt.Printf("Building %s...\n", tag)
-
-		cmd := exec.Command("/bin/bash", "-c", line)
+		// create result
+		cmd := exec.CommandContext(ctx,
+			"docker", "build",
+			"-f", filepath.Join(path, filename),
+			path,
+			"-t", tagName,
+		)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
-
 		if err := cmd.Run(); err != nil {
-			fmt.Printf("Build failed for %s: %v\n", tag, err)
-			continue
+			return fmt.Errorf("failed building: %v\n", err)
 		}
-
-		// Write build artifact to JSONL
-		artifact := BuildArtifact{Tag: tag}
-		data, _ := json.Marshal(artifact)
-		output.Write(data)
-		output.WriteString("\n")
+		// write result
+		tag := BuildResult{Tag: tagName}
+		err = encoder.Encode(tag)
+		if err != nil {
+			return fmt.Errorf("failed to marshal json %w", err)
+		}
+		return nil
 	}
+	if err := transform(ctx, infileName, transformer, cmdfileName, tempfileName); err != nil {
+		return err
+	}
+	if err := os.Rename(tempfileName, resultsfileName); err != nil {
+		return fmt.Errorf("failed to finalize results: %w", err)
+	}
+	// log and return
+	fmt.Println("complete")
 	return nil
 }
