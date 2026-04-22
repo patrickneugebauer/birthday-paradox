@@ -10,6 +10,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 func getTagName(dir string, filename string) string {
@@ -22,56 +23,75 @@ func getTagName(dir string, filename string) string {
 }
 
 func Build() error {
-	infileName := dockerfileList
-	cmdfileName := buildCommandsFile
-	tempfileName := buildTempResultsFile
-	resultsfileName := buildResultsFile
-	// Create a context that listens for Ctrl+C
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
-	defer stop() // Restore default behavior when Build returns
-	transformer := func(ctx context.Context, scanner *bufio.Scanner, cmdWriter *bufio.Writer, encoder *json.Encoder) error {
-		// read
-		inBytes := scanner.Bytes()
-		var dockerfile Dockerfile
-		err := json.Unmarshal(inBytes, &dockerfile)
-		if err != nil {
-			return fmt.Errorf("failed to unmarshall %w", err)
-		}
-		// write command
-		path := filepath.Join(solutionsDir, dockerfile.Language)
-		filename := dockerfile.Filename
-		tagName := getTagName(dockerfile.Language, dockerfile.Filename)
-		command := fmt.Sprintf("docker build -f %s/%s %s -t %s\n", path, filename, path, tagName)
-		if _, err := cmdWriter.WriteString(command); err != nil {
-			return fmt.Errorf("failed to write command %w", err)
-		}
-		// create result
-		cmd := exec.CommandContext(ctx,
-			"docker", "build",
-			"-f", filepath.Join(path, filename),
-			path,
-			"-t", tagName,
-		)
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		if err := cmd.Run(); err != nil {
-			return fmt.Errorf("failed building: %v\n", err)
-		}
-		// write result
-		tag := BuildResult{Tag: tagName}
-		err = encoder.Encode(tag)
-		if err != nil {
-			return fmt.Errorf("failed to marshal json %w", err)
-		}
-		return nil
+	defer stop()
+
+	infile, err := os.Open(dockerfileList)
+	if err != nil {
+		return fmt.Errorf("open %s: %w", dockerfileList, err)
 	}
-	if err := transform(ctx, infileName, transformer, cmdfileName, tempfileName); err != nil {
+	defer infile.Close()
+	scanner := bufio.NewScanner(infile)
+
+	writers, err := OpenBufferedFiles(buildCommandsFile, buildTempResultsFile)
+	if err != nil {
 		return err
 	}
-	if err := os.Rename(tempfileName, resultsfileName); err != nil {
-		return fmt.Errorf("failed to finalize results: %w", err)
+	cmdFile, resultsFile := writers[0], writers[1]
+	defer CloseBufferedFiles(writers...)
+
+	ticker := time.NewTicker(10 * time.Second)
+	defer ticker.Stop()
+
+	for scanner.Scan() {
+		select {
+		case <-ctx.Done():
+			fmt.Println("Interrupt received, stopping build loop...")
+			return nil
+		case <-ticker.C:
+			for _, w := range writers {
+				if err := w.Flush(); err != nil {
+					return fmt.Errorf("flush: %w", err)
+				}
+			}
+		default:
+		}
+
+		var dockerfile Dockerfile
+		if err := json.Unmarshal(scanner.Bytes(), &dockerfile); err != nil {
+			return fmt.Errorf("unmarshal: %w", err)
+		}
+
+		tag := getTagName(dockerfile.Language, dockerfile.Filename)
+		dockerfilePath := filepath.Join(solutionsDir, dockerfile.Language, dockerfile.Filename)
+		solutionPath := filepath.Join(solutionsDir, dockerfile.Language)
+		cmd := fmt.Sprintf("docker build -t %s -f %s %s\n", tag, dockerfilePath, solutionPath)
+		if err := cmdFile.WriteString(cmd); err != nil {
+			return fmt.Errorf("write command: %w", err)
+		}
+
+		// Run docker build
+		buildCmd := exec.CommandContext(ctx, "docker", "build", "-t", tag, "-f", dockerfilePath, solutionPath)
+		buildCmd.Stdout = os.Stdout
+		buildCmd.Stderr = os.Stderr
+		if err := buildCmd.Run(); err != nil {
+			return fmt.Errorf("docker build failed for %s: %w", tag, err)
+		}
+
+		if err := resultsFile.Encode(BuildResult{Tag: tag}); err != nil {
+			return fmt.Errorf("encode result: %w", err)
+		}
 	}
-	// log and return
-	fmt.Println("complete")
+
+	if err := scanner.Err(); err != nil {
+		return fmt.Errorf("scanner: %w", err)
+	}
+	if err := resultsFile.Close(); err != nil {
+		return fmt.Errorf("close temp results: %w", err)
+	}
+	if err := os.Rename(buildTempResultsFile, buildResultsFile); err != nil {
+		return fmt.Errorf("finalize results: %w", err)
+	}
+	fmt.Printf("wrote to file: %s\n", buildResultsFile)
 	return nil
 }

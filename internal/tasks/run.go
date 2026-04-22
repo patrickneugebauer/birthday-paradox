@@ -11,6 +11,7 @@ import (
 	"os/signal"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func loadPreviousStats() (map[string]int, error) {
@@ -43,68 +44,88 @@ func loadPreviousStats() (map[string]int, error) {
 }
 
 func Run() error {
-	// Create a context that listens for Ctrl+C
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
-	defer stop() // Restore default behavior when Build returns
-	infileName := buildResultsFile
-	cmdFileName := runCommandsFile
-	tempfileName := runTempResultsFile
-	savefileName := runResultsFile
+	defer stop()
+
 	prevStats, err := loadPreviousStats()
 	if err != nil {
 		return err
 	}
-	fmt.Printf("writing to: %s...\n", tempfileName)
-	transformer := func(ctx context.Context, scanner *bufio.Scanner, cmdWriter *bufio.Writer, encoder *json.Encoder) error {
-		// read input
-		inBytes := scanner.Bytes()
-		var buildResult BuildResult
-		if err := json.Unmarshal(inBytes, &buildResult); err != nil {
-			return fmt.Errorf("failed to unmarshall %w", err)
-		}
-		// write command
-		tagName := buildResult.Tag
-		iters := defaultIterations
-		if ips, ok := prevStats[tagName]; ok && ips > 0 {
-			iters = ips
-		}
-		commandText := fmt.Sprintf("docker run --rm %s %d\n", tagName, iters)
-		if _, err := cmdWriter.WriteString(commandText); err != nil {
-			return fmt.Errorf("failed to write command %w", err)
-		}
-		// run command
-		fmt.Printf("Benchmarking %s %d...\n", tagName, iters)
-		cmd := exec.CommandContext(ctx,
-			"docker", "run",
-			"--rm",
-			tagName,
-			strconv.Itoa(iters),
-		)
-		out, err := cmd.CombinedOutput()
-		if err != nil {
-			fmt.Printf("Skipping %s: %v\n", tagName, err)
-			emptyResult := RunResult{Tag: tagName, IPS: defaultIterations}
-			if err := encoder.Encode(emptyResult); err != nil {
-				return fmt.Errorf("Failed to serialize failure %s: %v\n", tagName, err)
-			}
+
+	infile, err := os.Open(buildResultsFile)
+	if err != nil {
+		return fmt.Errorf("open %s: %w", buildResultsFile, err)
+	}
+	defer infile.Close()
+	scanner := bufio.NewScanner(infile)
+
+	writers, err := OpenBufferedFiles(runCommandsFile, runTempResultsFile)
+	if err != nil {
+		return err
+	}
+	cmdFile, resultsFile := writers[0], writers[1]
+	defer CloseBufferedFiles(writers...)
+
+	ticker := time.NewTicker(10 * time.Second)
+	defer ticker.Stop()
+
+	for scanner.Scan() {
+		fmt.Print(".")
+		select {
+		case <-ctx.Done():
+			fmt.Println("Interrupt received, stopping run loop...")
 			return nil
+		case <-ticker.C:
+			for _, w := range writers {
+				if err := w.Flush(); err != nil {
+					return fmt.Errorf("flush: %w", err)
+				}
+			}
+		default:
 		}
-		// print results
-		result := parseOutput(string(out))
-		result.Tag = tagName
-		if err := encoder.Encode(result); err != nil {
-			return fmt.Errorf("Failed to encode %s: %v\n", tagName, err)
+
+		var buildResult BuildResult
+		if err := json.Unmarshal(scanner.Bytes(), &buildResult); err != nil {
+			return fmt.Errorf("unmarshal: %w", err)
 		}
-		return nil
+
+		iterations := defaultIterations
+		if prev, ok := prevStats[buildResult.Tag]; ok {
+			iterations = prev
+		}
+
+		cmd := fmt.Sprintf("docker run --rm %s %d\n", buildResult.Tag, iterations)
+		if err := cmdFile.WriteString(cmd); err != nil {
+			return fmt.Errorf("write command: %w", err)
+		}
+
+		output, err := exec.CommandContext(ctx, "docker", "run", "--rm", buildResult.Tag, strconv.Itoa(iterations)).CombinedOutput()
+		if err != nil {
+			// fallback on error
+			if err := resultsFile.Encode(RunResult{Tag: buildResult.Tag, IPS: defaultIterations}); err != nil {
+				return fmt.Errorf("encode fallback: %w", err)
+			}
+			continue
+		}
+
+		result := parseOutput(string(output))
+		result.Tag = buildResult.Tag
+		if err := resultsFile.Encode(result); err != nil {
+			return fmt.Errorf("encode result: %w", err)
+		}
 	}
-	if err = transform(ctx, infileName, transformer, cmdFileName, tempfileName); err != nil {
-		return fmt.Errorf("failed to transform %w", err)
+	fmt.Println()
+
+	if err := scanner.Err(); err != nil {
+		return fmt.Errorf("scanner: %w", err)
 	}
-	if err := os.Rename(tempfileName, savefileName); err != nil {
-		return fmt.Errorf("failed to finalize results: %w", err)
+	if err := resultsFile.Close(); err != nil {
+		return fmt.Errorf("close temp results: %w", err)
 	}
-	// log and return
-	fmt.Printf("renamed: %s to %s\n", tempfileName, savefileName)
+	if err := os.Rename(runTempResultsFile, runResultsFile); err != nil {
+		return fmt.Errorf("finalize results: %w", err)
+	}
+	fmt.Printf("wrote to file: %s\n", runResultsFile)
 	return nil
 }
 

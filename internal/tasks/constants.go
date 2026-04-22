@@ -9,7 +9,6 @@ const (
 	referenceDir      = "reference"
 	artifactDir       = "artifacts"
 	defaultIterations = 1000
-	capacity          = 70
 )
 
 var (
@@ -20,12 +19,13 @@ var (
 	githubLinksFile = filepath.Join(referenceDir, "github-links.csv")
 	wikiLinksFile   = filepath.Join(referenceDir, "wiki-links.csv")
 	// stars
-	starCommandsFile     = filepath.Join(artifactDir, "star-commands.sh")
-	starsTempResultsFile = filepath.Join(artifactDir, "star-temp-results.sh")
-	starResultsFile      = filepath.Join(artifactDir, "star-results.jsonl")
+	starsCommandsFile    = filepath.Join(artifactDir, "star-commands.sh")
+	starsDataFile        = filepath.Join(artifactDir, "star-data.json")
+	starsTempResultsFile = filepath.Join(artifactDir, "star-temp-results.jsonl")
+	starsResultsFile     = filepath.Join(artifactDir, "star-results.jsonl")
 	// build
 	buildCommandsFile    = filepath.Join(artifactDir, "build-commands.sh")
-	buildTempResultsFile = filepath.Join(artifactDir, "build-temp-results.json")
+	buildTempResultsFile = filepath.Join(artifactDir, "build-temp-results.jsonl")
 	buildResultsFile     = filepath.Join(artifactDir, "build-results.jsonl")
 	// size
 	weighCommandsFile = filepath.Join(artifactDir, "weigh-commands.sh")
