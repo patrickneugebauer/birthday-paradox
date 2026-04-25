@@ -34,12 +34,17 @@ var (
 	runCommandsFile    = filepath.Join(artifactDir, "run-commands.sh")
 	runTempResultsFile = filepath.Join(artifactDir, "run-temp-results.jsonl")
 	runResultsFile     = filepath.Join(artifactDir, "run-results.jsonl")
+	// readme
+	readmeResultsFile = filepath.Join(artifactDir, "readme-results.jsonl")
+	readmeFile        = filepath.Join(artifactDir, "readme.md")
 )
 
 type DockerfileMap = map[string][]string
 type Dockerfile struct {
-	Language string `json:"language"`
-	Filename string `json:"dockerfile"`
+	Language string  `json:"language"`
+	Filename string  `json:"dockerfile"`
+	Runtime  *string `json:"runtime"`
+	Tag      string  `json:"tag"`
 }
 
 type Command struct {
@@ -80,4 +85,16 @@ type GithubRepo struct {
 	MirrorUrl       string `json:"mirror_url"`
 	Archived        bool   `json:"archived"`
 	Disabled        bool   `json:"disabled"`
+}
+
+type ReadmeRow struct {
+	Tag      string `json:"string"`
+	Language string `json:"language"`
+	Runtime  string `json:"runtime"`
+	Year     int    `json:"year"`
+	Wiki     string `json:"wiki"`
+	Github   string `json:"github"`
+	Stars    int    `json:"stars"`
+	SizeMB   int    `json:"size_mb"`
+	IPS      int    `json:"ips"`
 }

@@ -2,10 +2,47 @@ package tasks
 
 import (
 	"bufio"
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"os"
 )
+
+type Reader struct {
+	f *os.File
+	s *bufio.Scanner
+	c *csv.Reader
+}
+
+func (reader Reader) Close() error {
+	err := reader.f.Close()
+	return err
+}
+
+func OpenReaders(paths ...string) ([]Reader, error) {
+	readers := make([]Reader, 0, len(paths))
+	for _, path := range paths {
+		file, err := os.Open(path)
+		if err != nil {
+			return nil, err
+		}
+		scanner := bufio.NewScanner(file)
+		c := csv.NewReader(file)
+		reader := Reader{f: file, s: scanner, c: c}
+		readers = append(readers, reader)
+	}
+	return readers, nil
+}
+
+func CloseReaders(readers []Reader) error {
+	for _, reader := range readers {
+		err := reader.Close()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
 
 type BufferedFile struct {
 	f   *os.File

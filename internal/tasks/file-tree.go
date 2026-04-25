@@ -34,7 +34,8 @@ func MakeFileTree() error {
 				continue
 			}
 			encoder := json.NewEncoder(writer)
-			dockerfile := Dockerfile{Language: entry.Name(), Filename: f.Name()}
+			runtime, tag := getRuntimeAndTag(entry.Name(), f.Name())
+			dockerfile := Dockerfile{Language: entry.Name(), Filename: f.Name(), Tag: tag, Runtime: runtime}
 			err := encoder.Encode(dockerfile)
 			if err != nil {
 				return fmt.Errorf("failed to encode: %w", err)
@@ -47,3 +48,12 @@ func MakeFileTree() error {
 	return nil
 }
 
+func getRuntimeAndTag(dir string, filename string) (*string, string) {
+	var runtime *string
+	tag := "bday/" + dir
+	if strings.Contains(filename, ".") {
+		runtime = &strings.SplitN(filename, ".", 2)[1]
+		tag += "-" + *runtime
+	}
+	return runtime, tag
+}

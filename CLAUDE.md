@@ -1,20 +1,17 @@
 # Claude Code Instructions
 
 ## Project
-`solutions/` — one folder per language, each a Monte Carlo birthday problem simulation.
+See [STRUCTURE.md](STRUCTURE.md) for full layout.
+See [PHILOSOPHY.md](PHILOSOPHY.md) for guiding principles on data collection and resource efficiency.
 `cmd/app/` — Go CLI orchestrating Docker builds and benchmark runs.
 Build: `go build ./cmd/app/`
 
-## Plan-First (Strictly Enforced)
-Never make code changes without a plan file. Every task is two prompts:
-1. **Plan:** Enter plan mode, explore, write plan to `plans/`, call ExitPlanMode. No code changes.
-2. **Execute:** Implement the plan from prompt 1.
+## Plans
+Always write plans to `plans/YYYYMMDD-short-description.md` before implementing. Never describe a plan only in chat. Write the file, then stop — don't prompt or ask to proceed.
 
-If asked to make changes without a plan, interrupt and ask for a planning prompt first.
+Update [STRUCTURE.md](STRUCTURE.md) whenever plans or code changes affect project layout or architecture.
 
-## Plan Files
-`plans/YYYYMMDDTHHMMSS-short-description.md`
-Example: `plans/20260414T143022-add-pre-run-command.md`
+When important philosophical decisions emerge during planning or implementation, prompt to add them to [PHILOSOPHY.md](PHILOSOPHY.md).
 
 ## Go
 Write idiomatic Go.
@@ -23,4 +20,4 @@ Write idiomatic Go.
 Terse. Lead with the result. Keep this file minimal.
 
 ## Models
-Chose lowest cost model for each task unless specified.
+Choose lowest cost model for each task unless specified.

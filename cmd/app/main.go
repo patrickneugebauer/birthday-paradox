@@ -27,6 +27,8 @@ func main() {
 		err = tasks.Weigh()
 	case "run":
 		err = tasks.Run()
+	case "readme":
+		err = tasks.Readme()
 	default:
 		err = fmt.Errorf("unknown command: %s", command)
 	}

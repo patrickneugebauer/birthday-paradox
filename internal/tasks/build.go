@@ -9,18 +9,8 @@ import (
 	"os/exec"
 	"os/signal"
 	"path/filepath"
-	"strings"
 	"time"
 )
-
-func getTagName(dir string, filename string) string {
-	tag := "bday/" + dir
-	if strings.Contains(filename, ".") {
-		extension := strings.SplitN(filename, ".", 2)[1]
-		tag += "-" + extension
-	}
-	return tag
-}
 
 func Build() error {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
@@ -62,7 +52,7 @@ func Build() error {
 			return fmt.Errorf("unmarshal: %w", err)
 		}
 
-		tag := getTagName(dockerfile.Language, dockerfile.Filename)
+		tag := dockerfile.Tag
 		dockerfilePath := filepath.Join(solutionsDir, dockerfile.Language, dockerfile.Filename)
 		solutionPath := filepath.Join(solutionsDir, dockerfile.Language)
 		cmd := fmt.Sprintf("docker build -t %s -f %s %s\n", tag, dockerfilePath, solutionPath)
