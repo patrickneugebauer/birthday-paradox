@@ -131,6 +131,7 @@ func Readme() error {
 		jsonBytes, _ := json.Marshal(row)
 		fmt.Fprintln(jsonlFile, string(jsonBytes))
 	}
+	fmt.Printf("wrote to file: %s\n", readmeResultsFile)
 
 	// Sort by IPS descending (0 IPS goes to end)
 	sortByIPS(rows)
@@ -152,18 +153,23 @@ func Readme() error {
 	if err := writeReadmeFile(readmeFile, "Performance (IPS, highest first)", rows); err != nil {
 		return err
 	}
+	fmt.Printf("wrote to file: %s\n", readmeFile)
 	if err := writeReadmeFile(readmeFileByLanguage, "Language (A-Z)", rowsByLanguage); err != nil {
 		return err
 	}
+	fmt.Printf("wrote to file: %s\n", readmeFileByLanguage)
 	if err := writeReadmeFile(readmeFileByYear, "Year (newest first)", rowsByYear); err != nil {
 		return err
 	}
+	fmt.Printf("wrote to file: %s\n", readmeFileByYear)
 	if err := writeReadmeFile(readmeFileByStars, "GitHub Stars (highest first)", rowsByStars); err != nil {
 		return err
 	}
+	fmt.Printf("wrote to file: %s\n", readmeFileByStars)
 	if err := writeReadmeFile(readmeFileBySize, "Size in MB (smallest first)", rowsBySize); err != nil {
 		return err
 	}
+	fmt.Printf("wrote to file: %s\n", readmeFileBySize)
 
 	return nil
 }
