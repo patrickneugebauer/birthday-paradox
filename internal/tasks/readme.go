@@ -174,6 +174,14 @@ func extractWikiDisplay(wikiURL string) string {
 		if err != nil {
 			return display
 		}
+		// Remove _(programming_language) suffix, handling fragments like #ReScript
+		if idx := strings.Index(decoded, "#"); idx != -1 {
+			beforeHash := decoded[:idx]
+			beforeHash = strings.TrimSuffix(beforeHash, "_(programming_language)")
+			decoded = beforeHash + decoded[idx:]
+		} else {
+			decoded = strings.TrimSuffix(decoded, "_(programming_language)")
+		}
 		return decoded
 	}
 	return ""
