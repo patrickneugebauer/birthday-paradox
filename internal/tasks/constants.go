@@ -36,7 +36,7 @@ var (
 	runResultsFile     = filepath.Join(artifactDir, "run-results.jsonl")
 	// readme
 	readmeResultsFile = filepath.Join(artifactDir, "readme-results.jsonl")
-	readmeFile        = filepath.Join(artifactDir, "readme.md")
+	readmeFile        = "README.md"
 )
 
 type DockerfileMap = map[string][]string
@@ -88,13 +88,15 @@ type GithubRepo struct {
 }
 
 type ReadmeRow struct {
-	Tag      string `json:"string"`
-	Language string `json:"language"`
-	Runtime  string `json:"runtime"`
-	Year     int    `json:"year"`
-	Wiki     string `json:"wiki"`
-	Github   string `json:"github"`
-	Stars    int    `json:"stars"`
-	SizeMB   int    `json:"size_mb"`
-	IPS      int    `json:"ips"`
+	Tag           string  `json:"tag"`
+	Language      string  `json:"language"`
+	Runtime       string  `json:"runtime"`
+	Year          int     `json:"year"`
+	WikiURL       string  `json:"wiki_url"`
+	WikiDisplay   string  `json:"wiki_display"`
+	GitHubURL     string  `json:"github_url"`
+	GitHubDisplay string  `json:"github_display"`
+	Stars         int     `json:"stars"`
+	SizeMB        float64 `json:"size_mb"`
+	IPS           int     `json:"ips"`
 }

@@ -6,68 +6,232 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/url"
 	"os"
+	"sort"
+	"strings"
 )
 
 func Readme() error {
-	// Phase A — Open input and set up scanner (no output files yet)
-	// ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
-	// defer stop()
-
-	runtimes, err := loadJson[Dockerfile](dockerfileList)
+	// Load all data
+	dockerfiles, err := loadJson[Dockerfile](dockerfileList)
 	if err != nil {
 		return err
 	}
-	jsonData, err := json.MarshalIndent(runtimes, "", "    ")
-	fmt.Println(string(jsonData))
 
 	years, err := loadCsvToMap(yearsFile)
 	if err != nil {
 		return err
 	}
-	jsonData, err = json.MarshalIndent(years, "", "    ")
-	fmt.Println(string(jsonData))
 
 	wiki, err := loadCsvToMap(wikiLinksFile)
 	if err != nil {
 		return err
 	}
-	jsonData, err = json.MarshalIndent(wiki, "", "    ")
-	fmt.Println(string(jsonData))
 
 	github, err := loadCsvToMap(githubLinksFile)
 	if err != nil {
 		return err
 	}
-	jsonData, err = json.MarshalIndent(github, "", "    ")
-	fmt.Println(string(jsonData))
 
 	stars, err := loadJson[StarResult](starsResultsFile)
 	if err != nil {
 		return err
 	}
-	jsonData, err = json.MarshalIndent(stars, "", "    ")
-	fmt.Println(string(jsonData))
 
 	sizes, err := loadJson[WeighResult](weighResultsFile)
 	if err != nil {
 		return err
 	}
-	jsonData, err = json.MarshalIndent(sizes, "", "    ")
-	fmt.Println(string(jsonData))
 
 	runs, err := loadJson[RunResult](runResultsFile)
 	if err != nil {
 		return err
 	}
-	jsonData, err = json.MarshalIndent(runs, "", "    ")
-	fmt.Println(string(jsonData))
+
+	// Build a map of tag → dockerfile info for quick lookup
+	dockerfileMap := make(map[string]*Dockerfile)
+	for i := range dockerfiles {
+		dockerfileMap[dockerfiles[i].Tag] = &dockerfiles[i]
+	}
+
+	// Build a map of tag → size for quick lookup
+	sizeMap := make(map[string]float64)
+	for _, size := range sizes {
+		sizeMap[size.Tag] = size.SizeMB
+	}
+
+	// Build a map of language → stars for quick lookup
+	starMap := make(map[string]int)
+	for _, star := range stars {
+		starMap[star.Language] = star.Stars
+	}
+
+	// Build readme rows from runs (the main dataset)
+	var rows []ReadmeRow
+	for _, run := range runs {
+		tag := run.Tag
+
+		// Look up dockerfile/runtime
+		dockerfileInfo, ok := dockerfileMap[tag]
+		if !ok {
+			continue // skip if no dockerfile for this tag
+		}
+
+		language := dockerfileInfo.Language
+		runtime := ""
+		if dockerfileInfo.Runtime != nil {
+			runtime = *dockerfileInfo.Runtime
+		}
+
+		// Look up year, wiki, github from language-keyed maps
+		yearStr := years[language]
+		year := 0
+		if yearStr != "" {
+			fmt.Sscanf(yearStr, "%d", &year)
+		}
+		wikiURL := wiki[language]
+		githubURL := github[language]
+
+		// Look up stars
+		starsCount := starMap[language]
+
+		// Look up size
+		sizeMB := sizeMap[tag]
+
+		row := ReadmeRow{
+			Tag:           tag,
+			Language:      language,
+			Runtime:       runtime,
+			Year:          year,
+			WikiURL:       wikiURL,
+			WikiDisplay:   extractWikiDisplay(wikiURL),
+			GitHubURL:     githubURL,
+			GitHubDisplay: extractGitHubDisplay(githubURL),
+			Stars:         starsCount,
+			SizeMB:        sizeMB,
+			IPS:           run.IPS,
+		}
+
+		rows = append(rows, row)
+	}
+
+	// Sort rows by IPS descending
+	sort.Slice(rows, func(i, j int) bool {
+		return rows[i].IPS > rows[j].IPS
+	})
+
+	// Open output files
+	jsonlFile, err := os.Create(readmeResultsFile)
+	if err != nil {
+		return err
+	}
+	defer jsonlFile.Close()
+
+	markdownFile, err := os.Create(readmeFile)
+	if err != nil {
+		return err
+	}
+	defer markdownFile.Close()
+
+	// Write markdown header
+	fmt.Fprintln(markdownFile, "| Language | Runtime | Year | Wiki | GitHub | Stars | Size (MB) | IPS |")
+	fmt.Fprintln(markdownFile, "|---|---|---|---|---|---|---|---|")
+
+	// Write rows to both files
+	for _, row := range rows {
+		// JSONL
+		jsonBytes, _ := json.Marshal(row)
+		fmt.Fprintln(jsonlFile, string(jsonBytes))
+
+		// Markdown
+		line := formatMarkdownRow(row)
+		fmt.Fprintln(markdownFile, line)
+	}
 
 	return nil
 }
 
-// need everything to be based on tag
-// load languages, runtimes based on tag?
+func extractGitHubDisplay(url string) string {
+	if url == "" {
+		return ""
+	}
+	parts := strings.Split(url, "github.com/")
+	if len(parts) > 1 {
+		return parts[1]
+	}
+	return ""
+}
+
+func extractWikiDisplay(wikiURL string) string {
+	if wikiURL == "" {
+		return ""
+	}
+	parts := strings.Split(wikiURL, "/wiki/")
+	if len(parts) > 1 {
+		display := parts[1]
+		decoded, err := url.QueryUnescape(display)
+		if err != nil {
+			return display
+		}
+		return decoded
+	}
+	return ""
+}
+
+func formatMarkdownRow(row ReadmeRow) string {
+	runtime := row.Runtime
+	if runtime == "" {
+		runtime = "-"
+	}
+
+	year := "-"
+	if row.Year > 0 {
+		year = fmt.Sprintf("%d", row.Year)
+	}
+
+	wiki := "-"
+	if row.WikiURL != "" {
+		wiki = fmt.Sprintf("[%s](%s)", row.WikiDisplay, row.WikiURL)
+	}
+
+	github := "-"
+	if row.GitHubURL != "" {
+		github = fmt.Sprintf("[%s](%s)", row.GitHubDisplay, row.GitHubURL)
+	}
+
+	stars := "-"
+	if row.Stars > 0 {
+		stars = formatWithCommas(row.Stars)
+	}
+
+	size := "-"
+	if row.SizeMB > 0 {
+		size = formatWithCommas(int(row.SizeMB))
+	}
+
+	ips := formatWithCommas(row.IPS)
+
+	return fmt.Sprintf("| %s | %s | %s | %s | %s | %s | %s | %s |",
+		row.Language, runtime, year, wiki, github, stars, size, ips)
+}
+
+func formatWithCommas(n int) string {
+	str := fmt.Sprintf("%d", n)
+	if len(str) <= 3 {
+		return str
+	}
+
+	// Add commas from right to left
+	var result strings.Builder
+	for i, c := range str {
+		if i > 0 && (len(str)-i)%3 == 0 {
+			result.WriteRune(',')
+		}
+		result.WriteRune(c)
+	}
+	return result.String()
+}
 
 func loadJson[T any](path string) ([]T, error) {
 	results := make([]T, 0, 100)
@@ -75,6 +239,7 @@ func loadJson[T any](path string) ([]T, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer file.Close()
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		bytes := scanner.Bytes()
@@ -97,7 +262,7 @@ func loadCsvToMap(path string) (map[string]string, error) {
 	reader := csv.NewReader(file)
 	if _, err := reader.Read(); err != nil {
 		if err == io.EOF {
-			return results, nil // File was empty
+			return results, nil
 		}
 		return nil, err
 	}
@@ -110,9 +275,6 @@ func loadCsvToMap(path string) (map[string]string, error) {
 			return nil, err
 		}
 		key, val := record[0], record[1]
-		if err != nil {
-			return nil, err
-		}
 		results[key] = val
 	}
 	return results, nil

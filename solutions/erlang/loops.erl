@@ -1,5 +1,5 @@
 -module(loops).
--export([main/1]).
+-export([main/0]).
 
 -define(SampleSize, 23).
 
@@ -18,10 +18,15 @@ has_duplicates([X|XS]) -> case lists:member(X, XS) of true -> true; false -> has
 % has_duplicates(List) -> erlang:length(List) == sets:size(sets:from_list(List)).
 % ---------------------------------------------------------------------------
 
-main(Args) ->
+main() ->
+  % Get iterations from command line argument
+  IterationStr = case init:get_argument(iterations) of
+    {ok, [[N]]} -> N;
+    _ -> hd(init:get_plain_arguments())
+  end,
   % data
   StartMicrosecond = os:system_time(),
-  Iterations = list_to_integer(lists:nth(1, Args)),
+  Iterations = list_to_integer(IterationStr),
   Data = lists:map(
     fun(_) -> has_duplicates(random_sample(?SampleSize)) end,
     lists:seq(1, Iterations)

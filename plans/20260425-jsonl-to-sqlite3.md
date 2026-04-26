@@ -161,11 +161,11 @@ SELECT
   st.stars, sz.size_mb, r.ips
 FROM solutions s
 JOIN languages l ON s.language = l.language AND l.status = 'final'
-LEFT JOIN (SELECT language, stars FROM stars WHERE status = 'final') st 
+LEFT JOIN (SELECT language, stars FROM stars WHERE status = 'final') st
   ON l.language = st.language
-LEFT JOIN (SELECT tag, size_mb FROM sizes WHERE status = 'final') sz 
+LEFT JOIN (SELECT tag, size_mb FROM sizes WHERE status = 'final') sz
   ON s.tag = sz.tag
-LEFT JOIN (SELECT tag, ips FROM runs WHERE status = 'final') r 
+LEFT JOIN (SELECT tag, ips FROM runs WHERE status = 'final') r
   ON s.tag = r.tag
 ORDER BY s.tag;
 ```
@@ -247,14 +247,14 @@ f.Close()
          panic(r)
        }
      }()
-     
+
      rows, err := tx.Query("SELECT tag FROM solutions WHERE status = 'final'")
      if err != nil {
        tx.Commit()  // save what succeeded
        return fmt.Errorf("query solutions: %w", err)
      }
      defer rows.Close()
-     
+
      for rows.Next() {
        var tag string
        if err := rows.Scan(&tag); err != nil {
@@ -275,7 +275,7 @@ f.Close()
        tx.Commit()  // save what succeeded
        return fmt.Errorf("rows iteration: %w", err)
      }
-     
+
      // Cleanup: promote all temp to final
      if err := tx.Exec("DELETE FROM builds WHERE status = 'final'").Err(); err != nil {
        tx.Commit()
@@ -285,7 +285,7 @@ f.Close()
        tx.Commit()
        return fmt.Errorf("promote builds: %w", err)
      }
-     
+
      if err := tx.Commit(); err != nil {
        return fmt.Errorf("commit transaction: %w", err)
      }
@@ -380,3 +380,11 @@ See [PHILOSOPHY.md](../PHILOSOPHY.md) for guiding principles on data preservatio
   - Verify stars/github_api_responses records for that language persist (orphaned)
   - Re-add language to languages table
   - Verify relationship automatically re-establishes (natural key match)
+
+## Phases
+
+- [x] Get readme working with current logic. Minimal changes to create readme.jsonl and README.md table, all in one command using existing patterns.
+- [ ] Just add SQL schema, create tables, insert language data
+- [ ] Add logic to insert records alongside existing code
+- [ ] Switch over reading logic to read from DB instead of files, keep writing to files
+- [ ] Remove logic to write to jsonl and sh commands
