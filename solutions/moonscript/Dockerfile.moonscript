@@ -1,0 +1,14 @@
+FROM alpine
+
+# Moonscript tarball extracts directly to /moon binary (no subdirectory).
+RUN apk update && apk add --no-cache wget tar && \
+    wget -O /tmp/moonscript.tar.gz https://github.com/leafo/moonscript/releases/download/v0.6.0/moonscript-v0.6.0-linux-x86_64.tar.gz && \
+    tar -xzf /tmp/moonscript.tar.gz -C /usr/local/bin && \
+    chmod +x /usr/local/bin/moon && \
+    apk del wget tar && \
+    rm -rf /tmp/moonscript.tar.gz
+
+WORKDIR /app
+COPY loops.moon .
+
+ENTRYPOINT ["moon", "loops.moon"]

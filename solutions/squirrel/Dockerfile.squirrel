@@ -1,0 +1,17 @@
+FROM debian:bookworm-slim
+
+# Squirrel must be built from source (no prebuilt binaries).
+# Requires Debian for glibc (Alpine's musl incompatible with compiled binary).
+# ca-certificates needed for HTTPS downloads in Debian bookworm-slim.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget ca-certificates tar make gcc g++ && \
+    wget -O /tmp/squirrel.tar.gz https://github.com/albertodemichelis/squirrel/archive/refs/tags/v3.2.tar.gz && \
+    tar -xzf /tmp/squirrel.tar.gz -C /tmp && \
+    cd /tmp/squirrel-3.2 && make && \
+    find . -name "sq" -type f -executable -exec cp {} /usr/local/bin/squirrel \; && chmod +x /usr/local/bin/squirrel && \
+    rm -rf /tmp/squirrel*
+
+WORKDIR /app
+COPY loops.nut .
+
+ENTRYPOINT ["squirrel", "loops.nut"]

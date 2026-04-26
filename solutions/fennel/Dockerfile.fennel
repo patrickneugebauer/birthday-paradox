@@ -1,0 +1,13 @@
+FROM alpine
+
+# Fennel v0.10.0 and later don't provide prebuilt binaries for x86_64-linux.
+# Using v0.4.2 which does provide a prebuilt binary.
+RUN apk update && apk add --no-cache wget && \
+    wget -O /tmp/fennel https://github.com/bakpakin/fennel/releases/download/0.4.2/fennel && \
+    mv /tmp/fennel /usr/local/bin/ && chmod +x /usr/local/bin/fennel && \
+    apk del wget
+
+WORKDIR /app
+COPY loops.fnl .
+
+ENTRYPOINT ["fennel", "loops.fnl"]

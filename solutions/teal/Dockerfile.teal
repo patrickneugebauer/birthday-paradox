@@ -1,0 +1,17 @@
+FROM debian:trixie-slim
+
+# Teal binary is compiled against glibc (not compatible with Alpine's musl).
+# trixie-slim is required because v0.24.8 needs glibc 2.38+; bookworm-slim only has 2.36.
+# Teal requires the "run" subcommand syntax (tl run file.tl), not just filename.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget ca-certificates && \
+    wget -O /tmp/teal.tar.gz https://github.com/teal-language/tl/releases/download/v0.24.8/tl-0.24.8-linux-x86_64.tar.gz && \
+    tar -xzf /tmp/teal.tar.gz -C /tmp && \
+    mv /tmp/tl-0.24.8-linux-x86_64/tl /usr/local/bin/ && chmod +x /usr/local/bin/tl && \
+    apt-get purge -y wget ca-certificates && apt-get autoremove -y && \
+    rm -rf /tmp/teal.tar.gz /tmp/tl-0.24.8-linux-x86_64 /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY loops.tl .
+
+ENTRYPOINT ["tl", "run", "loops.tl"]

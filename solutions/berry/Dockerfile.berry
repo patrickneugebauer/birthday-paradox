@@ -1,0 +1,12 @@
+FROM debian:bookworm-slim
+WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential cmake git python3 ca-certificates && \
+    git clone https://github.com/berry-lang/berry.git /tmp/berry && \
+    cd /tmp/berry && mkdir build && cd build && cmake .. && make && \
+    cp bin/berry /usr/local/bin/ && \
+    apt-get purge -y build-essential cmake git python3 ca-certificates && \
+    apt-get autoremove -y && rm -rf /tmp/berry /var/lib/apt/lists/*
+COPY loops.be .
+
+ENTRYPOINT ["berry", "loops.be"]
