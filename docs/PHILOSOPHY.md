@@ -50,3 +50,20 @@ Examples:
 - `bday/csharp:dotnet.array.build`
 
 When adding new solutions, name Dockerfiles directly according to the convention without needing to update reference data.
+
+## Dockerfile Best Practices
+
+**Single-stage builds**: All Dockerfiles are single-stage. No multi-stage builds with builder images. If the build fails, the error should surface clearly in the build log. Within a single stage, it's fine to delete build-time dependencies after they're no longer needed (e.g. `apk del gcc cmake` after compiling).
+
+**Minimal official base images**: Choose the slimmest sensible base image:
+- Start with `alpine` or `slim` variants where available (e.g. `python:3.11-slim`, `node:20-alpine`).
+- Use `alpine` only if dependencies are available there; if the language or significant dependencies require many additional packages, use a `slim` variant (e.g. `debian:bookworm-slim`) instead. Don't fight alpine; pick the right base.
+- Always use **official images** from Docker Hub (golang, python, node, rust, etc.). Never pull from community, unofficial, or third-party image repositories.
+
+**Predictable, maintainable**: Each Dockerfile should be self-contained and easy to understand at a glance. No clever layering tricks. Use `apk add --no-cache` (alpine) or `apt-get install -y --no-install-recommends` (debian) to keep images lean.
+
+**COPY before source files**: All setup steps (package installation, compilation, downloads) must come before the `COPY` of source files. This preserves Docker layer caching: developers can modify the source file and rebuild without re-running expensive setup steps. Always use `COPY`, not `ADD`, unless extracting archives is required.
+
+**WORKDIR placement and directory**: `WORKDIR` must be set immediately after `FROM`, before any `RUN` or `COPY` commands. This establishes context for all subsequent commands and preserves layer caching when source files change.
+
+Use `/app` as the standard working directory. Exception: if the base image is specifically tied to a user/path (e.g. `ocaml/opam:alpine` uses `/home/opam`), respect that path only if it's required by the image's entrypoint or tooling.

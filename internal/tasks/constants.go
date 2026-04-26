@@ -15,12 +15,13 @@ var (
 	// solutions list
 	dockerfileList = filepath.Join(artifactDir, "dockerfiles.jsonl")
 	// language info
-	languageInfoFile = filepath.Join(referenceDir, "language-info.csv")
+	languageInfoFile = "language-info.csv"
 	// stars
-	starsCommandsFile    = filepath.Join(artifactDir, "star-commands.sh")
-	starsDataFile        = filepath.Join(artifactDir, "star-data.json")
-	starsTempResultsFile = filepath.Join(artifactDir, "star-temp-results.jsonl")
-	starsResultsFile     = filepath.Join(artifactDir, "star-results.jsonl")
+	starsCommandsFile      = filepath.Join(artifactDir, "star-commands.sh")
+	starsDataFile          = filepath.Join(artifactDir, "star-data.json")
+	starsRawPayloadsFile   = filepath.Join(artifactDir, "star-raw-payloads.jsonl")
+	starsTempResultsFile   = filepath.Join(artifactDir, "star-temp-results.jsonl")
+	starsResultsFile       = filepath.Join(artifactDir, "star-results.jsonl")
 	// build
 	buildCommandsFile    = filepath.Join(artifactDir, "build-commands.sh")
 	buildTempResultsFile = filepath.Join(artifactDir, "build-temp-results.jsonl")
@@ -35,10 +36,10 @@ var (
 	// readme
 	readmeResultsFile            = filepath.Join(artifactDir, "readme-results.jsonl")
 	readmeFile                   = "README.md"
-	readmeFileByLanguage         = "results-by-language.md"
-	readmeFileByYear             = "results-by-year.md"
-	readmeFileByStars            = "results-by-stars.md"
-	readmeFileBySize             = "results-by-size.md"
+	readmeFileByLanguage         = filepath.Join("tables", "results-by-language.md")
+	readmeFileByYear             = filepath.Join("tables", "results-by-year.md")
+	readmeFileByStars            = filepath.Join("tables", "results-by-stars.md")
+	readmeFileBySize             = filepath.Join("tables", "results-by-size.md")
 )
 
 type DockerfileMap = map[string][]string

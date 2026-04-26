@@ -32,12 +32,12 @@ func Stars() error {
 	defer infile.Close()
 	scanner := bufio.NewScanner(infile)
 
-	// Phase B — Open all three output files
-	writers, err := OpenBufferedFiles(starsCommandsFile, starsDataFile, starsTempResultsFile)
+	// Phase B — Open all output files
+	writers, err := OpenBufferedFiles(starsCommandsFile, starsDataFile, starsRawPayloadsFile, starsTempResultsFile)
 	if err != nil {
 		return err
 	}
-	cmdFile, dataFile, resultsFile := writers[0], writers[1], writers[2]
+	cmdFile, dataFile, rawPayloadsFile, resultsFile := writers[0], writers[1], writers[2], writers[3]
 	defer CloseBufferedFiles(writers...)
 
 	ticker := time.NewTicker(10 * time.Second)
@@ -60,10 +60,10 @@ func Stars() error {
 		}
 
 		line := scanner.Text()
-		if line == "language,year,wiki,github" {
+		if line == "language,year,wiki,github,website" {
 			continue
 		}
-		parts := strings.SplitN(line, ",", 4)
+		parts := strings.SplitN(line, ",", 5)
 		if len(parts) < 4 {
 			continue
 		}
@@ -76,9 +76,12 @@ func Stars() error {
 			return fmt.Errorf("write command: %w", err)
 		}
 
-		repo, err := getStars(apiURL)
+		repo, rawBody, err := getStarsWithRaw(apiURL)
 		if err != nil {
 			return fmt.Errorf("get stars for %s: %w", url, err)
+		}
+		if err := rawPayloadsFile.WriteString(string(rawBody) + "\n"); err != nil {
+			return fmt.Errorf("write raw payload: %w", err)
 		}
 		if err := dataFile.Encode(repo); err != nil {
 			return fmt.Errorf("encode repo data: %w", err)
@@ -103,34 +106,35 @@ func Stars() error {
 	return nil
 }
 
-func getStars(url string) (GithubRepo, error) {
+func getStarsWithRaw(url string) (GithubRepo, []byte, error) {
 	githubRepo := GithubRepo{}
-	// curl -i -H "Accept: application/vnd.github+json" \
-	// 	-H "Authorization: Bearer $ghtoken" \
-	// 	https://api.github.com/repos/golang/go
 	client := http.DefaultClient
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		return githubRepo, fmt.Errorf("create request: %w", err)
+		return githubRepo, nil, fmt.Errorf("create request: %w", err)
 	}
 	token := os.Getenv("ghtoken")
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", token))
 	req.Header.Add("Accept", "application/vnd.github+json")
 	resp, err := client.Do(req)
 	if err != nil {
-		return githubRepo, fmt.Errorf("http request: %w", err)
+		return githubRepo, nil, fmt.Errorf("http request: %w", err)
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
-		body, _ := io.ReadAll(resp.Body)
-		return githubRepo, fmt.Errorf("http %d: %s", resp.StatusCode, string(body))
-	}
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return githubRepo, fmt.Errorf("read body: %w", err)
+		return githubRepo, nil, fmt.Errorf("read body: %w", err)
+	}
+	if resp.StatusCode != 200 {
+		return githubRepo, body, fmt.Errorf("http %d: %s", resp.StatusCode, string(body))
 	}
 	if err := json.Unmarshal(body, &githubRepo); err != nil {
-		return githubRepo, fmt.Errorf("unmarshal: %w", err)
+		return githubRepo, body, fmt.Errorf("unmarshal: %w", err)
 	}
-	return githubRepo, nil
+	return githubRepo, body, nil
+}
+
+func getStars(url string) (GithubRepo, error) {
+	repo, _, err := getStarsWithRaw(url)
+	return repo, err
 }
