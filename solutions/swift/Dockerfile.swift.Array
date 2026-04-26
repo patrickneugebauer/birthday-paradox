@@ -1,6 +1,5 @@
 FROM swift
-
-WORKDIR /root
+WORKDIR /app
 
 COPY .gitignore .
 COPY Package.swift .

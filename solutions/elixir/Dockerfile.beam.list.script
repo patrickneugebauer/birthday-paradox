@@ -1,7 +1,6 @@
 FROM elixir:alpine
+WORKDIR /app
 
-WORKDIR /root
-
-ADD lib/loops.exs lib/
+COPY lib/loops.exs lib/
 
 ENTRYPOINT ["elixir", "lib/loops.exs"]

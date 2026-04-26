@@ -1,8 +1,7 @@
 FROM freepascal/fpc:latest-slim
+WORKDIR /app
 
-WORKDIR /root
-
-ADD loops.pp .
+COPY loops.pp .
 
 RUN fpc -O4 loops.pp
 

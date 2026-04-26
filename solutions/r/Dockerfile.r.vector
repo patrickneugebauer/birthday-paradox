@@ -1,7 +1,6 @@
 FROM r-base
+WORKDIR /app
 
-WORKDIR /root
-
-ADD loops.r .
+COPY loops.r .
 
 ENTRYPOINT ["Rscript", "loops.r"]

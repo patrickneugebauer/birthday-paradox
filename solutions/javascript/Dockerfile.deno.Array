@@ -1,6 +1,5 @@
 FROM denoland/deno:alpine
-
-WORKDIR /root
+WORKDIR /app
 
 COPY loops.js .
 

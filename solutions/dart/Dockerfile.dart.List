@@ -1,7 +1,6 @@
 FROM dart
+WORKDIR /app
 
-WORKDIR /root
-
-ADD loops.dart .
+COPY loops.dart .
 
 ENTRYPOINT ["dart", "loops.dart"]

@@ -1,6 +1,5 @@
 FROM golang:tip-alpine
-
-WORKDIR /root
+WORKDIR /app
 
 COPY loops.go .
 

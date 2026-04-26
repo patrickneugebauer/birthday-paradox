@@ -1,6 +1,5 @@
 FROM julia:alpine
-
-WORKDIR /root
+WORKDIR /app
 
 COPY loops.jl .
 

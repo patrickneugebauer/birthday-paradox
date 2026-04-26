@@ -1,10 +1,9 @@
 FROM node:alpine
-
-WORKDIR /root
+WORKDIR /app
 
 RUN npm i -g livescript
 
-ADD hello.ls .
+COPY hello.ls .
 
 RUN lsc -c hello.ls
 

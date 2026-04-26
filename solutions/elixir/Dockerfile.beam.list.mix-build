@@ -1,9 +1,8 @@
 FROM elixir:alpine
+WORKDIR /app
 
-WORKDIR /root
-
-ADD mix.exs .
-ADD lib/loops.ex lib/
+COPY mix.exs .
+COPY lib/loops.ex lib/
 
 RUN mix escript.build
 

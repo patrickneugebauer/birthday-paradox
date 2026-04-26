@@ -1,10 +1,9 @@
 FROM node:lts-slim
-
-WORKDIR /root
+WORKDIR /app
 
 RUN npm i -g coffeescript
 
-ADD loops.coffee .
+COPY loops.coffee .
 
 RUN coffee -c loops.coffee
 

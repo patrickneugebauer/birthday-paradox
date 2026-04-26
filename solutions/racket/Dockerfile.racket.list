@@ -1,7 +1,6 @@
 FROM racket/racket
+WORKDIR /app
 
-WORKDIR /root
-
-ADD loops.rkt .
+COPY loops.rkt .
 
 ENTRYPOINT ["racket", "loops.rkt"]

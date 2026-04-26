@@ -1,6 +1,5 @@
 FROM rust:slim
-
-WORKDIR /root
+WORKDIR /app
 
 COPY Cargo.toml .
 COPY src/* src/

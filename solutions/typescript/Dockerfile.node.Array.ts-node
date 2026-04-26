@@ -1,5 +1,4 @@
 FROM node:alpine
-
 WORKDIR /app
 
 RUN npm i ts-node @types/node

@@ -1,6 +1,5 @@
 FROM oven/bun:alpine
-
-WORKDIR /root
+WORKDIR /app
 
 COPY loops.js .
 

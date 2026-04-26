@@ -1,8 +1,7 @@
 FROM nimlang/nim
+WORKDIR /app
 
-WORKDIR /root
-
-ADD loops.nim .
+COPY loops.nim .
 
 RUN nim c -d:release loops.nim
 

@@ -1,11 +1,10 @@
 FROM alpine
-
-WORKDIR /root
+WORKDIR /app
 
 # musl-dev is headers
 RUN apk add --no-cache clang musl-dev
 
-ADD loops.cpp .
+COPY loops.cpp .
 
 RUN clang++ loops.cpp -O3 -o loops.out
 

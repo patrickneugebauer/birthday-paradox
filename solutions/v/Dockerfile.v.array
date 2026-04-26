@@ -1,8 +1,7 @@
 FROM thevlang/vlang:alpine
+WORKDIR /app
 
-WORKDIR /root
-
-ADD loops.v .
+COPY loops.v .
 
 RUN v loops.v -o loops
 

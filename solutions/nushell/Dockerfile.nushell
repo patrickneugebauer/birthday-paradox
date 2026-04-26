@@ -1,8 +1,7 @@
 FROM alpine:latest
-
+WORKDIR /app
 RUN apk add --no-cache nushell
 
-WORKDIR /app
 
 COPY loops.nu /app/loops.nu
 

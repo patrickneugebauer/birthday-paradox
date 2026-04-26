@@ -1,9 +1,8 @@
 FROM debian:stable-slim
-
+WORKDIR /app
 RUN apt update \
  && apt install -y --no-install-recommends valac gcc
 
-WORKDIR /root
 
 COPY loops.vala .
 

@@ -1,9 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine
+WORKDIR /app
 
-WORKDIR /root
-
-ADD loops.vbproj .
-ADD Program.vb .
+COPY loops.vbproj .
+COPY Program.vb .
 
 RUN dotnet build
 

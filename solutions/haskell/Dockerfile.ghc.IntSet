@@ -1,6 +1,5 @@
 FROM haskell:slim
-
-WORKDIR /root
+WORKDIR /app
 
 RUN cabal v2-update \
  && cabal v2-install random split --lib

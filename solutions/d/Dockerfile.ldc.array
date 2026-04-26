@@ -1,8 +1,7 @@
 FROM dlang2/ldc-ubuntu
+WORKDIR /app
 
-WORKDIR /root
-
-ADD loops.d .
+COPY loops.d .
 
 # RUN ldc2 loops.d -of=loops
 RUN ldc2 -O3 -release -mcpu=native -flto=full loops.d -of=loops

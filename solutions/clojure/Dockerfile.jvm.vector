@@ -1,7 +1,6 @@
 FROM clojure:temurin-25-alpine
+WORKDIR /app
 
-WORKDIR /root
-
-ADD loops.clj .
+COPY loops.clj .
 
 ENTRYPOINT ["clj", "-M", "loops.clj"]

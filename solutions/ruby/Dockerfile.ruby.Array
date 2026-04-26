@@ -1,7 +1,6 @@
 FROM ruby:alpine
+WORKDIR /app
 
-WORKDIR /root
-
-ADD loops.rb .
+COPY loops.rb .
 
 ENTRYPOINT ["ruby", "loops.rb"]

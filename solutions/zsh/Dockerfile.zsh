@@ -1,8 +1,7 @@
 FROM alpine:latest
-
+WORKDIR /app
 RUN apk add --no-cache zsh
 
-WORKDIR /app
 
 COPY loops.zsh .
 

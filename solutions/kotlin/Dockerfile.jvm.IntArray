@@ -1,6 +1,5 @@
 FROM zenika/alpine-kotlin
-
-WORKDIR /root
+WORKDIR /app
 
 COPY loops.kt .
 

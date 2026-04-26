@@ -1,6 +1,5 @@
 FROM rakudo-star:alpine
-
-WORKDIR /root
+WORKDIR /app
 
 COPY loops.p6 .
 

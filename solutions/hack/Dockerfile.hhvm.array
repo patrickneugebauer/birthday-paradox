@@ -1,6 +1,5 @@
 FROM hhvm/hhvm
-
-WORKDIR /root
+WORKDIR /app
 
 COPY loops.hh .
 

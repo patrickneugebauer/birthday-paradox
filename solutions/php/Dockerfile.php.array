@@ -1,6 +1,5 @@
 FROM php:alpine
-
-WORKDIR /root
+WORKDIR /app
 
 COPY loops.php .
 

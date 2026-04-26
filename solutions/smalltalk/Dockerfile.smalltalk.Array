@@ -1,7 +1,6 @@
 FROM codesignal/smalltalk:v14.1.0
+WORKDIR /app
 
-WORKDIR /root
-
-ADD loops.st .
+COPY loops.st .
 
 ENTRYPOINT ["gst", "loops.st", "-g", "-a"]

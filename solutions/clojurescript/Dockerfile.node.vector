@@ -1,5 +1,4 @@
 FROM clojure:temurin-25-alpine
-
 WORKDIR /app
 
 RUN apk add --no-cache nodejs npm

@@ -1,8 +1,7 @@
 FROM erlang:alpine
+WORKDIR /app
 
-WORKDIR /root
-
-ADD loops.erl .
+COPY loops.erl .
 
 RUN erlc loops.erl
 

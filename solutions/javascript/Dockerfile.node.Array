@@ -1,6 +1,5 @@
 FROM node:alpine
-
-WORKDIR /root
+WORKDIR /app
 
 COPY loops.js .
 
