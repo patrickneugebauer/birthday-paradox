@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"unicode"
 )
 
 func MakeFileTree() error {
@@ -34,8 +35,8 @@ func MakeFileTree() error {
 				continue
 			}
 			encoder := json.NewEncoder(writer)
-			runtime, tag := getRuntimeAndTag(entry.Name(), f.Name())
-			dockerfile := Dockerfile{Language: entry.Name(), Filename: f.Name(), Tag: tag, Runtime: runtime}
+			runtime, dataStructure, executionMethod, tag := getRuntimeAndTag(entry.Name(), f.Name())
+			dockerfile := Dockerfile{Language: entry.Name(), Filename: f.Name(), Runtime: runtime, DataStructure: dataStructure, ExecutionMethod: executionMethod, Tag: tag}
 			err := encoder.Encode(dockerfile)
 			if err != nil {
 				return fmt.Errorf("failed to encode: %w", err)
@@ -48,12 +49,38 @@ func MakeFileTree() error {
 	return nil
 }
 
-func getRuntimeAndTag(dir string, filename string) (*string, string) {
-	var runtime *string
+func toLower(s string) string {
+	return strings.Map(func(r rune) rune {
+		if unicode.IsUpper(r) {
+			return unicode.ToLower(r)
+		}
+		return r
+	}, s)
+}
+
+func getRuntimeAndTag(dir string, filename string) (*string, *string, *string, string) {
+	var runtime, dataStructure, executionMethod *string
 	tag := "bday/" + dir
-	if strings.Contains(filename, ".") {
-		runtime = &strings.SplitN(filename, ".", 2)[1]
-		tag += "-" + *runtime
+
+	parts := strings.Split(filename, ".")
+	if len(parts) == 1 {
+		return runtime, dataStructure, executionMethod, tag
 	}
-	return runtime, tag
+
+	if len(parts) >= 2 {
+		runtime = &parts[1]
+		tag += ":" + toLower(*runtime)
+	}
+	if len(parts) >= 3 {
+		dataStructure = &parts[2]
+		if *dataStructure != "-" {
+			tag += "." + toLower(*dataStructure)
+		}
+	}
+	if len(parts) >= 4 {
+		executionMethod = &parts[3]
+		tag += "." + toLower(*executionMethod)
+	}
+
+	return runtime, dataStructure, executionMethod, tag
 }

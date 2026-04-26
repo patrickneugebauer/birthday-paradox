@@ -74,6 +74,16 @@ func Readme() error {
 			runtime = *dockerfileInfo.Runtime
 		}
 
+		dataStructure := ""
+		if dockerfileInfo.DataStructure != nil {
+			dataStructure = *dockerfileInfo.DataStructure
+		}
+
+		executionMethod := ""
+		if dockerfileInfo.ExecutionMethod != nil {
+			executionMethod = *dockerfileInfo.ExecutionMethod
+		}
+
 		// Look up year, wiki, github from language info
 		info := languageInfo[language]
 		year := info.Year
@@ -92,17 +102,19 @@ func Readme() error {
 		}
 
 		row := ReadmeRow{
-			Tag:           tag,
-			Language:      language,
-			Runtime:       runtime,
-			Year:          year,
-			WikiURL:       wikiURL,
-			WikiDisplay:   extractWikiDisplay(wikiURL),
-			GitHubURL:     githubURL,
-			GitHubDisplay: extractGitHubDisplay(githubURL),
-			Stars:         starsCount,
-			SizeMB:        sizeMB,
-			IPS:           ips,
+			Tag:             tag,
+			Language:        language,
+			Runtime:         runtime,
+			DataStructure:   dataStructure,
+			ExecutionMethod: executionMethod,
+			Year:            year,
+			WikiURL:         wikiURL,
+			WikiDisplay:     extractWikiDisplay(wikiURL),
+			GitHubURL:       githubURL,
+			GitHubDisplay:   extractGitHubDisplay(githubURL),
+			Stars:           starsCount,
+			SizeMB:          sizeMB,
+			IPS:             ips,
 		}
 
 		rows = append(rows, row)
@@ -136,8 +148,8 @@ func Readme() error {
 	defer markdownFile.Close()
 
 	// Write markdown header
-	fmt.Fprintln(markdownFile, "| Language | Runtime | Year | GitHub | Stars | Size (MB) | IPS |")
-	fmt.Fprintln(markdownFile, "|---|---|---|---|---|---|---|")
+	fmt.Fprintln(markdownFile, "| Language | Runtime | Data Structure | Execution Method | Year | GitHub | Stars | Size (MB) | IPS |")
+	fmt.Fprintln(markdownFile, "|---|---|---|---|---|---|---|---|---|")
 
 	// Write rows to both files
 	for _, row := range rows {
@@ -194,6 +206,16 @@ func formatMarkdownRow(row ReadmeRow) string {
 		runtime = "-"
 	}
 
+	dataStructure := "-"
+	if row.DataStructure != "" {
+		dataStructure = row.DataStructure
+	}
+
+	executionMethod := "-"
+	if row.ExecutionMethod != "" {
+		executionMethod = row.ExecutionMethod
+	}
+
 	year := "-"
 	if row.Year > 0 {
 		year = fmt.Sprintf("%d", row.Year)
@@ -219,8 +241,8 @@ func formatMarkdownRow(row ReadmeRow) string {
 		ips = formatWithCommas(row.IPS)
 	}
 
-	return fmt.Sprintf("| %s | %s | %s | %s | %s | %s | %s |",
-		row.Language, runtime, year, github, stars, size, ips)
+	return fmt.Sprintf("| %s | %s | %s | %s | %s | %s | %s | %s | %s |",
+		row.Language, runtime, dataStructure, executionMethod, year, github, stars, size, ips)
 }
 
 func formatWithCommas(n int) string {

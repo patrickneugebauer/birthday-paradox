@@ -32,3 +32,21 @@ No CASCADE DELETE constraints are defined; orphaned records are intentionally pr
 ## Memory Efficiency
 
 Tasks stream SQL results row-by-row without loading all records into memory. Writes are batched in transactions and committed once per task completion. On error mid-loop: commit accumulated writes, log error, exit (no error list kept in memory).
+
+## Benchmark Dimensions
+
+The project benchmarks along **4 independent dimensions**. Each Dockerfile represents a unique point in this 4D space:
+
+1. **Language**: The programming language (bash, C, Python, Go, etc.)
+2. **Runtime**: The language implementation — compiler, interpreter, or VM (e.g. gcc, clang, cpython, node, dotnet, jvm)
+3. **DataStructure**: The algorithm variant used in the solution (e.g. array, list, vector, set, associative-array, hash-table)
+4. **ExecutionMethod**: Optional; only populated when the same language/runtime/data_structure can be executed in multiple ways (e.g. build, publish, run, ocamlopt, mix-build)
+
+Dockerfile filenames encode these dimensions as `Dockerfile[.{runtime}][.{data_structure}][.{execution_method}]`. Null dimensions are omitted from the filename and tag. Docker tags are constructed by combining all four dimensions: `bday/{language}:{runtime}[.{data_structure}][.{execution_method}]` with all tag components lowercased. Periods separate all dimensions within the tag.
+
+Examples:
+- `bday/python:cpython.set`
+- `bday/bash:bash.associative-array`
+- `bday/csharp:dotnet.array.build`
+
+When adding new solutions, name Dockerfiles directly according to the convention without needing to update reference data.

@@ -1,81 +1,81 @@
-| Language | Runtime | Year | GitHub | Stars | Size (MB) | IPS |
-|---|---|---|---|---|---|---|
-| c | clang | 1972 | [gcc-mirror/gcc](https://github.com/gcc-mirror/gcc) | 10,872 | 497 | 8,548,276 |
-| cpp | clang | 1985 | [llvm/llvm-project](https://github.com/llvm/llvm-project) | 38,044 | 497 | 8,303,842 |
-| c | gcc | 1972 | [gcc-mirror/gcc](https://github.com/gcc-mirror/gcc) | 10,872 | 198 | 8,132,868 |
-| cpp | gcc | 1985 | [llvm/llvm-project](https://github.com/llvm/llvm-project) | 38,044 | 265 | 8,018,040 |
-| javascript | bun | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,907 | 105 | 6,018,989 |
-| d | ldc | 2001 | [dlang/dmd](https://github.com/dlang/dmd) | 3,263 | 961 | 5,279,537 |
-| csharp | publish | 2000 | [dotnet/roslyn](https://github.com/dotnet/roslyn) | 20,386 | 1,062 | 3,651,294 |
-| rust | - | 2010 | [rust-lang/rust](https://github.com/rust-lang/rust) | 112,341 | 889 | 3,027,547 |
-| vbnet | - | 2001 | [dotnet/vblang](https://github.com/dotnet/vblang) | 323 | 725 | 2,940,250 |
-| javascript | node-typed-array | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,907 | 162 | 2,932,633 |
-| csharp | build | 2000 | [dotnet/roslyn](https://github.com/dotnet/roslyn) | 20,386 | 725 | 2,651,866 |
-| javascript | deno | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,907 | 131 | 2,508,057 |
-| javascript | node-object | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,907 | 162 | 2,428,613 |
-| javascript | node | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,907 | 162 | 2,419,861 |
-| crystal | - | 2014 | [crystal-lang/crystal](https://github.com/crystal-lang/crystal) | 20,240 | 492 | 2,364,765 |
-| nim | - | 2008 | [nim-lang/nim](https://github.com/nim-lang/nim) | 17,954 | 578 | 2,306,525 |
-| d | dmd | 2001 | [dlang/dmd](https://github.com/dlang/dmd) | 3,263 | 801 | 2,251,585 |
-| go | run | 2009 | [golang/go](https://github.com/golang/go) | 133,649 | 258 | 2,234,256 |
-| go | - | 2009 | [golang/go](https://github.com/golang/go) | 133,649 | 292 | 2,139,367 |
-| java | - | 1995 | [openjdk/jdk](https://github.com/openjdk/jdk) | 22,815 | 288 | 2,004,226 |
-| kotlin | - | 2011 | [jetbrains/kotlin](https://github.com/jetbrains/kotlin) | 52,632 | 385 | 1,916,720 |
-| typescript | ts-node | 2012 | [microsoft/TypeScript](https://github.com/microsoft/TypeScript) | 108,670 | 229 | 1,748,507 |
-| vala | - | 2006 | [gnome/vala](https://github.com/gnome/vala) | 882 | 351 | 1,556,877 |
-| csharp | run | 2000 | [dotnet/roslyn](https://github.com/dotnet/roslyn) | 20,386 | 724 | 1,501,425 |
-| typescript | - | 2012 | [microsoft/TypeScript](https://github.com/microsoft/TypeScript) | 108,670 | 221 | 1,364,846 |
-| javascript | node-list | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,907 | 162 | 1,134,951 |
-| pascal | - | 1970 | [fpc/FPCSource](https://github.com/fpc/FPCSource) | 133 | 149 | 1,121,631 |
-| javascript | node-map | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,907 | 162 | 1,121,352 |
-| coffeescript | - | 2009 | [jashkenas/coffeescript](https://github.com/jashkenas/coffeescript) | 16,580 | 218 | 1,039,451 |
-| julia | - | 2012 | [JuliaLang/julia](https://github.com/JuliaLang/julia) | 48,622 | 999 | 727,398 |
-| javascript | node-set | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,907 | 162 | 640,473 |
-| php | - | 1995 | [php/php-src](https://github.com/php/php-src) | 40,036 | 131 | 592,124 |
-| haskell | - | 1990 | [ghc/ghc](https://github.com/ghc/ghc) | 3,235 | 5,260 | 550,319 |
-| gambas | - | 1999 | [landv/gambas](https://github.com/landv/gambas) | 6 | 750 | 539,219 |
-| dart | - | 2011 | [dart-lang/sdk](https://github.com/dart-lang/sdk) | 11,125 | 798 | 474,570 |
-| fsharp | - | 2005 | [dotnet/fsharp](https://github.com/dotnet/fsharp) | 4,283 | 736 | 372,578 |
-| scala | - | 2004 | [scala/scala3](https://github.com/scala/scala3) | 6,234 | 786 | 360,249 |
-| common-lisp | - | 1984 | [sbcl/sbcl](https://github.com/sbcl/sbcl) | 2,094 | 354 | 312,951 |
-| ocaml | ocamlopt | 1996 | [ocaml/ocaml](https://github.com/ocaml/ocaml) | 6,284 | 479 | 301,836 |
-| rescript | - | 2020 | [rescript-lang/rescript](https://github.com/rescript-lang/rescript) | 7,372 | 252 | 285,728 |
-| v | - | 2019 | [vlang/v](https://github.com/vlang/v) | 37,508 | 255 | 283,207 |
-| erlang | - | 1986 | [erlang/otp](https://github.com/erlang/otp) | 12,117 | 85 | 282,565 |
-| hack | - | 2014 | [facebook/hhvm](https://github.com/facebook/hhvm) | 18,616 | 676 | 221,308 |
-| groovy | - | 2003 | [apache/groovy](https://github.com/apache/groovy) | 5,442 | 383 | 194,676 |
-| python | - | 1990 | [python/cpython](https://github.com/python/cpython) | 72,450 | 45 | 174,620 |
-| perl | - | 1987 | [Perl/perl5](https://github.com/Perl/perl5) | 2,266 | 234 | 157,219 |
-| elixir | script | 2012 | [elixir-lang/elixir](https://github.com/elixir-lang/elixir) | 26,371 | 98 | 152,106 |
-| javascript | txiki | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,907 | 18 | 139,421 |
-| lua | - | 1993 | [lua/lua](https://github.com/lua/lua) | 9,922 | 11 | 136,138 |
-| elixir | mix-build | 2012 | [elixir-lang/elixir](https://github.com/elixir-lang/elixir) | 26,371 | 100 | 127,646 |
-| clojure | - | 2007 | [clojure/clojure](https://github.com/clojure/clojure) | 10,860 | 323 | 125,521 |
-| ruby | - | 1995 | [ruby/ruby](https://github.com/ruby/ruby) | 23,546 | 85 | 125,243 |
-| racket | - | 1995 | [racket/racket](https://github.com/racket/racket) | 5,128 | 249 | 115,214 |
-| ocaml | opam-exec | 1996 | [ocaml/ocaml](https://github.com/ocaml/ocaml) | 6,284 | 1,342 | 83,581 |
-| swift | - | 2014 | [swiftlang/swift](https://github.com/swiftlang/swift) | 69,943 | 3,837 | 80,594 |
-| r | - | 1993 | [wch/r-source](https://github.com/wch/r-source) | 1,230 | 870 | 48,571 |
-| smalltalk | - | 1972 | [gnu-smalltalk/smalltalk](https://github.com/gnu-smalltalk/smalltalk) | 185 | 1,885 | 36,641 |
-| raku | - | 2015 | [rakudo/rakudo](https://github.com/rakudo/rakudo) | 1,870 | 212 | 12,606 |
-| octave | - | 1988 | [gnu-octave/octave](https://github.com/gnu-octave/octave) | 602 | 3,447 | 8,681 |
-| scheme | - | 1975 | [jaseemabid/mit-scheme](https://github.com/jaseemabid/mit-scheme) | 6 | 135 | 3,218 |
-| bash | - | 1989 | [gitGNU/gnu_bash](https://github.com/gitGNU/gnu_bash) | 202 | 11 | 2,659 |
-| powershell | - | 2006 | [powershell/powershell](https://github.com/powershell/powershell) | 53,149 | 724 | 420 |
-| fish | - | 2005 | [fish-shell/fish-shell](https://github.com/fish-shell/fish-shell) | 33,297 | 25 | 75 |
-| ion | - | 2015 | [redox-os/ion](https://github.com/redox-os/ion) | 1,638 | 88 | - |
-| livescript | - | 2011 | [gkz/LiveScript](https://github.com/gkz/LiveScript) | 2,360 | 166 | - |
-| fortran | - | 1957 | [fortran-lang/stdlib](https://github.com/fortran-lang/stdlib) | 1,307 | 305 | - |
-| elvish | - | 2013 | [elves/elvish](https://github.com/elves/elvish) | 6,287 | 18 | - |
-| hilbish | - | 2021 | [Rosettea/Hilbish](https://github.com/Rosettea/Hilbish) | 559 | 101 | - |
-| freebasic | - | 2004 | [freebasic/fbc](https://github.com/freebasic/fbc) | 1,069 | 260 | - |
-| pharo | - | 2008 | [pharo-project/pharo](https://github.com/pharo-project/pharo) | 1,449 | 208 | - |
-| oil | - | 2016 | [oilshell/oil](https://github.com/oilshell/oil) | 3,317 | 12 | - |
-| nushell | - | 2019 | [nushell/nushell](https://github.com/nushell/nushell) | 39,175 | 28 | - |
-| dash | - | 2002 | [tklauser/dash](https://github.com/tklauser/dash) | 15 | 8 | - |
-| clojurescript | - | 2011 | [clojure/clojurescript](https://github.com/clojure/clojurescript) | 9,387 | 423 | - |
-| murex | - | 2018 | [lmorg/murex](https://github.com/lmorg/murex) | 1,876 | 24 | - |
-| chapel | - | 2009 | [chapel-lang/chapel](https://github.com/chapel-lang/chapel) | 1,992 | 2,054 | - |
-| xonsh | - | 2015 | [xonsh/xonsh](https://github.com/xonsh/xonsh) | 9,289 | 134 | - |
-| zig | - | 2016 | [ziglang/zig](https://github.com/ziglang/zig) | 42,860 | 512 | - |
-| zsh | - | 1990 | [zsh-users/zsh](https://github.com/zsh-users/zsh) | 4,173 | 12 | - |
+| Language | Runtime | Data Structure | Execution Method | Year | GitHub | Stars | Size (MB) | IPS |
+|---|---|---|---|---|---|---|---|---|
+| c | clang | array | - | 1972 | [gcc-mirror/gcc](https://github.com/gcc-mirror/gcc) | 10,872 | 497 | 6,802,721 |
+| cpp | clang | array | - | 1985 | [llvm/llvm-project](https://github.com/llvm/llvm-project) | 38,044 | 497 | 6,802,721 |
+| cpp | gcc | array | - | 1985 | [llvm/llvm-project](https://github.com/llvm/llvm-project) | 38,044 | 265 | 6,329,113 |
+| c | gcc | array | - | 1972 | [gcc-mirror/gcc](https://github.com/gcc-mirror/gcc) | 10,872 | 198 | 5,586,592 |
+| d | ldc | array | - | 2001 | [dlang/dmd](https://github.com/dlang/dmd) | 3,263 | 961 | 5,586,592 |
+| rust | rustc | array | - | 2010 | [rust-lang/rust](https://github.com/rust-lang/rust) | 112,340 | 889 | 2,659,574 |
+| d | dmd | array | - | 2001 | [dlang/dmd](https://github.com/dlang/dmd) | 3,263 | 801 | 2,352,941 |
+| nim | nim | array | - | 2008 | [nim-lang/nim](https://github.com/nim-lang/nim) | 17,954 | 578 | 2,079,002 |
+| go | gc | array | - | 2009 | [golang/go](https://github.com/golang/go) | 133,644 | 292 | 1,838,235 |
+| go | gc | array | run | 2009 | [golang/go](https://github.com/golang/go) | 133,644 | 258 | 1,712,328 |
+| vala | gcc | array | - | 2006 | [gnome/vala](https://github.com/gnome/vala) | 882 | 351 | 1,531,393 |
+| crystal | crystal | Array | - | 2014 | [crystal-lang/crystal](https://github.com/crystal-lang/crystal) | 20,240 | 492 | 1,358,695 |
+| pascal | fpc | array | - | 1970 | [fpc/FPCSource](https://github.com/fpc/FPCSource) | 133 | 149 | 904,977 |
+| gambas | gambas | - | - | 1999 | [landv/gambas](https://github.com/landv/gambas) | 6 | 750 | 656,598 |
+| javascript | bun | Array | - | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,909 | 105 | 588,581 |
+| php | php | array | - | 1995 | [php/php-src](https://github.com/php/php-src) | 40,036 | 131 | 558,971 |
+| javascript | node | Object | - | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,909 | 162 | 500,000 |
+| javascript | node | Array | - | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,909 | 162 | 425,170 |
+| javascript | node | Int32Array | - | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,909 | 162 | 416,146 |
+| javascript | node | Map | - | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,909 | 162 | 338,868 |
+| typescript | node | Array | ts-node | 2012 | [microsoft/TypeScript](https://github.com/microsoft/TypeScript) | 108,672 | 229 | 309,789 |
+| javascript | node | List | - | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,909 | 162 | 294,377 |
+| coffeescript | node | Array | - | 2009 | [jashkenas/coffeescript](https://github.com/jashkenas/coffeescript) | 16,579 | 218 | 282,406 |
+| erlang | beam | list | - | 1986 | [erlang/otp](https://github.com/erlang/otp) | 12,117 | 85 | 278,706 |
+| v | v | array | - | 2019 | [vlang/v](https://github.com/vlang/v) | 37,508 | 255 | 269,469 |
+| ocaml | ocaml | list | ocamlopt | 1996 | [ocaml/ocaml](https://github.com/ocaml/ocaml) | 6,284 | 479 | 258,665 |
+| haskell | ghc | IntSet | - | 1990 | [ghc/ghc](https://github.com/ghc/ghc) | 3,235 | 5,260 | 237,079 |
+| javascript | deno | Array | - | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,909 | 131 | 195,924 |
+| perl | perl | array | - | 1987 | [Perl/perl5](https://github.com/Perl/perl5) | 2,266 | 234 | 151,584 |
+| python | cpython | set | - | 1990 | [python/cpython](https://github.com/python/cpython) | 72,451 | 45 | 127,893 |
+| racket | racket | list | - | 1995 | [racket/racket](https://github.com/racket/racket) | 5,129 | 249 | 127,437 |
+| ruby | ruby | Array | - | 1995 | [ruby/ruby](https://github.com/ruby/ruby) | 23,546 | 85 | 125,250 |
+| common-lisp | sbcl | list | - | 1984 | [sbcl/sbcl](https://github.com/sbcl/sbcl) | 2,094 | 354 | 125,000 |
+| lua | lua | table | - | 1993 | [lua/lua](https://github.com/lua/lua) | 9,922 | 11 | 124,470 |
+| javascript | node | Set | - | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,909 | 162 | 121,300 |
+| javascript | txiki | Array | - | 1995 | [nodejs/node](https://github.com/nodejs/node) | 116,909 | 18 | 97,399 |
+| swift | swift | Array | - | 2014 | [swiftlang/swift](https://github.com/swiftlang/swift) | 69,945 | 3,837 | 76,423 |
+| dart | dart | List | - | 2011 | [dart-lang/sdk](https://github.com/dart-lang/sdk) | 11,124 | 798 | 75,935 |
+| hack | hhvm | array | - | 2014 | [facebook/hhvm](https://github.com/facebook/hhvm) | 18,616 | 676 | 69,247 |
+| vbnet | dotnet | array | - | 2001 | [dotnet/vblang](https://github.com/dotnet/vblang) | 323 | 725 | 68,245 |
+| csharp | dotnet | array | run | 2000 | [dotnet/roslyn](https://github.com/dotnet/roslyn) | 20,386 | 724 | 64,354 |
+| rescript | node | list | - | 2020 | [rescript-lang/rescript](https://github.com/rescript-lang/rescript) | 7,372 | 252 | 63,548 |
+| typescript | node | Array | - | 2012 | [microsoft/TypeScript](https://github.com/microsoft/TypeScript) | 108,672 | 221 | 58,183 |
+| csharp | dotnet | array | build | 2000 | [dotnet/roslyn](https://github.com/dotnet/roslyn) | 20,386 | 725 | 56,455 |
+| elixir | beam | list | mix-build | 2012 | [elixir-lang/elixir](https://github.com/elixir-lang/elixir) | 26,371 | 100 | 46,042 |
+| elixir | beam | list | script | 2012 | [elixir-lang/elixir](https://github.com/elixir-lang/elixir) | 26,371 | 98 | 45,783 |
+| kotlin | jvm | IntArray | - | 2011 | [jetbrains/kotlin](https://github.com/jetbrains/kotlin) | 52,632 | 385 | 44,660 |
+| r | r | vector | - | 1993 | [wch/r-source](https://github.com/wch/r-source) | 1,230 | 870 | 41,904 |
+| smalltalk | smalltalk | Array | - | 1972 | [gnu-smalltalk/smalltalk](https://github.com/gnu-smalltalk/smalltalk) | 185 | 1,885 | 30,152 |
+| java | jvm | array | - | 1995 | [openjdk/jdk](https://github.com/openjdk/jdk) | 22,815 | 288 | 23,750 |
+| fsharp | dotnet | Set | - | 2005 | [dotnet/fsharp](https://github.com/dotnet/fsharp) | 4,283 | 736 | 21,714 |
+| ocaml | ocaml | list | opam-exec | 1996 | [ocaml/ocaml](https://github.com/ocaml/ocaml) | 6,284 | 1,342 | 17,195 |
+| clojure | jvm | vector | - | 2007 | [clojure/clojure](https://github.com/clojure/clojure) | 10,860 | 323 | 15,873 |
+| csharp | dotnet | array | publish | 2000 | [dotnet/roslyn](https://github.com/dotnet/roslyn) | 20,386 | 1,062 | 12,478 |
+| octave | octave | matrix | - | 1988 | [gnu-octave/octave](https://github.com/gnu-octave/octave) | 602 | 3,447 | 8,243 |
+| raku | rakudo | array | - | 2015 | [rakudo/rakudo](https://github.com/rakudo/rakudo) | 1,870 | 212 | 7,743 |
+| scala | jvm | Seq | - | 2004 | [scala/scala3](https://github.com/scala/scala3) | 6,234 | 786 | 6,513 |
+| julia | julia | array | - | 2012 | [JuliaLang/julia](https://github.com/JuliaLang/julia) | 48,622 | 999 | 5,667 |
+| groovy | groovy | array | - | 2003 | [apache/groovy](https://github.com/apache/groovy) | 5,442 | 383 | 4,405 |
+| scheme | scheme | list | - | 1975 | [jaseemabid/mit-scheme](https://github.com/jaseemabid/mit-scheme) | 6 | 135 | 3,115 |
+| bash | bash | associative-array | - | 1989 | [gitGNU/gnu_bash](https://github.com/gitGNU/gnu_bash) | 202 | 11 | 2,436 |
+| powershell | dotnet | array | - | 2006 | [powershell/powershell](https://github.com/powershell/powershell) | 53,155 | 724 | 581 |
+| fish | fish | array | - | 2005 | [fish-shell/fish-shell](https://github.com/fish-shell/fish-shell) | 33,297 | 25 | 95 |
+| fortran | gfortran | - | - | 1957 | [fortran-lang/stdlib](https://github.com/fortran-lang/stdlib) | 1,307 | 305 | - |
+| ion | ion | - | - | 2015 | [redox-os/ion](https://github.com/redox-os/ion) | 1,638 | 88 | - |
+| freebasic | freebasic | - | - | 2004 | [freebasic/fbc](https://github.com/freebasic/fbc) | 1,069 | 260 | - |
+| elvish | elvish | - | - | 2013 | [elves/elvish](https://github.com/elves/elvish) | 6,287 | 18 | - |
+| murex | murex | - | - | 2018 | [lmorg/murex](https://github.com/lmorg/murex) | 1,876 | 24 | - |
+| pharo | pharo | - | - | 2008 | [pharo-project/pharo](https://github.com/pharo-project/pharo) | 1,449 | 208 | - |
+| livescript | node | - | - | 2011 | [gkz/LiveScript](https://github.com/gkz/LiveScript) | 2,360 | 166 | - |
+| dash | dash | - | - | 2002 | [tklauser/dash](https://github.com/tklauser/dash) | 15 | 8 | - |
+| hilbish | hilbish | - | - | 2021 | [Rosettea/Hilbish](https://github.com/Rosettea/Hilbish) | 559 | 101 | - |
+| clojurescript | node | vector | - | 2011 | [clojure/clojurescript](https://github.com/clojure/clojurescript) | 9,386 | 423 | - |
+| oil | oil | - | - | 2016 | [oilshell/oil](https://github.com/oilshell/oil) | 3,317 | 12 | - |
+| chapel | chapel | - | - | 2009 | [chapel-lang/chapel](https://github.com/chapel-lang/chapel) | 1,992 | 2,054 | - |
+| nushell | nushell | - | - | 2019 | [nushell/nushell](https://github.com/nushell/nushell) | 39,175 | 28 | - |
+| xonsh | python | - | - | 2015 | [xonsh/xonsh](https://github.com/xonsh/xonsh) | 9,289 | 134 | - |
+| zig | zig | - | - | 2016 | [ziglang/zig](https://github.com/ziglang/zig) | 42,860 | 512 | - |
+| zsh | zsh | - | - | 1990 | [zsh-users/zsh](https://github.com/zsh-users/zsh) | 4,173 | 12 | - |

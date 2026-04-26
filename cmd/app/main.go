@@ -19,7 +19,7 @@ func main() {
 	switch command {
 	case "map-files":
 		err = tasks.MakeFileTree()
-	case "stars":
+	case "star", "stars":
 		err = tasks.Stars()
 	case "build":
 		err = tasks.Build()
