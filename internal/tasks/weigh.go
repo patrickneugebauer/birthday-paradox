@@ -55,11 +55,11 @@ func Weigh() error {
 			return fmt.Errorf("docker inspect failed: %w", err)
 		}
 
-		sizeMB, err := parseSize(output)
+		sizeMB, sizeBytes, err := parseSize(output)
 		if err != nil {
 			return fmt.Errorf("parse size: %w", err)
 		}
-		if err := resultsFile.Encode(WeighResult{Tag: buildResult.Tag, SizeMB: sizeMB}); err != nil {
+		if err := resultsFile.Encode(WeighResult{Tag: buildResult.Tag, SizeMB: sizeMB, SizeBytes: sizeBytes}); err != nil {
 			return fmt.Errorf("encode result: %w", err)
 		}
 	}
@@ -72,20 +72,15 @@ func Weigh() error {
 	return nil
 }
 
-func parseSize(bytes []byte) (float64, error) {
+func parseSize(bytes []byte) (float64, int64, error) {
 	sizeStr := strings.TrimSpace(string(bytes))
 	sizeBytes, err := strconv.ParseInt(sizeStr, 10, 64)
 	if err != nil {
-		return 0, fmt.Errorf("parse size: %w", err)
+		return 0, 0, fmt.Errorf("parse size: %w", err)
 	}
 	sizeMB := float64(sizeBytes) / (1024 * 1024)
-	var roundedSize float64
-	if sizeMB < 100 {
-		roundedSize = roundToPrecision(sizeMB, 1)
-	} else {
-		roundedSize = math.Round(sizeMB)
-	}
-	return roundedSize, nil
+	roundedSize := roundToPrecision(sizeMB, 3)
+	return roundedSize, sizeBytes, nil
 }
 
 func roundToPrecision(f float64, precision int) float64 {

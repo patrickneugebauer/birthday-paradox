@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math"
 	"net/url"
 	"os"
 	"sort"
@@ -13,30 +14,51 @@ import (
 )
 
 func Readme() error {
+	// Stage 1: Build raw results
+	rows, err := buildRawReadmeResults()
+	if err != nil {
+		return err
+	}
+
+	// Stage 2: Build formatted results
+	formattedRows, err := buildFormattedReadmeResults(rows)
+	if err != nil {
+		return err
+	}
+
+	// Stage 3: Generate markdown files
+	if err := generateReadmeMarkdownFiles(formattedRows); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func buildRawReadmeResults() ([]ReadmeRow, error) {
 	// Load all data
 	dockerfiles, err := loadJson[Dockerfile](dockerfileList)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	languageInfo, err := loadLanguageInfo(languageInfoFile)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	stars, err := loadJson[StarResult](starsResultsFile)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	sizes, err := loadJson[WeighResult](weighResultsFile)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	runs, err := loadJson[RunResult](runResultsFile)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// Build a map of tag → dockerfile info for quick lookup
@@ -69,20 +91,6 @@ func Readme() error {
 		}
 
 		language := dockerfileInfo.Language
-		runtime := ""
-		if dockerfileInfo.Runtime != nil {
-			runtime = *dockerfileInfo.Runtime
-		}
-
-		dataStructure := ""
-		if dockerfileInfo.DataStructure != nil {
-			dataStructure = *dockerfileInfo.DataStructure
-		}
-
-		executionMethod := ""
-		if dockerfileInfo.ExecutionMethod != nil {
-			executionMethod = *dockerfileInfo.ExecutionMethod
-		}
 
 		// Look up year, wiki, github from language info
 		info := languageInfo[language]
@@ -104,9 +112,9 @@ func Readme() error {
 		row := ReadmeRow{
 			Tag:             tag,
 			Language:        language,
-			Runtime:         runtime,
-			DataStructure:   dataStructure,
-			ExecutionMethod: executionMethod,
+			Runtime:         dockerfileInfo.Runtime,
+			DataStructure:   dockerfileInfo.DataStructure,
+			ExecutionMethod: dockerfileInfo.ExecutionMethod,
 			Year:            year,
 			WikiURL:         wikiURL,
 			WikiDisplay:     extractWikiDisplay(wikiURL),
@@ -120,19 +128,117 @@ func Readme() error {
 		rows = append(rows, row)
 	}
 
-	// Write JSONL results
+	// Write raw JSONL results
 	jsonlFile, err := os.Create(readmeResultsFile)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer jsonlFile.Close()
 
 	for _, row := range rows {
-		jsonBytes, _ := json.Marshal(row)
+		roundedRow := row
+		roundedRow.SizeMB = math.Round(row.SizeMB*1000) / 1000
+		jsonBytes, _ := json.Marshal(roundedRow)
 		fmt.Fprintln(jsonlFile, string(jsonBytes))
 	}
 	fmt.Printf("wrote to file: %s\n", readmeResultsFile)
 
+	return rows, nil
+}
+
+func buildFormattedReadmeResults(rows []ReadmeRow) ([]ReadmeRow, error) {
+	// Apply all formatting to rows
+	formattedRows := make([]ReadmeRow, len(rows))
+	for i, row := range rows {
+		formattedRows[i] = row
+		// Round SizeMB to 3 decimals
+		formattedRows[i].SizeMB = math.Round(row.SizeMB*1000) / 1000
+
+		// Format language with wiki link
+		language := row.Language
+		if row.WikiURL != "" {
+			language = fmt.Sprintf("[%s](%s)", row.Language, row.WikiURL)
+		}
+		formattedRows[i].FormattedLanguage = language
+
+		// Format runtime
+		runtime := "-"
+		if row.Runtime != nil {
+			runtime = *row.Runtime
+		}
+		formattedRows[i].FormattedRuntime = runtime
+
+		// Format data structure
+		dataStructure := "-"
+		if row.DataStructure != nil {
+			dataStructure = *row.DataStructure
+		}
+		formattedRows[i].FormattedDataType = dataStructure
+
+		// Format execution method
+		executionMethod := "-"
+		if row.ExecutionMethod != nil {
+			executionMethod = *row.ExecutionMethod
+		}
+		formattedRows[i].FormattedExecMode = executionMethod
+
+		// Format year
+		year := "-"
+		if row.Year > 0 {
+			year = fmt.Sprintf("%d", row.Year)
+		}
+		formattedRows[i].FormattedYear = year
+
+		// Format stars with github link
+		stars := "-"
+		if row.Stars > 0 {
+			starStr := formatWithCommas(row.Stars)
+			if row.GitHubURL != "" {
+				stars = fmt.Sprintf("[%s](%s)", starStr, row.GitHubURL)
+			} else {
+				stars = starStr
+			}
+		}
+		formattedRows[i].FormattedStars = stars
+
+		// Format size MB - show at least 3 digits
+		size := "-"
+		if row.SizeMB > 0 {
+			if row.SizeMB < 10 {
+				size = fmt.Sprintf("%.2f", row.SizeMB)
+			} else if row.SizeMB < 100 {
+				size = fmt.Sprintf("%.1f", row.SizeMB)
+			} else {
+				size = formatWithCommas(int(row.SizeMB))
+			}
+		}
+		formattedRows[i].FormattedSizeMB = size
+
+		// Format IPS
+		ips := "-"
+		if row.IPS > 0 {
+			ips = formatWithCommas(row.IPS)
+		}
+		formattedRows[i].FormattedIPS = ips
+	}
+
+	// Write formatted JSONL results
+	jsonlFile, err := os.Create(formattedReadmeResultsFile)
+	if err != nil {
+		return nil, err
+	}
+	defer jsonlFile.Close()
+
+	for _, row := range formattedRows {
+		jsonBytes, _ := json.Marshal(row)
+		fmt.Fprintln(jsonlFile, string(jsonBytes))
+	}
+	fmt.Printf("wrote to file: %s\n", formattedReadmeResultsFile)
+
+	return formattedRows, nil
+}
+
+func generateReadmeMarkdownFiles(rows []ReadmeRow) error {
 	// Sort by IPS descending (0 IPS goes to end)
 	sortByIPS(rows)
 
@@ -229,8 +335,25 @@ func writeReadmeFile(filename, currentSort string, rows []ReadmeRow) error {
 	}
 	defer file.Close()
 
+	// Build navigation links based on whether this is root README or tables/
+	isRoot := filename == readmeFile
+	perfLink := "README.md"
+	langLink := "results-by-language.md"
+	yearLink := "results-by-year.md"
+	starsLink := "results-by-stars.md"
+	sizeLink := "results-by-size.md"
+
+	if !isRoot {
+		perfLink = "../README.md"
+	} else {
+		langLink = "tables/results-by-language.md"
+		yearLink = "tables/results-by-year.md"
+		starsLink = "tables/results-by-stars.md"
+		sizeLink = "tables/results-by-size.md"
+	}
+
 	// Write navigation bar
-	fmt.Fprintln(file, "**View by:** | [Performance](README.md) | [Language](results-by-language.md) | [Year](results-by-year.md) | [Stars](results-by-stars.md) | [Size](results-by-size.md) |")
+	fmt.Fprintf(file, "**View by:** | [Performance](%s) | [Language](%s) | [Year](%s) | [Stars](%s) | [Size](%s) |\n", perfLink, langLink, yearLink, starsLink, sizeLink)
 	fmt.Fprintln(file)
 	fmt.Fprintln(file, "| | Language | Runtime | Data Type | Exec Mode | Year | Stars | Size (MB) | IPS |")
 	fmt.Fprintln(file, "|---|---|---|---|---|---|---|---|---|")
@@ -280,53 +403,9 @@ func extractWikiDisplay(wikiURL string) string {
 }
 
 func formatMarkdownRow(row ReadmeRow) string {
-	language := row.Language
-	if row.WikiURL != "" {
-		language = fmt.Sprintf("[%s](%s)", row.Language, row.WikiURL)
-	}
-
-	runtime := row.Runtime
-	if runtime == "" {
-		runtime = "-"
-	}
-
-	dataStructure := "-"
-	if row.DataStructure != "" {
-		dataStructure = row.DataStructure
-	}
-
-	executionMethod := "-"
-	if row.ExecutionMethod != "" {
-		executionMethod = row.ExecutionMethod
-	}
-
-	year := "-"
-	if row.Year > 0 {
-		year = fmt.Sprintf("%d", row.Year)
-	}
-
-	stars := "-"
-	if row.Stars > 0 {
-		starStr := formatWithCommas(row.Stars)
-		if row.GitHubURL != "" {
-			stars = fmt.Sprintf("[%s](%s)", starStr, row.GitHubURL)
-		} else {
-			stars = starStr
-		}
-	}
-
-	size := "-"
-	if row.SizeMB > 0 {
-		size = formatWithCommas(int(row.SizeMB))
-	}
-
-	ips := "-"
-	if row.IPS > 0 {
-		ips = formatWithCommas(row.IPS)
-	}
-
 	return fmt.Sprintf("| %s | %s | %s | %s | %s | %s | %s | %s |",
-		language, runtime, dataStructure, executionMethod, year, stars, size, ips)
+		row.FormattedLanguage, row.FormattedRuntime, row.FormattedDataType, row.FormattedExecMode,
+		row.FormattedYear, row.FormattedStars, row.FormattedSizeMB, row.FormattedIPS)
 }
 
 func formatWithCommas(n int) string {
