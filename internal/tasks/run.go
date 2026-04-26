@@ -31,8 +31,8 @@ func loadPreviousStats() (map[string]int, error) {
 	for scanner.Scan() {
 		bytes := scanner.Bytes()
 		var result RunResult
-		if err := json.Unmarshal(bytes, &result); err == nil {
-			stats[result.Tag] = result.IPS
+		if err := json.Unmarshal(bytes, &result); err == nil && result.IPS != nil && *result.IPS > 0 {
+			stats[result.Tag] = *result.IPS
 		}
 	}
 	// cleanup
@@ -90,7 +90,7 @@ func Run() error {
 		}
 
 		iterations := defaultIterations
-		if prev, ok := prevStats[buildResult.Tag]; ok {
+		if prev, ok := prevStats[buildResult.Tag]; ok && prev > 0 {
 			iterations = prev
 		}
 
@@ -102,7 +102,7 @@ func Run() error {
 		output, err := exec.CommandContext(ctx, "docker", "run", "--rm", buildResult.Tag, strconv.Itoa(iterations)).CombinedOutput()
 		if err != nil {
 			// fallback on error
-			if err := resultsFile.Encode(RunResult{Tag: buildResult.Tag, IPS: defaultIterations}); err != nil {
+			if err := resultsFile.Encode(RunResult{Tag: buildResult.Tag}); err != nil {
 				return fmt.Errorf("encode fallback: %w", err)
 			}
 			continue
@@ -140,15 +140,24 @@ func parseOutput(raw string) RunResult {
 		key, val := parts[0], parts[1]
 		switch key {
 		case "iterations":
-			res.Iterations, _ = strconv.Atoi(val)
+			if v, err := strconv.Atoi(val); err == nil {
+				res.Iterations = &v
+			}
 		case "sample-size":
-			res.SampleSize, _ = strconv.Atoi(val)
+			if v, err := strconv.Atoi(val); err == nil {
+				res.SampleSize = &v
+			}
 		case "percent":
-			res.Percent, _ = strconv.ParseFloat(val, 64)
+			if v, err := strconv.ParseFloat(val, 64); err == nil {
+				res.Percent = &v
+			}
 		case "seconds":
-			res.Seconds, _ = strconv.ParseFloat(val, 64)
-			if res.Seconds > 0 {
-				res.IPS = int(float64(res.Iterations) / res.Seconds)
+			if v, err := strconv.ParseFloat(val, 64); err == nil {
+				res.Seconds = &v
+				if res.Iterations != nil && v > 0 {
+					ips := int(float64(*res.Iterations) / v)
+					res.IPS = &ips
+				}
 			}
 		}
 	}

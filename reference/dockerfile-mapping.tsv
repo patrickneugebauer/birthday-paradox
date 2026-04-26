@@ -1,0 +1,80 @@
+old_name	runtime	data_structure	execution_method
+bash/Dockerfile	bash	associative-array
+c/Dockerfile.clang	clang	array
+c/Dockerfile.gcc	gcc	array
+chapel/Dockerfile	chapel	-
+clojure/Dockerfile	jvm	vector
+clojurescript/Dockerfile	node	vector
+coffeescript/Dockerfile	node	Array
+common-lisp/Dockerfile	sbcl	list
+cpp/Dockerfile.clang	clang	array
+cpp/Dockerfile.gcc	gcc	array
+crystal/Dockerfile	crystal	Array
+csharp/Dockerfile.build	dotnet	array	build
+csharp/Dockerfile.publish	dotnet	array	publish
+csharp/Dockerfile.run	dotnet	array	run
+dart/Dockerfile	dart	List
+dash/Dockerfile	dash	-
+d/Dockerfile.dmd	dmd	array
+d/Dockerfile.ldc	ldc	array
+elixir/Dockerfile.mix-build	beam	list	mix-build
+elixir/Dockerfile.script	beam	list	script
+elvish/Dockerfile	elvish	-
+erlang/Dockerfile	beam	list
+fish/Dockerfile	fish	array
+fortran/Dockerfile	gfortran	-
+freebasic/Dockerfile	freebasic	-
+fsharp/Dockerfile	dotnet	Set
+gambas/Dockerfile	gambas	-
+go/Dockerfile	gc	array
+go/Dockerfile.run	gc	array	run
+groovy/Dockerfile	groovy	array
+hack/Dockerfile	hhvm	array
+haskell/Dockerfile	ghc	IntSet
+hilbish/Dockerfile	hilbish	-
+ion/Dockerfile	ion	-
+java/Dockerfile	jvm	array
+javascript/Dockerfile.bun	bun	Array
+javascript/Dockerfile.deno	deno	Array
+javascript/Dockerfile.node	node	Array
+javascript/Dockerfile.node-list	node	List
+javascript/Dockerfile.node-map	node	Map
+javascript/Dockerfile.node-object	node	Object
+javascript/Dockerfile.node-set	node	Set
+javascript/Dockerfile.node-typed-array	node	Int32Array
+javascript/Dockerfile.txiki	txiki	Array
+julia/Dockerfile	julia	array
+kotlin/Dockerfile	jvm	IntArray
+livescript/Dockerfile	node	-
+lua/Dockerfile	lua	table
+murex/Dockerfile	murex	-
+nim/Dockerfile	nim	array
+nushell/Dockerfile	nushell	-
+ocaml/Dockerfile.ocamlopt	ocaml	list	ocamlopt
+ocaml/Dockerfile.opam-exec	ocaml	list	opam-exec
+octave/Dockerfile	octave	matrix
+oil/Dockerfile	oil	-
+pascal/Dockerfile	fpc	array
+perl/Dockerfile	perl	array
+pharo/Dockerfile	pharo	-
+php/Dockerfile	php	array
+powershell/Dockerfile	dotnet	array
+python/Dockerfile	cpython	set
+racket/Dockerfile	racket	list
+raku/Dockerfile	rakudo	array
+r/Dockerfile	r	vector
+rescript/Dockerfile	node	list
+ruby/Dockerfile	ruby	Array
+rust/Dockerfile	rustc	array
+scala/Dockerfile	jvm	Seq
+scheme/Dockerfile	scheme	list
+smalltalk/Dockerfile	smalltalk	Array
+swift/Dockerfile	swift	Array
+typescript/Dockerfile	node	Array
+typescript/Dockerfile.ts-node	node	Array	ts-node
+vala/Dockerfile	gcc	array
+vbnet/Dockerfile	dotnet	array
+v/Dockerfile	v	array
+xonsh/Dockerfile	python	-
+zig/Dockerfile	zig	-
+zsh/Dockerfile	zsh	-

@@ -25,9 +25,9 @@ func Stars() error {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
-	infile, err := os.Open(githubLinksFile)
+	infile, err := os.Open(languageInfoFile)
 	if err != nil {
-		return fmt.Errorf("open %s: %w", githubLinksFile, err)
+		return fmt.Errorf("open %s: %w", languageInfoFile, err)
 	}
 	defer infile.Close()
 	scanner := bufio.NewScanner(infile)
@@ -60,14 +60,15 @@ func Stars() error {
 		}
 
 		line := scanner.Text()
-		if line == "language,url" {
+		if line == "language,year,wiki,github" {
 			continue
 		}
-		parts := strings.SplitN(line, ",", 2)
-		if len(parts) < 2 {
+		parts := strings.SplitN(line, ",", 4)
+		if len(parts) < 4 {
 			continue
 		}
-		language, url := parts[0], parts[1]
+		language := parts[0]
+		url := parts[3]
 
 		apiURL := toGitHubAPIURL(url)
 		headers := `"Accept: application/vnd.github+json" -H "Authorization: Bearer $ghtoken"`

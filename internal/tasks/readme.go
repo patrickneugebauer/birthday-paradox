@@ -19,17 +19,7 @@ func Readme() error {
 		return err
 	}
 
-	years, err := loadCsvToMap(yearsFile)
-	if err != nil {
-		return err
-	}
-
-	wiki, err := loadCsvToMap(wikiLinksFile)
-	if err != nil {
-		return err
-	}
-
-	github, err := loadCsvToMap(githubLinksFile)
+	languageInfo, err := loadLanguageInfo(languageInfoFile)
 	if err != nil {
 		return err
 	}
@@ -84,20 +74,22 @@ func Readme() error {
 			runtime = *dockerfileInfo.Runtime
 		}
 
-		// Look up year, wiki, github from language-keyed maps
-		yearStr := years[language]
-		year := 0
-		if yearStr != "" {
-			fmt.Sscanf(yearStr, "%d", &year)
-		}
-		wikiURL := wiki[language]
-		githubURL := github[language]
+		// Look up year, wiki, github from language info
+		info := languageInfo[language]
+		year := info.Year
+		wikiURL := info.Wiki
+		githubURL := info.GitHub
 
 		// Look up stars
 		starsCount := starMap[language]
 
 		// Look up size
 		sizeMB := sizeMap[tag]
+
+		ips := 0
+		if run.IPS != nil {
+			ips = *run.IPS
+		}
 
 		row := ReadmeRow{
 			Tag:           tag,
@@ -110,14 +102,23 @@ func Readme() error {
 			GitHubDisplay: extractGitHubDisplay(githubURL),
 			Stars:         starsCount,
 			SizeMB:        sizeMB,
-			IPS:           run.IPS,
+			IPS:           ips,
 		}
 
 		rows = append(rows, row)
 	}
 
-	// Sort rows by IPS descending
+	// Sort rows by IPS descending (0 IPS goes to end)
 	sort.Slice(rows, func(i, j int) bool {
+		if rows[i].IPS == 0 && rows[j].IPS == 0 {
+			return false
+		}
+		if rows[i].IPS == 0 {
+			return false
+		}
+		if rows[j].IPS == 0 {
+			return true
+		}
 		return rows[i].IPS > rows[j].IPS
 	})
 
@@ -135,8 +136,8 @@ func Readme() error {
 	defer markdownFile.Close()
 
 	// Write markdown header
-	fmt.Fprintln(markdownFile, "| Language | Runtime | Year | Wiki | GitHub | Stars | Size (MB) | IPS |")
-	fmt.Fprintln(markdownFile, "|---|---|---|---|---|---|---|---|")
+	fmt.Fprintln(markdownFile, "| Language | Runtime | Year | GitHub | Stars | Size (MB) | IPS |")
+	fmt.Fprintln(markdownFile, "|---|---|---|---|---|---|---|")
 
 	// Write rows to both files
 	for _, row := range rows {
@@ -198,11 +199,6 @@ func formatMarkdownRow(row ReadmeRow) string {
 		year = fmt.Sprintf("%d", row.Year)
 	}
 
-	wiki := "-"
-	if row.WikiURL != "" {
-		wiki = fmt.Sprintf("[%s](%s)", row.WikiDisplay, row.WikiURL)
-	}
-
 	github := "-"
 	if row.GitHubURL != "" {
 		github = fmt.Sprintf("[%s](%s)", row.GitHubDisplay, row.GitHubURL)
@@ -218,10 +214,13 @@ func formatMarkdownRow(row ReadmeRow) string {
 		size = formatWithCommas(int(row.SizeMB))
 	}
 
-	ips := formatWithCommas(row.IPS)
+	ips := "-"
+	if row.IPS > 0 {
+		ips = formatWithCommas(row.IPS)
+	}
 
-	return fmt.Sprintf("| %s | %s | %s | %s | %s | %s | %s | %s |",
-		row.Language, runtime, year, wiki, github, stars, size, ips)
+	return fmt.Sprintf("| %s | %s | %s | %s | %s | %s | %s |",
+		row.Language, runtime, year, github, stars, size, ips)
 }
 
 func formatWithCommas(n int) string {
@@ -241,27 +240,14 @@ func formatWithCommas(n int) string {
 	return result.String()
 }
 
-func loadJson[T any](path string) ([]T, error) {
-	results := make([]T, 0, 100)
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		bytes := scanner.Bytes()
-		var result T
-		if err := json.Unmarshal(bytes, &result); err != nil {
-			return nil, fmt.Errorf("Error decoding line: %v", err)
-		}
-		results = append(results, result)
-	}
-	return results, nil
+type LanguageInfo struct {
+	Year   int
+	Wiki   string
+	GitHub string
 }
 
-func loadCsvToMap(path string) (map[string]string, error) {
-	results := make(map[string]string)
+func loadLanguageInfo(path string) (map[string]LanguageInfo, error) {
+	results := make(map[string]LanguageInfo)
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -282,8 +268,35 @@ func loadCsvToMap(path string) (map[string]string, error) {
 		if err != nil {
 			return nil, err
 		}
-		key, val := record[0], record[1]
-		results[key] = val
+		language := record[0]
+		year := 0
+		if record[1] != "" {
+			fmt.Sscanf(record[1], "%d", &year)
+		}
+		results[language] = LanguageInfo{
+			Year:   year,
+			Wiki:   record[2],
+			GitHub: record[3],
+		}
+	}
+	return results, nil
+}
+
+func loadJson[T any](path string) ([]T, error) {
+	results := make([]T, 0, 100)
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		bytes := scanner.Bytes()
+		var result T
+		if err := json.Unmarshal(bytes, &result); err != nil {
+			return nil, fmt.Errorf("Error decoding line: %v", err)
+		}
+		results = append(results, result)
 	}
 	return results, nil
 }

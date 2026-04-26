@@ -15,9 +15,7 @@ var (
 	// solutions list
 	dockerfileList = filepath.Join(artifactDir, "dockerfiles.jsonl")
 	// language info
-	yearsFile       = filepath.Join(referenceDir, "years.csv")
-	githubLinksFile = filepath.Join(referenceDir, "github-links.csv")
-	wikiLinksFile   = filepath.Join(referenceDir, "wiki-links.csv")
+	languageInfoFile = filepath.Join(referenceDir, "language-info.csv")
 	// stars
 	starsCommandsFile    = filepath.Join(artifactDir, "star-commands.sh")
 	starsDataFile        = filepath.Join(artifactDir, "star-data.json")
@@ -67,12 +65,12 @@ type WeighResult struct {
 }
 
 type RunResult struct {
-	Tag        string  `json:"image"`
-	Iterations int     `json:"iterations"`
-	SampleSize int     `json:"sample_size"`
-	Percent    float64 `json:"percent"`
-	Seconds    float64 `json:"seconds"`
-	IPS        int     `json:"ips"`
+	Tag        string   `json:"image"`
+	Iterations *int     `json:"iterations"`
+	SampleSize *int     `json:"sample_size"`
+	Percent    *float64 `json:"percent"`
+	Seconds    *float64 `json:"seconds"`
+	IPS        *int     `json:"ips"`
 }
 
 type GithubRepo struct {
