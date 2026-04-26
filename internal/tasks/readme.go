@@ -148,8 +148,8 @@ func Readme() error {
 	defer markdownFile.Close()
 
 	// Write markdown header
-	fmt.Fprintln(markdownFile, "| Language | Runtime | Data Structure | Execution Method | Year | GitHub | Stars | Size (MB) | IPS |")
-	fmt.Fprintln(markdownFile, "|---|---|---|---|---|---|---|---|---|")
+	fmt.Fprintln(markdownFile, "| Language | Runtime | Data Structure | Execution Method | Year | Stars | Size (MB) | IPS |")
+	fmt.Fprintln(markdownFile, "|---|---|---|---|---|---|---|---|")
 
 	// Write rows to both files
 	for _, row := range rows {
@@ -201,6 +201,11 @@ func extractWikiDisplay(wikiURL string) string {
 }
 
 func formatMarkdownRow(row ReadmeRow) string {
+	language := row.Language
+	if row.WikiURL != "" {
+		language = fmt.Sprintf("[%s](%s)", row.Language, row.WikiURL)
+	}
+
 	runtime := row.Runtime
 	if runtime == "" {
 		runtime = "-"
@@ -221,14 +226,14 @@ func formatMarkdownRow(row ReadmeRow) string {
 		year = fmt.Sprintf("%d", row.Year)
 	}
 
-	github := "-"
-	if row.GitHubURL != "" {
-		github = fmt.Sprintf("[%s](%s)", row.GitHubDisplay, row.GitHubURL)
-	}
-
 	stars := "-"
 	if row.Stars > 0 {
-		stars = formatWithCommas(row.Stars)
+		starStr := formatWithCommas(row.Stars)
+		if row.GitHubURL != "" {
+			stars = fmt.Sprintf("[%s](%s)", starStr, row.GitHubURL)
+		} else {
+			stars = starStr
+		}
 	}
 
 	size := "-"
@@ -241,8 +246,8 @@ func formatMarkdownRow(row ReadmeRow) string {
 		ips = formatWithCommas(row.IPS)
 	}
 
-	return fmt.Sprintf("| %s | %s | %s | %s | %s | %s | %s | %s | %s |",
-		row.Language, runtime, dataStructure, executionMethod, year, github, stars, size, ips)
+	return fmt.Sprintf("| %s | %s | %s | %s | %s | %s | %s | %s |",
+		language, runtime, dataStructure, executionMethod, year, stars, size, ips)
 }
 
 func formatWithCommas(n int) string {
