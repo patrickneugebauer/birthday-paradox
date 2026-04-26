@@ -120,7 +120,55 @@ func Readme() error {
 		rows = append(rows, row)
 	}
 
-	// Sort rows by IPS descending (0 IPS goes to end)
+	// Write JSONL results
+	jsonlFile, err := os.Create(readmeResultsFile)
+	if err != nil {
+		return err
+	}
+	defer jsonlFile.Close()
+
+	for _, row := range rows {
+		jsonBytes, _ := json.Marshal(row)
+		fmt.Fprintln(jsonlFile, string(jsonBytes))
+	}
+
+	// Sort by IPS descending (0 IPS goes to end)
+	sortByIPS(rows)
+
+	// Create sorted copies for each view
+	rowsByLanguage := append([]ReadmeRow{}, rows...)
+	sortByLanguage(rowsByLanguage)
+
+	rowsByYear := append([]ReadmeRow{}, rows...)
+	sortByYear(rowsByYear)
+
+	rowsByStars := append([]ReadmeRow{}, rows...)
+	sortByStars(rowsByStars)
+
+	rowsBySize := append([]ReadmeRow{}, rows...)
+	sortBySize(rowsBySize)
+
+	// Write all markdown files
+	if err := writeReadmeFile(readmeFile, "Performance (IPS, highest first)", rows); err != nil {
+		return err
+	}
+	if err := writeReadmeFile(readmeFileByLanguage, "Language (A-Z)", rowsByLanguage); err != nil {
+		return err
+	}
+	if err := writeReadmeFile(readmeFileByYear, "Year (newest first)", rowsByYear); err != nil {
+		return err
+	}
+	if err := writeReadmeFile(readmeFileByStars, "GitHub Stars (highest first)", rowsByStars); err != nil {
+		return err
+	}
+	if err := writeReadmeFile(readmeFileBySize, "Size in MB (smallest first)", rowsBySize); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func sortByIPS(rows []ReadmeRow) {
 	sort.Slice(rows, func(i, j int) bool {
 		if rows[i].IPS == 0 && rows[j].IPS == 0 {
 			return false
@@ -133,33 +181,58 @@ func Readme() error {
 		}
 		return rows[i].IPS > rows[j].IPS
 	})
+}
 
-	// Open output files
-	jsonlFile, err := os.Create(readmeResultsFile)
+func sortByLanguage(rows []ReadmeRow) {
+	sort.Slice(rows, func(i, j int) bool {
+		return strings.ToLower(rows[i].Language) < strings.ToLower(rows[j].Language)
+	})
+}
+
+func sortByYear(rows []ReadmeRow) {
+	sort.Slice(rows, func(i, j int) bool {
+		if rows[i].Year == rows[j].Year {
+			return strings.ToLower(rows[i].Language) < strings.ToLower(rows[j].Language)
+		}
+		return rows[i].Year > rows[j].Year
+	})
+}
+
+func sortByStars(rows []ReadmeRow) {
+	sort.Slice(rows, func(i, j int) bool {
+		if rows[i].Stars == rows[j].Stars {
+			return strings.ToLower(rows[i].Language) < strings.ToLower(rows[j].Language)
+		}
+		return rows[i].Stars > rows[j].Stars
+	})
+}
+
+func sortBySize(rows []ReadmeRow) {
+	sort.Slice(rows, func(i, j int) bool {
+		if rows[i].SizeMB == rows[j].SizeMB {
+			return strings.ToLower(rows[i].Language) < strings.ToLower(rows[j].Language)
+		}
+		return rows[i].SizeMB < rows[j].SizeMB
+	})
+}
+
+func writeReadmeFile(filename, currentSort string, rows []ReadmeRow) error {
+	file, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
-	defer jsonlFile.Close()
+	defer file.Close()
 
-	markdownFile, err := os.Create(readmeFile)
-	if err != nil {
-		return err
-	}
-	defer markdownFile.Close()
+	// Write navigation bar
+	fmt.Fprintln(file, "**View by:** | [Performance](README.md) | [Language](results-by-language.md) | [Year](results-by-year.md) | [Stars](results-by-stars.md) | [Size](results-by-size.md) |")
+	fmt.Fprintln(file)
+	fmt.Fprintln(file, "| | Language | Runtime | Data Type | Exec Mode | Year | Stars | Size (MB) | IPS |")
+	fmt.Fprintln(file, "|---|---|---|---|---|---|---|---|---|")
 
-	// Write markdown header
-	fmt.Fprintln(markdownFile, "| Language | Runtime | Data Structure | Execution Method | Year | Stars | Size (MB) | IPS |")
-	fmt.Fprintln(markdownFile, "|---|---|---|---|---|---|---|---|")
-
-	// Write rows to both files
-	for _, row := range rows {
-		// JSONL
-		jsonBytes, _ := json.Marshal(row)
-		fmt.Fprintln(jsonlFile, string(jsonBytes))
-
-		// Markdown
+	// Write rows with index
+	for i, row := range rows {
 		line := formatMarkdownRow(row)
-		fmt.Fprintln(markdownFile, line)
+		fmt.Fprintf(file, "| %d %s\n", i+1, line)
 	}
 
 	return nil

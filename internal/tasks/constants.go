@@ -33,8 +33,12 @@ var (
 	runTempResultsFile = filepath.Join(artifactDir, "run-temp-results.jsonl")
 	runResultsFile     = filepath.Join(artifactDir, "run-results.jsonl")
 	// readme
-	readmeResultsFile = filepath.Join(artifactDir, "readme-results.jsonl")
-	readmeFile        = "README.md"
+	readmeResultsFile            = filepath.Join(artifactDir, "readme-results.jsonl")
+	readmeFile                   = "README.md"
+	readmeFileByLanguage         = "results-by-language.md"
+	readmeFileByYear             = "results-by-year.md"
+	readmeFileByStars            = "results-by-stars.md"
+	readmeFileBySize             = "results-by-size.md"
 )
 
 type DockerfileMap = map[string][]string
