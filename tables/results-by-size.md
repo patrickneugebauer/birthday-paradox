@@ -55,7 +55,7 @@
 | 51 | [go](https://en.wikipedia.org/wiki/Go_(programming_language)) | gc | array | - | 2009 | [133,644](https://github.com/golang/go) | 291 | 2,180,972 |
 | 52 | [fortran](https://en.wikipedia.org/wiki/Fortran) | gfortran | - | - | 1957 | [1,307](https://github.com/fortran-lang/stdlib) | 305 | - |
 | 53 | [clojure](https://en.wikipedia.org/wiki/Clojure) | jvm | vector | - | 2007 | [10,861](https://github.com/clojure/clojure) | 323 | 85,338 |
-| 54 | squirrel | squirrel | - | - | - | - | 329 | - |
+| 54 | [squirrel](https://en.wikipedia.org/wiki/Squirrel_(programming_language)) | squirrel | - | - | 1999 | - | 329 | - |
 | 55 | [vala](https://en.wikipedia.org/wiki/Vala_(programming_language)) | gcc | array | - | 2006 | [882](https://github.com/gnome/vala) | 351 | 1,701,755 |
 | 56 | [common-lisp](https://en.wikipedia.org/wiki/Common_Lisp) | sbcl | list | - | 1984 | [2,096](https://github.com/sbcl/sbcl) | 353 | 304,872 |
 | 57 | [groovy](https://en.wikipedia.org/wiki/Apache_Groovy) | groovy | array | - | 2003 | [5,442](https://github.com/apache/groovy) | 382 | 10,103 |

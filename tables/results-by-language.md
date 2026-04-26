@@ -78,7 +78,7 @@
 | 74 | [scala](https://en.wikipedia.org/wiki/Scala_(programming_language)) | jvm | Seq | - | 2004 | [6,234](https://github.com/scala/scala3) | 785 | 40,424 |
 | 75 | [scheme](https://en.wikipedia.org/wiki/MIT/GNU_Scheme) | scheme | list | - | 1975 | [6](https://github.com/jaseemabid/mit-scheme) | 134 | 3,214 |
 | 76 | [smalltalk](https://en.wikipedia.org/wiki/GNU_Smalltalk) | smalltalk | Array | - | 1972 | [185](https://github.com/gnu-smalltalk/smalltalk) | 1,885 | 36,041 |
-| 77 | squirrel | squirrel | - | - | - | - | 329 | - |
+| 77 | [squirrel](https://en.wikipedia.org/wiki/Squirrel_(programming_language)) | squirrel | - | - | 1999 | - | 329 | - |
 | 78 | [swift](https://en.wikipedia.org/wiki/Swift_(programming_language)) | swift | Array | - | 2014 | [69,946](https://github.com/swiftlang/swift) | 3,837 | 77,197 |
 | 79 | [teal](https://teal-language.org) | teal | - | - | 2019 | [2,731](https://github.com/teal-language/tl) | 79.7 | - |
 | 80 | [typescript](https://en.wikipedia.org/wiki/TypeScript) | node | Array | ts-node | 2012 | [108,671](https://github.com/microsoft/TypeScript) | 229 | 1,300,268 |

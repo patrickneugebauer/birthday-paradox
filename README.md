@@ -66,7 +66,7 @@
 | 62 | [powershell](https://en.wikipedia.org/wiki/PowerShell) | dotnet | array | - | 2006 | [53,161](https://github.com/powershell/powershell) | 724 | 478 |
 | 63 | [fish](https://en.wikipedia.org/wiki/Fish_(Unix_shell)) | fish | array | - | 2005 | [33,298](https://github.com/fish-shell/fish-shell) | 25.4 | 90 |
 | 64 | [nushell](https://www.nushell.sh) | nushell | - | - | 2019 | [39,178](https://github.com/nushell/nushell) | 28.5 | - |
-| 65 | squirrel | squirrel | - | - | - | - | 329 | - |
+| 65 | [squirrel](https://en.wikipedia.org/wiki/Squirrel_(programming_language)) | squirrel | - | - | 1999 | - | 329 | - |
 | 66 | [ion](https://redox-os.org) | ion | - | - | 2015 | [1,638](https://github.com/redox-os/ion) | 88.9 | - |
 | 67 | [luau](https://luau-lang.org) | luau | - | - | 2019 | [5,471](https://github.com/luau-lang/luau) | 18.5 | - |
 | 68 | [oil](https://oilshell.org) | oil | - | - | 2016 | [3,317](https://github.com/oilshell/oil) | 12.9 | - |

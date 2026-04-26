@@ -89,4 +89,4 @@
 | 85 | [dash](https://en.wikipedia.org/wiki/Almquist_shell) | dash | - | - | 2002 | [15](https://github.com/tklauser/dash) | 8.18 | - |
 | 86 | [gambas](https://en.wikipedia.org/wiki/Gambas) | gambas | - | - | 1999 | [6](https://github.com/landv/gambas) | 750 | 655,613 |
 | 87 | [scheme](https://en.wikipedia.org/wiki/MIT/GNU_Scheme) | scheme | list | - | 1975 | [6](https://github.com/jaseemabid/mit-scheme) | 134 | 3,214 |
-| 88 | squirrel | squirrel | - | - | - | - | 329 | - |
+| 88 | [squirrel](https://en.wikipedia.org/wiki/Squirrel_(programming_language)) | squirrel | - | - | 1999 | - | 329 | - |
