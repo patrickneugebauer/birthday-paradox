@@ -26,6 +26,7 @@ gleam,2016,https://gleam.run,https://github.com/gleam-lang/gleam,https://gleam.r
 go,2009,https://en.wikipedia.org/wiki/Go_(programming_language),https://github.com/golang/go,https://go.dev
 groovy,2003,https://en.wikipedia.org/wiki/Apache_Groovy,https://github.com/apache/groovy,https://groovy-lang.org
 hack,2014,https://en.wikipedia.org/wiki/Hack_(programming_language),https://github.com/facebook/hhvm,https://hhvm.com
+haxe,2005,https://en.wikipedia.org/wiki/Haxe,https://github.com/haxefoundation/haxe,https://haxe.io
 haskell,1990,https://en.wikipedia.org/wiki/Haskell,https://github.com/ghc/ghc,http://www.haskell.org/ghc/
 hilbish,2021,https://github.com/sammy-ette/Hilbish/wiki,https://github.com/Rosettea/Hilbish,https://hilbish.sammyette.party/
 ion,2015,https://redox-os.org,https://github.com/redox-os/ion,https://github.com/redox-os/ion
