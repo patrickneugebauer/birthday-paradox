@@ -11,39 +11,55 @@ import (
 )
 
 func MakeFileTree() error {
-	inDirName := solutionsDir
 	outfileName := dockerfileList
 	outfile, err := os.Create(outfileName)
 	if err != nil {
 		return fmt.Errorf("failed to create file: %w", err)
 	}
 	writer := bufio.NewWriter(outfile)
-	// get map of dockerfiles
-	entries, err := os.ReadDir(inDirName)
-	if err != nil {
-		return err
-	}
-	for _, entry := range entries {
-		if !entry.IsDir() {
-			continue
+
+	// Scan solutions, scaffolds, and hello-worlds directories
+	for _, dirName := range []string{solutionsDir, scaffoldsDir, helloWorldsDir} {
+		dirType := filepath.Base(dirName)
+		entries, err := os.ReadDir(dirName)
+		if err != nil && !os.IsNotExist(err) {
+			return err
 		}
-		dirPath := filepath.Join(inDirName, entry.Name())
-		files, _ := os.ReadDir(dirPath)
-		for _, f := range files {
-			isDockerfile := !f.IsDir() && strings.HasPrefix(f.Name(), "Dockerfile")
-			if !isDockerfile {
+		if os.IsNotExist(err) {
+			continue // Skip if directory doesn't exist
+		}
+
+		for _, entry := range entries {
+			if !entry.IsDir() {
 				continue
 			}
-			encoder := json.NewEncoder(writer)
-			runtime, dataStructure, executionMethod, tag := getRuntimeAndTag(entry.Name(), f.Name())
-			dockerfile := Dockerfile{Language: entry.Name(), Filename: f.Name(), Runtime: runtime, DataStructure: dataStructure, ExecutionMethod: executionMethod, Tag: tag}
-			err := encoder.Encode(dockerfile)
-			if err != nil {
-				return fmt.Errorf("failed to encode: %w", err)
+			dirPath := filepath.Join(dirName, entry.Name())
+			files, _ := os.ReadDir(dirPath)
+			for _, f := range files {
+				isDockerfile := !f.IsDir() && strings.HasPrefix(f.Name(), "Dockerfile")
+				if !isDockerfile {
+					continue
+				}
+				encoder := json.NewEncoder(writer)
+				runtime, dataStructure, executionMethod, tag := getRuntimeAndTag(entry.Name(), f.Name())
+				dockerfile := Dockerfile{
+					Language:        entry.Name(),
+					Filename:        f.Name(),
+					Runtime:         runtime,
+					DataStructure:   dataStructure,
+					ExecutionMethod: executionMethod,
+					Tag:             tag,
+					Directory:       dirType,
+				}
+				err := encoder.Encode(dockerfile)
+				if err != nil {
+					return fmt.Errorf("failed to encode: %w", err)
+				}
+				writer.Flush()
 			}
-			writer.Flush()
 		}
 	}
+
 	// log and return
 	fmt.Printf("wrote to file: %s\n", dockerfileList)
 	return nil

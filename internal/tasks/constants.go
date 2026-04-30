@@ -6,6 +6,8 @@ import (
 
 const (
 	solutionsDir      = "./solutions"
+	scaffoldsDir      = "./scaffolds"
+	helloWorldsDir    = "./hello-worlds"
 	referenceDir      = "reference"
 	artifactDir       = "artifacts"
 	defaultIterations = 1000
@@ -51,6 +53,7 @@ type Dockerfile struct {
 	DataStructure   *string `json:"data_structure"`
 	ExecutionMethod *string `json:"execution_method"`
 	Tag             string  `json:"tag"`
+	Directory       string  `json:"directory"`
 }
 
 type Command struct {

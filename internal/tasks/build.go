@@ -53,8 +53,15 @@ func Build() error {
 		}
 
 		tag := dockerfile.Tag
-		dockerfilePath := filepath.Join(solutionsDir, dockerfile.Language, dockerfile.Filename)
-		solutionPath := filepath.Join(solutionsDir, dockerfile.Language)
+		dir := solutionsDir
+		switch dockerfile.Directory {
+		case "scaffolds":
+			dir = scaffoldsDir
+		case "hello-worlds":
+			dir = helloWorldsDir
+		}
+		dockerfilePath := filepath.Join(dir, dockerfile.Language, dockerfile.Filename)
+		solutionPath := filepath.Join(dir, dockerfile.Language)
 		cmd := fmt.Sprintf("docker build -t %s -f %s %s\n", tag, dockerfilePath, solutionPath)
 		if err := cmdFile.WriteString(cmd); err != nil {
 			return fmt.Errorf("write command: %w", err)

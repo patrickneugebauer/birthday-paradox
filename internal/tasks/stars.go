@@ -67,8 +67,12 @@ func Stars() error {
 		if len(parts) < 4 {
 			continue
 		}
-		language := parts[0]
-		url := parts[3]
+		language := strings.TrimSpace(parts[0])
+		url := strings.TrimSpace(parts[3])
+
+		if url == "" {
+			return fmt.Errorf("empty github url for language: %s", language)
+		}
 
 		apiURL := toGitHubAPIURL(url)
 		headers := `"Accept: application/vnd.github+json" -H "Authorization: Bearer $ghtoken"`
