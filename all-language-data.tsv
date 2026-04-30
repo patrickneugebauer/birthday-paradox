@@ -1,0 +1,210 @@
+Language	dirname	runtime	year	github link	github is mirror	gitlab link	sourcehut link	svn link	sourceforge link	wiki link	website link	github stars	Tiobe name	Tiobe Rank	Tiobe rating	pypl name	pypl rank	pypl share	redmonk name	redmonk rank	Linux	Free	CLI	Notes
+(Visual) FoxPro	visual-foxpro			https://github.com/VFPX/Win32API								152	(Visual) FoxPro	50	0.23
+ABAP	abap												ABAP	37	0.34	Abap	23	0.35			No	No	Limited	SAP-specific
+ActionScript	actionscript												ActionScript	51							Yes	Freemium	Limited	Adobe Flash ecosystem
+Ada	ada			https://github.com/AdaCore/gnatstudio						https://en.wikipedia.org/wiki/Ada_(programming_language)		503	Ada	20	0.91	Ada	11	2.51			Yes	Yes	Yes	GNAT compiler available
+AssemblyScript	assemblyscript	Wasmtime
+Emscripten	emscripten	Wasmtime
+Go	go	Wasmtime
+Grain	grain	Wasmtime
+Kotlin	kotlin	Wasmtime
+Moonbit	moonbit	Wasmtime
+Rust	rust	Wasmtime
+Switf	switf	Wasmtime
+Zig	zig	Wasmtime
+agda	agda		2007	https://github.com/agda/agda								2,834
+Algol	algol			https://github.com/JvanKatwijk/algol-60-compiler						https://en.wikipedia.org/wiki/ALGOL		43	Algol	52							Yes	Yes	Yes	Historical language
+Apex	apex												Apex	53							No	No	No	Salesforce-specific
+AppleScript	applescript												AppleScript	54							No	Yes	No	macOS-only
+Assembly language	assembly									https://en.wikipedia.org/wiki/Assembly_language			Assembly language	18	1.05						Yes	Yes	Yes	Architecture-specific
+Awk	awk			https://github.com/onetrueawk/awk						https://en.wikipedia.org/wiki/AWK		2,189	Awk	55							Yes	Yes	Yes	Text processing
+Ballerina	ballerina		2017	https://github.com/ballerina-platform/ballerina-lang								3,833
+Bash	bash		1989	https://github.com/gitGNU/gnu_bash						https://en.wikipedia.org/wiki/Bash_(Unix_shell)	https://www.gnu.org/software/bash/	203	Bash	56					Shell	14
+bc	bc			https://github.com/gavinhoward/bc								238	bc	57							Yes	Yes	Yes	Calculator language
+BCPL	bcpl									https://en.wikipedia.org/wiki/BCPL			BCPL	58							Yes	Yes	Yes	Historical systems language
+beef	beef		2014	https://github.com/beefytech/Beef								2,799
+berry	berry		2019	https://github.com/berry-lang/berry							https://berry-lang.github.io	1,026
+blade	blade		2021	https://github.com/blade-lang/blade								194
+borgo	borgo		2024	https://github.com/borgo-lang/borgo								4,622
+Bourne shell	bourne shell		1979							https://en.wikipedia.org/wiki/Bourne_shell			Bourne shell	59							Yes	Yes	Yes	Original Unix shell
+bqn	bqn		2020	https://github.com/mlochbaum/BQN								1,051
+c		clang	2007	https://github.com/llvm/llvm-project												#REF!	#REF!
+c		gcc	1987	https://github.com/gcc-mirror/gcc												#REF!	#REF!
+C	c		1972	https://github.com/gcc-mirror/gcc	TRUE					https://en.wikipedia.org/wiki/C_(programming_language)	https://gcc.gnu.org/	10,889	C	2	12.34	C/C++	2	13.21	C	10
+C#	c-sharp		2000	https://github.com/dotnet/roslyn						https://en.wikipedia.org/wiki/C_Sharp_(programming_language)	https://docs.microsoft.com/dotnet/csharp/roslyn-sdk/	20,389	C#	5	5.98	C#	7	3.00	C#	4
+C++	c-plus-plus		1985	https://github.com/llvm/llvm-project						https://en.wikipedia.org/wiki/C%2B%2B		38,103	C++	3	8.03	C/C++	2	13.21	C++	7
+Caml	caml									https://en.wikipedia.org/wiki/Caml			Caml	40	0.27						Yes	Yes	Yes	Subset of OCaml
+carbon	carbon		2022	https://github.com/carbon-language/carbon-lang						https://en.wikipedia.org/wiki/Carbon_(programming_language)		33,681
+CFML	cfml												CFML	60							Yes	Freemium	Yes	Web framework-specific
+chapel	chapel		2009	https://github.com/chapel-lang/chapel						https://en.wikipedia.org/wiki/Chapel_(programming_language)	https://chapel-lang.org	1,992
+cherri	cherri		2022	https://github.com/electrikmilk/cherri								1,460
+CL (OS/400)	cl-os-400												CL (OS/400)	61							No	No	No	IBM mainframe-specific
+Clojure	clojure		2007	https://github.com/clojure/clojure						https://en.wikipedia.org/wiki/Clojure	https://clojure.org	10,865	Clojure	62
+clojure		clojerl	2020	https://github.com/clojerl/clojerl
+clojurescript	clojurescript		2011	https://github.com/clojure/clojurescript						https://en.wikipedia.org/wiki/Clojure#ClojureScript	https://clojurescript.org/	9,386
+COBOL	cobol			https://github.com/OCamlPro/gnucobol	TRUE					https://en.wikipedia.org/wiki/COBOL		59	COBOL	23	0.67	Cobol	30	0.04			Yes	Yes	Yes	GnuCOBOL available
+coconut	coconut		2015	https://github.com/evhub/coconut								4,324
+CoffeeScript	coffeescript		2009	https://github.com/jashkenas/coffeescript						https://en.wikipedia.org/wiki/CoffeeScript	https://coffeescript.org/	16,580	CoffeeScript	63
+common-lisp	common-lisp		1984	https://github.com/sbcl/sbcl	TRUE				https://sourceforge.net/projects/sbcl/	https://en.wikipedia.org/wiki/Common_Lisp	https://www.sbcl.org	2,097
+cpp		clang	2007	https://github.com/llvm/llvm-project
+cpp		gcc	1987	https://github.com/gcc-mirror/gcc
+crystal	crystal		2014	https://github.com/crystal-lang/crystal						https://en.wikipedia.org/wiki/Crystal_(programming_language)	https://crystal-lang.org	20,246
+CSS										https://en.wikipedia.org/wiki/CSS									CSS	7
+Curl	curl									https://en.wikipedia.org/wiki/Curl_(programming_language)	https://www.curl.com/		Curl	64							Yes	Yes	Yes	Data format language
+D	d		2001	https://github.com/dlang/dmd						https://en.wikipedia.org/wiki/D_(programming_language)	https://dlang.org	3,264	D	65
+d		dmd	2001	https://github.com/dlang/dmd
+d		ldc	2007	https://github.com/ldc-developers/ldc
+dafny	dafny		2009	https://github.com/dafny-lang/dafny								3,392
+dark	dark		2016	https://github.com/darklang/dark								2,157
+Dart	dart		2011	https://github.com/dart-lang/sdk						https://en.wikipedia.org/wiki/Dart_(programming_language)	https://dart.dev	11,122	Dart	28	0.58	Dart	16	0.94	Dart	18
+Dash			2002							https://en.wikipedia.org/wiki/Almquist_shell	http://gondor.apana.org.au/~herbert/dash/
+Delphi	delphi									https://en.wikipedia.org/wiki/Delphi_(software)			Delphi/Object Pascal	10	1.52	Delphi/Pascal	25	0.23			Yes	Freemium	Yes	Already have Free Pascal in project
+eiffel	eiffel		1985	https://github.com/LibertyEiffel/Liberty								52
+Elixir	elixir		2012	https://github.com/elixir-lang/elixir						https://en.wikipedia.org/wiki/Elixir_(programming_language)	https://elixir-lang.org/	26,383	Elixir	66
+Elm	elm		2012	https://github.com/elm/compiler						https://en.wikipedia.org/wiki/Elm_(programming_language)		7,772										Yes		Web-focused functional language
+elvish	elvish		2013	https://github.com/elves/elvish							https://elv.sh/	6,290
+erg	erg		2022	https://github.com/erg-lang/erg								2,855
+Erlang	erlang		1986	https://github.com/erlang/otp						https://en.wikipedia.org/wiki/Erlang_(programming_language)	http://erlang.org	12,121	Erlang	41	0.27
+F#	f-sharp		2005	https://github.com/dotnet/fsharp						https://en.wikipedia.org/wiki/F_Sharp_(programming_language)	https://dotnet.microsoft.com/languages/fsharp	4,283	F#	67
+factor	factor		2003	https://github.com/factor/factor								1,819
+fantom	fantom		2005	https://github.com/fantom-lang/fantom								153
+fennel	fennel		2016	https://github.com/bakpakin/fennel							https://fennel-lang.org	2,727
+fish	fish		2005	https://github.com/fish-shell/fish-shell						https://en.wikipedia.org/wiki/Fish_(Unix_shell)	https://fishshell.com	33,324
+flix	flix		2015	https://github.com/flix/flix								2,646
+forth	forth		1970	https://github.com/philburk/pforth						https://en.wikipedia.org/wiki/Forth_(programming_language)		694
+Fortran	fortran		1957	https://github.com/fortran-lang/stdlib						https://en.wikipedia.org/wiki/Fortran	https://stdlib.fortran-lang.org	1,310	Fortran	13	1.22
+freebasic	freebasic		2004	https://github.com/freebasic/fbc						https://en.wikipedia.org/wiki/FreeBASIC	https://www.freebasic.net	1,069
+fusion	fusion		2011	https://github.com/fusionlanguage/fut								1,859
+gambas	gambas		1999	https://github.com/landv/gambas	TRUE	https://gitlab.com/gambas/gambas				https://en.wikipedia.org/wiki/Gambas	https://gambas.app/	6
+GAMS	gams			https://github.com/GAMS-dev/studio								49	GAMS	68							Yes	Freemium	Yes	Optimization modeling
+GDScript	gdscript			https://github.com/godotengine/godot						https://simple.wikipedia.org/wiki/GDScript		110,115										Yes		Game Engine scripting language
+gleam	gleam		2016	https://github.com/gleam-lang/gleam						https://en.wikipedia.org/wiki/Gleam_(programming_language)	https://gleam.run	21,396
+gluon	gluon		2015	https://github.com/gluon-lang/gluon								3,395
+GML	gml												GML	46	0.25						Yes	Freemium	No	Game Maker Language
+Go	go		2009	https://github.com/golang/go						https://en.wikipedia.org/wiki/Go_(programming_language)	https://go.dev	133,685	Go	15	1.09	Go	21	0.71	Go	12
+gosu	gosu		2002	https://github.com/gosu-lang/gosu-lang								466
+gravity	gravity		2017	https://github.com/marcobambini/gravity								4,507
+Groovy	groovy		2003	https://github.com/apache/groovy						https://en.wikipedia.org/wiki/Apache_Groovy	https://groovy-lang.org	5,443	Groovy	69		Groovy	29	0.05
+hack	hack		2014	https://github.com/facebook/hhvm						https://en.wikipedia.org/wiki/Hack_(programming_language)	https://hhvm.com	18,616
+hare	hare		2022	https://github.com/liudonghua123/hare	TRUE		https://git.sr.ht/~sircmpwn/hare					18
+Haskell	haskell		1990	https://github.com/ghc/ghc	TRUE	https://gitlab.haskell.org/ghc/ghc				https://en.wikipedia.org/wiki/Haskell	http://www.haskell.org/ghc/	3,239	Haskell	35	0.36	Haskell	27	0.11
+haxe	haxe		2005	https://github.com/haxefoundation/haxe						https://en.wikipedia.org/wiki/Haxe		6,852
+Hilbish			2021	https://github.com/sammy-ette/Hilbish							https://hilbish.sammyette.party/	560
+Icon	icon		1977	https://github.com/gtownsend/icon								159	Icon	70							Yes	Yes	Yes	Text processing
+idris	idris		2007	https://github.com/idris-lang/Idris-dev								3,471
+imba	imba		2015	https://github.com/imba/imba								6,498
+Inform	inform			https://github.com/ganelson/inform								1,586	Inform	71							Yes	Yes	No	Interactive fiction DSL
+Io	io		2002	https://github.com/IoLanguage/io								2,760	Io	72							Yes	Yes	Yes	Prototype-based
+Ion			2015	https://github.com/redox-os/ion							https://doc.redox-os.org/ion-manual/	1,638
+J	j		1990	https://github.com/jsoftware/jsource								734	J	73							Yes	Yes	Yes	Array language
+J#	j-sharp												J#	74							No	No	No	Deprecated Java variant
+jakt	jakt		2022	https://github.com/SerenityOS/jakt								2,985
+jank	jank		2024	https://github.com/jank-lang/jank								3,194
+java		openjdk	2007	https://github.com/openjdk/jdk												#REF!	#REF!
+Java	java		1995	https://github.com/openjdk/jdk						https://en.wikipedia.org/wiki/Java_(programming_language)	https://openjdk.java.net/	22,825	Java	4	7.79	Java	3	10.01	Java	3
+javascript		node	2009	https://github.com/nodejs/node												#REF!	#REF!
+javascript		deno	2018	https://github.com/denoland/deno												#REF!	#REF!
+javascript		bun	2022	https://github.com/oven-sh/bun												#REF!	#REF!
+javascript		txiki	2020	https://github.com/saghul/txiki.js												#REF!	#REF!
+JavaScript	javascript		1995	https://github.com/nodejs/node						https://en.wikipedia.org/wiki/JavaScript	https://nodejs.org	116,976	JavaScript	6	3.11	JavaScript	5	5.07	JavaScript	1
+JScript	jscript												JScript	75							Limited	Yes	No	Internet Explorer scripting
+JScript.NET	jscript.net												JScript.NET	76							Limited	Freemium	Limited	Deprecated
+Julia	julia		2012	https://github.com/JuliaLang/julia						https://en.wikipedia.org/wiki/Julia_(programming_language)	https://julialang.org/	48,642	Julia	32	0.50	Julia	20	0.73
+Kotlin	kotlin		2011	https://github.com/jetbrains/kotlin						https://en.wikipedia.org/wiki/Kotlin_(programming_language)	https://kotlinlang.org	52,655	Kotlin	24	0.65	Kotlin	17	0.90	Kotlin	14
+LabVIEW	labview												LabVIEW	47	0.24						Yes	Freemium	Limited	Visual dataflow, proprietary
+Ladder Logic	ladder-logic												Ladder Logic	48	0.24						Limited	Freemium	No	PLC-specific
+Lisp	lisp			https://github.com/sbcl/sbcl						https://en.wikipedia.org/wiki/Lisp_(programming_language)		2,097	Lisp	31	0.50
+livescript	livescript		2011	https://github.com/gkz/LiveScript						https://en.wikipedia.org/wiki/LiveScript_(programming_language)	http://livescript.net	2,360
+Logo	logo			https://github.com/daxnet/logo-sharp						https://en.wikipedia.org/wiki/Logo_(programming_language)		18	Logo	77							Yes	Yes	Limited	Turtle graphics
+LotusScript	lotusscript												LotusScript	78							No	No	No	Lotus Notes-specific
+LPC	lpc												LPC	79							Yes	Yes	Yes	MUD programming
+Lua	lua		1993	https://github.com/lua/lua	TRUE					https://en.wikipedia.org/wiki/Lua_(programming_language)	https://lua.org	9,933	Lua	30	0.51	Lua	18	0.86
+luau	luau		2019	https://github.com/luau-lang/luau							https://luau.org	5,489
+lux	lux		2014	https://github.com/LuxLang/lux								1,733
+MATLAB	matlab									https://en.wikipedia.org/wiki/MATLAB			MATLAB	17	1.05	Matlab	13	1.51			Yes	No	Yes	Proprietary, expensive
+mint	mint		2018	https://github.com/mint-lang/mint								4,246
+ML	ml												ML	33	0.42						Yes	Yes	Yes	Functional, similar to OCaml
+Mojo	mojo		2023	https://github.com/modular/modular						https://en.wikipedia.org/wiki/Mojo_(programming_language)		25,913	Mojo	80							Yes	Yes	Yes	Python superset, emerging
+moonbit	moonbit		2022	https://github.com/moonbitlang/moonbit-docs								2,227
+moonscript	moonscript		2011	https://github.com/leafo/moonscript							https://moonscript.org	3,430
+MQL5	mql5												MQL5	81							Yes	Yes	Limited	MetaTrader trading language
+Murex			2018	https://github.com/lmorg/murex							https://murex.rocks	1,879
+nature	nature		2021	https://github.com/nature-lang/nature								2,243
+nelua	nelua		2019	https://github.com/edubart/nelua-lang								2,379
+NetLogo	netlogo			https://github.com/NetLogo/NetLogo								1,157	NetLogo	82							Yes	Yes	No	Agent-based modeling
+Nim	nim		2008	https://github.com/nim-lang/nim						https://en.wikipedia.org/wiki/Nim_(programming_language)	https://nim-lang.org	17,954	Nim	83
+numbat	numbat		2022	https://github.com/sharkdp/numbat								2,513
+Nushell			2019	https://github.com/nushell/nushell							https://www.nushell.sh/	39,255
+Objective-C	objective-c		1984	https://github.com/opensource-apple/objc4						https://en.wikipedia.org/wiki/Objective-C		1,194	Objective-C	27	0.59	Objective-C	10	2.57	Objective-C	18	Limited	Yes	Yes	Apple-centric
+OCaml	ocaml		1996	https://github.com/ocaml/ocaml						https://en.wikipedia.org/wiki/OCaml	https://ocaml.org	6,294	OCaml	38	0.32
+octave	octave		1988	https://github.com/gnu-octave/octave						https://en.wikipedia.org/wiki/GNU_Octave	https://www.gnu.org/software/octave/	605
+odin	odin		2016	https://github.com/odin-lang/Odin							https://odin-lang.org	10,217
+Oil			2016	https://github.com/oils-for-unix/oils							https://oils.pub/	3,319
+OpenCL	opencl			https://github.com/KhronosGroup/OpenCL-SDK								755	OpenCL	84							Yes	Yes	Yes	GPU programming
+pascal	pascal		1970	https://github.com/fpc/FPCSource	TRUE					https://en.wikipedia.org/wiki/Free_Pascal	https://www.freepascal.org/	133
+passerine	passerine		2020	https://github.com/vrtbl/passerine								1,091
+Perl	perl		1987	https://github.com/Perl/perl5						https://en.wikipedia.org/wiki/Perl	https://dev.perl.org/perl5/	2,269	Perl	12	1.48	Perl	28	0.10
+pharo	pharo		2008	https://github.com/pharo-project/pharo						https://en.wikipedia.org/wiki/Pharo	http://pharo.org	1,450
+PHP	php		1995	https://github.com/php/php-src						https://en.wikipedia.org/wiki/PHP	https://www.php.net	40,042	PHP	14	1.17	PHP	9	2.96	PHP	4
+PL/I	pl-i												PL/I	85							Yes	Yes	Yes	Historical mainframe
+PL/SQL	pl-sql												PL/SQL	21	0.80						Yes	Freemium	Yes	Oracle/PostgreSQL
+pocketlang	pocketlang		2020	https://github.com/ThakeeNathees/pocketlang								1,540
+Pony	pony		2015	https://github.com/ponylang/ponyc						https://en.wikipedia.org/wiki/Pony_(programming_language)		6,090										Yes		Actor-based concurrency language
+PowerShell	powershell		2006	https://github.com/powershell/powershell						https://en.wikipedia.org/wiki/PowerShell	https://microsoft.com/PowerShell	53,228	PowerShell	45	0.25	Powershell	14	1.26	PowerShell	17
+processing	processing		2001	https://github.com/processing/processing						https://en.wikipedia.org/wiki/Processing		6,491
+Prolog	prolog			https://github.com/SWI-Prolog/swipl-devel						https://en.wikipedia.org/wiki/Prolog		1,224	Prolog	22	0.73						Yes	Yes	Yes	Logic programming
+Pure Data	pure data			https://github.com/pure-data/pure-data								1,999	Pure Data	86							Yes	Yes	Limited	Audio/visual DSL
+purescript	purescript		2013	https://github.com/purescript/purescript						https://en.wikipedia.org/wiki/PureScript		8,853
+python		pocketpy	2023	https://github.com/pocketpy/pocketpy												#REF!	#REF!
+Python	python		1990	https://github.com/python/cpython						https://en.wikipedia.org/wiki/Python_(programming_language)	https://www.python.org	72,518	Python	1	20.97	Python	1	36.21	Python	2
+Q	q			https://github.com/KxSystems/kdb								464	Q	87							Yes	Yes	Yes	Time-series database
+R	r		1993	https://github.com/wch/r-source	TRUE			https://svn.r-project.org/R/		https://en.wikipedia.org/wiki/R_(programming_language)	https://github.com/wch/r-source/wiki/	1,230	R	9	1.62	R	4	6.17	R	13
+racket	racket		1995	https://github.com/racket/racket						https://en.wikipedia.org/wiki/Racket_(programming_language)	https://racket-lang.org/	5,131
+raku	raku		2015	https://github.com/rakudo/rakudo						https://en.wikipedia.org/wiki/Raku_(programming_language)	https://rakudo.org/	1,872
+Reason	reason		2015	https://github.com/reasonml/reason						https://en.wikipedia.org/wiki/Reason_(programming_language)		10,304										Yes		OCaml dialect with JavaScript syntax
+REBOL	rebol			https://github.com/rebol/rebol								888	REBOL	88							Yes	Yes	Yes	Data exchange language
+Red	red		2011	https://github.com/red/red								5,995										Yes		Rebol-inspired programming language
+rescript	rescript		2020	https://github.com/rescript-lang/rescript						https://en.wikipedia.org/wiki/Reason_(programming_language)#ReScript	https://rescript-lang.org	7,372
+Ring	ring		2016	https://github.com/ring-lang/ring								1,435	Ring	89							Yes	Yes	Yes	Application language
+Roc	roc		2021	https://github.com/roc-lang/roc								5,586										Yes		Compiled functional language
+RPG	rpg												RPG	90							Yes	Freemium	Yes	IBM i language
+RPL	rpl												RPL	91							Limited	No	No	HP calculator
+Ruby	ruby		1995	https://github.com/ruby/ruby						https://en.wikipedia.org/wiki/Ruby_(programming_language)	https://www.ruby-lang.org/	23,556	Ruby	29	0.54	Ruby	15	0.95	Ruby	9
+ruby		artichoke	2019	https://github.com/artichoke/artichoke												#REF!	#REF!
+rune	rune		2020	https://github.com/rune-rs/rune								2,201
+Rust	rust		2010	https://github.com/rust-lang/rust						https://en.wikipedia.org/wiki/Rust_(programming_language)	https://www.rust-lang.org	112,433	Rust	16	1.09	Rust	8	2.98	Rust	20
+S	s												S	92							Yes	Yes	Yes	Statistical, precursor to R
+SAS	sas												SAS	25	0.64						Yes	No	Yes	Proprietary statistical software
+Scala	scala		2004	https://github.com/scala/scala3						https://en.wikipedia.org/wiki/Scala_(programming_language)	https://scala-lang.org	6,235	Scala	43	0.26	Scala	22	0.36	Scala	14
+scheme	scheme		1975	https://github.com/jaseemabid/mit-scheme	TRUE					https://en.wikipedia.org/wiki/MIT/GNU_Scheme	https://www.gnu.org/software/mit-scheme/	6
+scheme		steel	2020	https://github.com/mattwparas/steel
+Scratch	scratch									https://en.wikipedia.org/wiki/Scratch_(programming_language)			Scratch	11	1.48						Yes	Yes	No	Visual language, not CLI compatible
+Small Basic	small basic												Small Basic	93							Limited	Yes	Limited	Educational language
+Smalltalk	smalltalk		1972	https://github.com/gnu-smalltalk/smalltalk						https://en.wikipedia.org/wiki/GNU_Smalltalk	https://gnu.org/software/smalltalk/	185	Smalltalk	94
+Solidity	solidity			https://github.com/argotorg/solidity						https://en.wikipedia.org/wiki/Solidity		25,615	Solidity	49	0.23						Yes	Yes	Yes	Blockchain smart contracts
+SQL	sql									https://en.wikipedia.org/wiki/SQL			SQL	8	1.75						Yes	Yes	Yes	Query language, not general-purpose
+squirrel	squirrel		1999	https://github.com/albertodemichelis/squirrel						https://en.wikipedia.org/wiki/Squirrel_(programming_language)	https://squirrel-lang.org/	1,030
+Swift	swift		2014	https://github.com/swiftlang/swift						https://en.wikipedia.org/wiki/Swift_(programming_language)	https://swift.org	69,943	Swift	19	0.92	Swift	6	3.15	Swift	11
+Tcl	tcl		1988	https://github.com/tcltk/tcl						https://en.wikipedia.org/wiki/Tcl_(programming_language)		794	Tcl	95							Yes	Yes	Yes	Systems automation
+teal	teal		2019	https://github.com/teal-language/tl							https://teal-language.org	2,728
+tengo	tengo		2018	https://github.com/d5/tengo								3,800
+Transact-SQL	transact-sql												Transact-SQL	44	0.25						Yes	Freemium	Yes	SQL Server dialect
+TypeScript	typescript		2012	https://github.com/microsoft/TypeScript						https://en.wikipedia.org/wiki/TypeScript	https://www.typescriptlang.org	108,705	typescript	34	0.37	TypeScript	12	1.80	TypeScript	6
+umka	umka		2020	https://github.com/vtereshkov/umka-lang								2,022
+unison	unison		2015	https://github.com/unisonweb/unison								6,599
+V	v		2019	https://github.com/vlang/v						https://en.wikipedia.org/wiki/V_(programming_language)	https://vlang.io/	37,512	V	96
+vala	vala		2006	https://github.com/gnome/vala						https://en.wikipedia.org/wiki/Vala_(programming_language)	https://gnome.pages.gitlab.gnome.org/vala/manual/index.html	883	vala	97
+vale	vale		2020	https://github.com/ValeLang/Vale								1,979
+VB.Net	vb.net		2001	https://github.com/dotnet/vblang						https://en.wikipedia.org/wiki/Visual_Basic_.NET	https://docs.microsoft.com/en-us/dotnet/visual-basic/	323	Visual Basic	7	3.02	Visual Basic	26	0.17			Limited	No	Limited	Windows-centric, poor Linux support
+VBScript	vbscript												VBScript	36	0.34						No	Yes	No	Windows-only scripting
+VHDL	vhdl			https://github.com/ghdl/ghdl						https://en.wikipedia.org/wiki/VHDL		2,803	VHDL	98							Yes	Yes	Yes	Hardware description
+Visual Basic	visual-basic-classic												Classic Visual Basic	26	0.61	VBA	19	0.85			No	No	Limited	Legacy Windows language
+Visual FoxPro	visual foxpro												Visual FoxPro	50	0.23						No	No	No	Legacy Windows database
+Wolfram	wolfram			https://github.com/wolframresearch						https://en.wikipedia.org/wiki/Wolfram_Language			Wolfram	99							Yes	Freemium	Yes	Symbolic math language
+wren	wren		2013	https://github.com/wren-lang/wren							http://wren.io	7,961
+X++	x-plus-plus												X++	42	0.27						No	No	No	Microsoft Dynamics specific
+Xgo	xgo		2020	https://github.com/goplus/xgo								9,413										Yes		Go-based Python superset
+Xojo	xojo												Xojo	100							Yes	Freemium	Yes	Cross-platform RAD tool
+Xonsh			2015	https://github.com/xonsh/xonsh							http://xon.sh	9,299
+Zig	zig		2016	https://github.com/ziglang/zig						https://en.wikipedia.org/wiki/Zig_(programming_language)	https://ziglang.org/	42,876	Zig	39	0.31	Zig	24	0.24
+ZSH			1990	https://github.com/zsh-users/zsh						https://en.wikipedia.org/wiki/Z_shell	http://www.zsh.org	4,174
