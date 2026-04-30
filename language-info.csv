@@ -59,7 +59,7 @@ rust,2010,https://en.wikipedia.org/wiki/Rust_(programming_language),https://gith
 scala,2004,https://en.wikipedia.org/wiki/Scala_(programming_language),https://github.com/scala/scala3,https://scala-lang.org
 scheme,1975,https://en.wikipedia.org/wiki/MIT/GNU_Scheme,https://github.com/jaseemabid/mit-scheme,https://www.gnu.org/software/mit-scheme/
 smalltalk,1972,https://en.wikipedia.org/wiki/GNU_Smalltalk,https://github.com/gnu-smalltalk/smalltalk,https://gnu.org/software/smalltalk/
-squirrel,1999,https://en.wikipedia.org/wiki/Squirrel_(programming_language),,https://squirrel-lang.org/
+squirrel,1999,https://en.wikipedia.org/wiki/Squirrel_(programming_language),https://github.com/albertodemichelis/squirrel,https://squirrel-lang.org/
 swift,2014,https://en.wikipedia.org/wiki/Swift_(programming_language),https://github.com/swiftlang/swift,https://swift.org
 teal,2019,https://teal-language.org,https://github.com/teal-language/tl,https://teal-language.org
 typescript,2012,https://en.wikipedia.org/wiki/TypeScript,https://github.com/microsoft/TypeScript,https://www.typescriptlang.org
