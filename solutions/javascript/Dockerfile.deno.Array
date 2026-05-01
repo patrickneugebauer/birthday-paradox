@@ -1,8 +1,8 @@
 FROM denoland/deno:alpine
 WORKDIR /app
 
-COPY loops.js .
+COPY loops-array.js .
 
-RUN deno cache loops.js
+RUN deno cache loops-array.js
 
-ENTRYPOINT ["deno", "run", "loops.js"]
+ENTRYPOINT ["deno", "run", "loops-array.js"]

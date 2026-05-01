@@ -1,6 +1,6 @@
 FROM oven/bun:alpine
 WORKDIR /app
 
-COPY loops.js .
+COPY loops-array.js .
 
-ENTRYPOINT ["bun", "loops.js"]
+ENTRYPOINT ["bun", "loops-array.js"]

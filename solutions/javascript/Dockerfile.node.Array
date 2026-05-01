@@ -1,6 +1,6 @@
 FROM node:alpine
 WORKDIR /app
 
-COPY loops.js .
+COPY loops-array.js .
 
-ENTRYPOINT ["node", "loops.js"]
+ENTRYPOINT ["node", "loops-array.js"]
