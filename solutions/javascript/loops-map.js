@@ -5,17 +5,17 @@ function simulate() {
   const start = process.hrtime.bigint();
   const sampleSize = 23
   let count = 0
-  const arr = new Map()
+  const map = new Map()
   let rand
   // loop
   for (let i = 0; i < iterations; i++) {
     for (let j = 0; j < sampleSize; j++) {
       rand = Math.floor(Math.random() * 365)
-      if (arr.get(rand) === i) {
+      if (map.get(rand) === i) {
         count++
         break
       } else {
-        arr.set(rand, i)
+        map.set(rand, i)
       }
     }
   }

@@ -5,20 +5,18 @@ function simulate() {
   const start = process.hrtime.bigint();
   const sampleSize = 23
   let count = 0
-  const set = new Set()
-  let rand
   // loop
   for (let i = 0; i < iterations; i++) {
+    const object = {}
     for (let j = 0; j < sampleSize; j++) {
-      rand = Math.floor(Math.random() * 365)
-      if (set.has(rand)) {
+      const rand = Math.floor(Math.random() * 365)
+      if (object[rand] === 1) {
         count++
         break
       } else {
-        set.add(rand)
+        object[rand] = 1
       }
     }
-    set.clear()
   }
   // calcs
   const results = (count / iterations * 100).toFixed(2)

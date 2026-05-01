@@ -5,17 +5,17 @@ function simulate() {
   const start = process.hrtime.bigint();
   const sampleSize = 23
   let count = 0
-  const arr = {}
+  const object = {}
   let rand
   // loop
   for (let i = 0; i < iterations; i++) {
     for (let j = 0; j < sampleSize; j++) {
       rand = Math.floor(Math.random() * 365)
-      if (arr[rand] === i) {
+      if (object[rand] === i) {
         count++
         break
       } else {
-        arr[rand] = i
+        object[rand] = i
       }
     }
   }

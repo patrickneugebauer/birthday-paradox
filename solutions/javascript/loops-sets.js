@@ -5,12 +5,11 @@ function simulate() {
   const start = process.hrtime.bigint();
   const sampleSize = 23
   let count = 0
-  const set = new Set()
-  let rand
   // loop
   for (let i = 0; i < iterations; i++) {
+    const set = new Set()
     for (let j = 0; j < sampleSize; j++) {
-      rand = Math.floor(Math.random() * 365)
+      const rand = Math.floor(Math.random() * 365)
       if (set.has(rand)) {
         count++
         break

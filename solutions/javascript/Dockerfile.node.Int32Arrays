@@ -1,0 +1,6 @@
+FROM node:alpine
+WORKDIR /app
+
+COPY loops-typed-arrays.js .
+
+ENTRYPOINT ["node", "loops-typed-arrays.js"]

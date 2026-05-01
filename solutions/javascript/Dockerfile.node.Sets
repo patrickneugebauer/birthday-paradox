@@ -1,0 +1,6 @@
+FROM node:alpine
+WORKDIR /app
+
+COPY loops-sets.js .
+
+ENTRYPOINT ["node", "loops-sets.js"]
