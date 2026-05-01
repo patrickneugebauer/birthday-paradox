@@ -5,12 +5,11 @@ function simulate() {
   const start = process.hrtime.bigint();
   const sampleSize = 23
   let count = 0
-  const list = []
-  let rand
   // loop
   for (let i = 0; i < iterations; i++) {
+    const list = []
     for (let j = 0; j < sampleSize; j++) {
-      rand = Math.floor(Math.random() * 365)
+      const rand = Math.floor(Math.random() * 365)
       if (list.includes(rand)) {
         count++
         break
@@ -18,7 +17,6 @@ function simulate() {
         list.push(rand)
       }
     }
-    list.length = 0
   }
   // calcs
   const results = (count / iterations * 100).toFixed(2)
