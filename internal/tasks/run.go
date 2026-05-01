@@ -14,6 +14,13 @@ import (
 	"time"
 )
 
+func ShouldRunBenchmark(imageUpdatedAt int64, lastRunAt int64) bool {
+	if lastRunAt == 0 {
+		return true
+	}
+	return imageUpdatedAt > lastRunAt
+}
+
 func loadPreviousStats() (map[string]int, error) {
 	infileName := runResultsFile
 	stats := make(map[string]int)
@@ -43,6 +50,23 @@ func loadPreviousStats() (map[string]int, error) {
 	return stats, nil
 }
 
+func loadExistingRunResults() map[string]RunResult {
+	results := make(map[string]RunResult)
+	file, err := os.Open(runResultsFile)
+	if err != nil {
+		return results
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		var result RunResult
+		if err := json.Unmarshal(scanner.Bytes(), &result); err == nil {
+			results[result.Tag] = result
+		}
+	}
+	return results
+}
+
 func Run() error {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
@@ -52,6 +76,10 @@ func Run() error {
 		return err
 	}
 
+	existingResults := loadExistingRunResults()
+	dockerfiles := LoadDockerfileMap()
+	now := time.Now().Unix()
+
 	infile, err := os.Open(buildResultsFile)
 	if err != nil {
 		return fmt.Errorf("open %s: %w", buildResultsFile, err)
@@ -59,18 +87,18 @@ func Run() error {
 	defer infile.Close()
 	scanner := bufio.NewScanner(infile)
 
-	writers, err := OpenBufferedFiles(runCommandsFile, runTempResultsFile)
+	writers, err := OpenBufferedFiles(runTempResultsFile)
 	if err != nil {
 		return err
 	}
-	cmdFile, resultsFile := writers[0], writers[1]
+	resultsFile := writers[0]
 	defer CloseBufferedFiles(writers...)
 
+	fmt.Print("run ")
 	ticker := time.NewTicker(10 * time.Second)
 	defer ticker.Stop()
 
 	for scanner.Scan() {
-		fmt.Print(".")
 		select {
 		case <-ctx.Done():
 			fmt.Println("Interrupt received, stopping run loop...")
@@ -89,27 +117,54 @@ func Run() error {
 			return fmt.Errorf("unmarshal: %w", err)
 		}
 
-		iterations := defaultIterations
-		if prev, ok := prevStats[buildResult.Tag]; ok && prev > 0 {
-			iterations = prev
+		df, hasDockerfile := dockerfiles[buildResult.Tag]
+		existing := existingResults[buildResult.Tag]
+
+		// Check if we should skip based on image update time
+		shouldRun := true
+		if hasDockerfile && existing.LastRunAt > 0 && df.ImageLastCreated > existing.LastRunAt {
+			shouldRun = true
+		} else if existing.LastRunAt > 0 && hasDockerfile && df.ImageLastCreated <= existing.LastRunAt {
+			shouldRun = false
 		}
 
-		cmd := fmt.Sprintf("docker run --rm %s %d\n", buildResult.Tag, iterations)
-		if err := cmdFile.WriteString(cmd); err != nil {
-			return fmt.Errorf("write command: %w", err)
-		}
-
-		output, err := exec.CommandContext(ctx, "docker", "run", "--rm", buildResult.Tag, strconv.Itoa(iterations)).CombinedOutput()
-		if err != nil {
-			// fallback on error
-			if err := resultsFile.Encode(RunResult{Tag: buildResult.Tag}); err != nil {
-				return fmt.Errorf("encode fallback: %w", err)
+		var result RunResult
+		if shouldRun {
+			fmt.Print("*")
+			iterations := defaultIterations
+			if prev, ok := prevStats[buildResult.Tag]; ok && prev > 0 {
+				iterations = prev
 			}
-			continue
+
+			output, err := exec.CommandContext(ctx, "docker", "run", "--rm", buildResult.Tag, strconv.Itoa(iterations)).CombinedOutput()
+			if err != nil {
+				// fallback on error, use existing result with updated timestamps
+				result = existing
+				result.Tag = buildResult.Tag
+				result.LastRunAt = now
+				if hasDockerfile {
+					result.ImageUpdatedAt = df.ImageLastCreated
+				}
+			} else {
+				result = parseOutput(string(output))
+				result.Tag = buildResult.Tag
+				result.LastRunAt = now
+				if hasDockerfile {
+					result.ImageUpdatedAt = df.ImageLastCreated
+				}
+			}
+		} else {
+			fmt.Print(".")
+			// Use cached result, update last_run_at
+			result = existing
+			result.Tag = buildResult.Tag
+			result.LastRunAt = now
+			if hasDockerfile {
+				result.ImageUpdatedAt = df.ImageLastCreated
+			}
 		}
 
-		result := parseOutput(string(output))
-		result.Tag = buildResult.Tag
+		// Write result for all (run or skipped)
 		if err := resultsFile.Encode(result); err != nil {
 			return fmt.Errorf("encode result: %w", err)
 		}
@@ -125,7 +180,7 @@ func Run() error {
 	if err := os.Rename(runTempResultsFile, runResultsFile); err != nil {
 		return fmt.Errorf("finalize results: %w", err)
 	}
-	fmt.Printf("wrote to file: %s\n", runResultsFile)
+	fmt.Printf("wrote: %s\n", runResultsFile)
 	return nil
 }
 

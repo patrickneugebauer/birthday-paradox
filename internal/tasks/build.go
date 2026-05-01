@@ -12,6 +12,13 @@ import (
 	"time"
 )
 
+func ShouldRebuild(fileLastModified int64, imageLastCreated int64) bool {
+	if imageLastCreated == 0 {
+		return true
+	}
+	return fileLastModified > imageLastCreated
+}
+
 func Build() error {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
@@ -23,13 +30,14 @@ func Build() error {
 	defer infile.Close()
 	scanner := bufio.NewScanner(infile)
 
-	writers, err := OpenBufferedFiles(buildCommandsFile, buildTempResultsFile)
+	writers, err := OpenBufferedFiles(buildTempResultsFile)
 	if err != nil {
 		return err
 	}
-	cmdFile, resultsFile := writers[0], writers[1]
+	resultsFile := writers[0]
 	defer CloseBufferedFiles(writers...)
 
+	fmt.Print("build ")
 	ticker := time.NewTicker(10 * time.Second)
 	defer ticker.Stop()
 
@@ -52,6 +60,16 @@ func Build() error {
 			return fmt.Errorf("unmarshal: %w", err)
 		}
 
+		// Check will_rebuild flag (which was computed by map-files)
+		shouldRebuild := true
+		if dockerfile.WillRebuild != nil {
+			shouldRebuild = *dockerfile.WillRebuild
+		}
+		// Or compute on the fly if needed
+		if !shouldRebuild {
+			shouldRebuild = ShouldRebuild(dockerfile.FileLastModified, dockerfile.ImageLastCreated)
+		}
+
 		tag := dockerfile.Tag
 		dir := solutionsDir
 		switch dockerfile.Directory {
@@ -62,19 +80,22 @@ func Build() error {
 		}
 		dockerfilePath := filepath.Join(dir, dockerfile.Language, dockerfile.Filename)
 		solutionPath := filepath.Join(dir, dockerfile.Language)
-		cmd := fmt.Sprintf("docker build -t %s -f %s %s\n", tag, dockerfilePath, solutionPath)
-		if err := cmdFile.WriteString(cmd); err != nil {
-			return fmt.Errorf("write command: %w", err)
+
+		if !shouldRebuild {
+			// Image is up-to-date, skip rebuild
+			fmt.Print(".")
+		} else {
+			fmt.Print("*")
+			// Run docker build
+			buildCmd := exec.CommandContext(ctx, "docker", "build", "-t", tag, "-f", dockerfilePath, solutionPath)
+			buildCmd.Stdout = os.Stdout
+			buildCmd.Stderr = os.Stderr
+			if err := buildCmd.Run(); err != nil {
+				return fmt.Errorf("docker build failed for %s: %w", tag, err)
+			}
 		}
 
-		// Run docker build
-		buildCmd := exec.CommandContext(ctx, "docker", "build", "-t", tag, "-f", dockerfilePath, solutionPath)
-		buildCmd.Stdout = os.Stdout
-		buildCmd.Stderr = os.Stderr
-		if err := buildCmd.Run(); err != nil {
-			return fmt.Errorf("docker build failed for %s: %w", tag, err)
-		}
-
+		// Write result for all (built or skipped)
 		if err := resultsFile.Encode(BuildResult{Tag: tag}); err != nil {
 			return fmt.Errorf("encode result: %w", err)
 		}
@@ -89,6 +110,7 @@ func Build() error {
 	if err := os.Rename(buildTempResultsFile, buildResultsFile); err != nil {
 		return fmt.Errorf("finalize results: %w", err)
 	}
-	fmt.Printf("wrote to file: %s\n", buildResultsFile)
+
+	fmt.Printf("\nwrote: %s\n", buildResultsFile)
 	return nil
 }

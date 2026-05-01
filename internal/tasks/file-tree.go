@@ -2,6 +2,7 @@ package tasks
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -10,58 +11,108 @@ import (
 	"unicode"
 )
 
-func MakeFileTree() error {
-	outfileName := dockerfileList
-	outfile, err := os.Create(outfileName)
+func LoadDockerfileMap() map[string]Dockerfile {
+	dockerfiles := make(map[string]Dockerfile)
+	file, err := os.Open(dockerfileList)
 	if err != nil {
-		return fmt.Errorf("failed to create file: %w", err)
+		return dockerfiles
 	}
-	writer := bufio.NewWriter(outfile)
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		var df Dockerfile
+		if err := json.Unmarshal(scanner.Bytes(), &df); err == nil {
+			dockerfiles[df.Tag] = df
+		}
+	}
+	return dockerfiles
+}
 
-	// Scan solutions, scaffolds, and hello-worlds directories
+func MakeFileTree() error {
+	fmt.Print("map ")
+
+	// Pass 1: collect all dockerfile entries from disk.
+	type entry struct {
+		language        string
+		filename        string
+		dirPath         string
+		dirType         string
+		tag             string
+		runtime         *string
+		dataStructure   *string
+		executionMethod *string
+	}
+	var entries []entry
 	for _, dirName := range []string{solutionsDir, scaffoldsDir, helloWorldsDir} {
 		dirType := filepath.Base(dirName)
-		entries, err := os.ReadDir(dirName)
+		dirs, err := os.ReadDir(dirName)
 		if err != nil && !os.IsNotExist(err) {
 			return err
 		}
-		if os.IsNotExist(err) {
-			continue // Skip if directory doesn't exist
-		}
-
-		for _, entry := range entries {
-			if !entry.IsDir() {
+		for _, dir := range dirs {
+			if !dir.IsDir() {
 				continue
 			}
-			dirPath := filepath.Join(dirName, entry.Name())
+			dirPath := filepath.Join(dirName, dir.Name())
 			files, _ := os.ReadDir(dirPath)
 			for _, f := range files {
-				isDockerfile := !f.IsDir() && strings.HasPrefix(f.Name(), "Dockerfile")
-				if !isDockerfile {
+				if f.IsDir() || !strings.HasPrefix(f.Name(), "Dockerfile") {
 					continue
 				}
-				encoder := json.NewEncoder(writer)
-				runtime, dataStructure, executionMethod, tag := getRuntimeAndTag(entry.Name(), f.Name())
-				dockerfile := Dockerfile{
-					Language:        entry.Name(),
-					Filename:        f.Name(),
-					Runtime:         runtime,
-					DataStructure:   dataStructure,
-					ExecutionMethod: executionMethod,
-					Tag:             tag,
-					Directory:       dirType,
-				}
-				err := encoder.Encode(dockerfile)
-				if err != nil {
-					return fmt.Errorf("failed to encode: %w", err)
-				}
-				writer.Flush()
+				runtime, dataStructure, executionMethod, tag := getRuntimeAndTag(dir.Name(), f.Name())
+				entries = append(entries, entry{
+					language:        dir.Name(),
+					filename:        f.Name(),
+					dirPath:         dirPath,
+					dirType:         dirType,
+					tag:             tag,
+					runtime:         runtime,
+					dataStructure:   dataStructure,
+					executionMethod: executionMethod,
+				})
 			}
 		}
 	}
 
-	// log and return
-	fmt.Printf("wrote to file: %s\n", dockerfileList)
+	// Pass 2: fetch all image times in parallel.
+	tags := make([]string, len(entries))
+	for i, e := range entries {
+		tags[i] = e.tag
+	}
+	imageTimes := GetImageUpdatedTimes(tags)
+	fmt.Println()
+
+	// Pass 3: build output rows.
+	var dockerfiles []Dockerfile
+	for _, e := range entries {
+		fileLastMod := getMaxFileModTime(e.dirPath)
+		imageLastUpdated := imageTimes[e.tag]
+		willRebuild := ShouldRebuild(fileLastMod, imageLastUpdated)
+		dockerfiles = append(dockerfiles, Dockerfile{
+			Language:         e.language,
+			Filename:         e.filename,
+			Runtime:          e.runtime,
+			DataStructure:    e.dataStructure,
+			ExecutionMethod:  e.executionMethod,
+			Tag:              e.tag,
+			Directory:        e.dirType,
+			FileLastModified: fileLastMod,
+			ImageLastCreated: imageLastUpdated,
+			WillRebuild:      &willRebuild,
+		})
+	}
+
+	// Pass 4: write all at once.
+	var buf bytes.Buffer
+	for _, df := range dockerfiles {
+		jsonBytes, _ := json.Marshal(df)
+		buf.Write(jsonBytes)
+		buf.WriteByte('\n')
+	}
+	if err := os.WriteFile(dockerfileList, buf.Bytes(), 0644); err != nil {
+		return fmt.Errorf("write: %w", err)
+	}
+	fmt.Printf("wrote: %s\n", dockerfileList)
 	return nil
 }
 
@@ -99,4 +150,21 @@ func getRuntimeAndTag(dir string, filename string) (*string, *string, *string, s
 	}
 
 	return runtime, dataStructure, executionMethod, tag
+}
+
+func getMaxFileModTime(dirPath string) int64 {
+	var maxTime int64
+	filepath.Walk(dirPath, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return nil
+		}
+		if !info.IsDir() {
+			modTime := info.ModTime().Unix()
+			if modTime > maxTime {
+				maxTime = modTime
+			}
+		}
+		return nil
+	})
+	return maxTime
 }

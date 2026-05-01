@@ -59,6 +59,15 @@ func NewBufferedFile(path string) (*BufferedFile, error) {
 	return &BufferedFile{f: f, w: w, enc: json.NewEncoder(w)}, nil
 }
 
+func NewBufferedFileAppend(path string) (*BufferedFile, error) {
+	f, err := os.OpenFile(path, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+	if err != nil {
+		return nil, fmt.Errorf("open append %s: %w", path, err)
+	}
+	w := bufio.NewWriter(f)
+	return &BufferedFile{f: f, w: w, enc: json.NewEncoder(w)}, nil
+}
+
 func (bf *BufferedFile) WriteString(s string) error {
 	_, err := bf.w.WriteString(s)
 	return err

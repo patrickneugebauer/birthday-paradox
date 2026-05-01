@@ -11,7 +11,32 @@ import (
 	"os/signal"
 	"strconv"
 	"strings"
+	"time"
 )
+
+func ShouldWeighImage(imageUpdatedAt int64, lastWeighAt int64) bool {
+	if lastWeighAt == 0 {
+		return true
+	}
+	return imageUpdatedAt > lastWeighAt
+}
+
+func loadExistingWeighResults() map[string]WeighResult {
+	results := make(map[string]WeighResult)
+	file, err := os.Open(weighResultsFile)
+	if err != nil {
+		return results
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		var result WeighResult
+		if err := json.Unmarshal(scanner.Bytes(), &result); err == nil {
+			results[result.Tag] = result
+		}
+	}
+	return results
+}
 
 func Weigh() error {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
@@ -24,15 +49,19 @@ func Weigh() error {
 	defer infile.Close()
 	scanner := bufio.NewScanner(infile)
 
-	writers, err := OpenBufferedFiles(weighCommandsFile, weighResultsFile)
+	writers, err := OpenBufferedFiles(weighTempResultsFile)
 	if err != nil {
 		return err
 	}
-	cmdFile, resultsFile := writers[0], writers[1]
+	resultsFile := writers[0]
 	defer CloseBufferedFiles(writers...)
 
+	existingResults := loadExistingWeighResults()
+	dockerfiles := LoadDockerfileMap()
+	now := time.Now().Unix()
+
+	fmt.Print("weigh ")
 	for scanner.Scan() {
-		fmt.Print(".")
 		select {
 		case <-ctx.Done():
 			fmt.Println("Interrupt received, stopping weigh loop...")
@@ -45,21 +74,40 @@ func Weigh() error {
 			return fmt.Errorf("unmarshal: %w", err)
 		}
 
-		cmd := fmt.Sprintf("docker image inspect --format {{.Size}} %s\n", buildResult.Tag)
-		if err := cmdFile.WriteString(cmd); err != nil {
-			return fmt.Errorf("write command: %w", err)
+		df, hasDockerfile := dockerfiles[buildResult.Tag]
+		existing := existingResults[buildResult.Tag]
+
+		// Check if we should skip based on image update time
+		shouldWeigh := true
+		if existing.LastWeighAt > 0 && hasDockerfile && df.ImageLastCreated <= existing.LastWeighAt {
+			shouldWeigh = false
 		}
 
-		output, err := exec.CommandContext(ctx, "docker", "image", "inspect", "--format", "{{.Size}}", buildResult.Tag).CombinedOutput()
-		if err != nil {
-			return fmt.Errorf("docker inspect failed: %w", err)
+		var result WeighResult
+		if shouldWeigh {
+			fmt.Print("*")
+			output, err := exec.CommandContext(ctx, "docker", "image", "inspect", "--format", "{{.Size}}", buildResult.Tag).CombinedOutput()
+			if err != nil {
+				return fmt.Errorf("docker inspect failed: %w", err)
+			}
+
+			sizeMB, sizeBytes, err := parseSize(output)
+			if err != nil {
+				return fmt.Errorf("parse size: %w", err)
+			}
+			result = WeighResult{Tag: buildResult.Tag, SizeMB: sizeMB, SizeBytes: sizeBytes, LastWeighAt: now}
+			if hasDockerfile {
+				result.ImageUpdatedAt = df.ImageLastCreated
+			}
+		} else {
+			fmt.Print(".")
+			// Use cached result, update last_weigh_at
+			result = existing
+			result.LastWeighAt = now
 		}
 
-		sizeMB, sizeBytes, err := parseSize(output)
-		if err != nil {
-			return fmt.Errorf("parse size: %w", err)
-		}
-		if err := resultsFile.Encode(WeighResult{Tag: buildResult.Tag, SizeMB: sizeMB, SizeBytes: sizeBytes}); err != nil {
+		// Write result for all (weighed or skipped)
+		if err := resultsFile.Encode(result); err != nil {
 			return fmt.Errorf("encode result: %w", err)
 		}
 	}
@@ -68,7 +116,13 @@ func Weigh() error {
 	if err := scanner.Err(); err != nil {
 		return fmt.Errorf("scanner: %w", err)
 	}
-	fmt.Printf("wrote to file: %s\n", weighResultsFile)
+	if err := resultsFile.Close(); err != nil {
+		return fmt.Errorf("close temp results: %w", err)
+	}
+	if err := os.Rename(weighTempResultsFile, weighResultsFile); err != nil {
+		return fmt.Errorf("finalize results: %w", err)
+	}
+	fmt.Printf("wrote: %s\n", weighResultsFile)
 	return nil
 }
 

@@ -2,6 +2,7 @@ package tasks
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
@@ -14,6 +15,7 @@ import (
 )
 
 func Readme() error {
+	fmt.Print("readme\n")
 	// Stage 1: Build raw results
 	rows, err := buildRawReadmeResults()
 	if err != nil {
@@ -128,20 +130,17 @@ func buildRawReadmeResults() ([]ReadmeRow, error) {
 		rows = append(rows, row)
 	}
 
-	// Write raw JSONL results
-	jsonlFile, err := os.Create(readmeResultsFile)
-	if err != nil {
-		return nil, err
-	}
-	defer jsonlFile.Close()
-
+	var buf bytes.Buffer
 	for _, row := range rows {
 		roundedRow := row
 		roundedRow.SizeMB = math.Round(row.SizeMB*1000) / 1000
 		jsonBytes, _ := json.Marshal(roundedRow)
-		fmt.Fprintln(jsonlFile, string(jsonBytes))
+		buf.Write(jsonBytes)
+		buf.WriteByte('\n')
 	}
-	fmt.Printf("wrote to file: %s\n", readmeResultsFile)
+	if err := os.WriteFile(readmeResultsFile, buf.Bytes(), 0644); err != nil {
+		return nil, err
+	}
 
 	return rows, nil
 }
@@ -222,18 +221,15 @@ func buildFormattedReadmeResults(rows []ReadmeRow) ([]ReadmeRow, error) {
 		formattedRows[i].FormattedIPS = ips
 	}
 
-	// Write formatted JSONL results
-	jsonlFile, err := os.Create(formattedReadmeResultsFile)
-	if err != nil {
-		return nil, err
-	}
-	defer jsonlFile.Close()
-
+	var buf bytes.Buffer
 	for _, row := range formattedRows {
 		jsonBytes, _ := json.Marshal(row)
-		fmt.Fprintln(jsonlFile, string(jsonBytes))
+		buf.Write(jsonBytes)
+		buf.WriteByte('\n')
 	}
-	fmt.Printf("wrote to file: %s\n", formattedReadmeResultsFile)
+	if err := os.WriteFile(formattedReadmeResultsFile, buf.Bytes(), 0644); err != nil {
+		return nil, err
+	}
 
 	return formattedRows, nil
 }
@@ -259,24 +255,19 @@ func generateReadmeMarkdownFiles(rows []ReadmeRow) error {
 	if err := writeReadmeFile(readmeFile, "Performance (IPS, highest first)", rows); err != nil {
 		return err
 	}
-	fmt.Printf("wrote to file: %s\n", readmeFile)
 	if err := writeReadmeFile(readmeFileByLanguage, "Language (A-Z)", rowsByLanguage); err != nil {
 		return err
 	}
-	fmt.Printf("wrote to file: %s\n", readmeFileByLanguage)
 	if err := writeReadmeFile(readmeFileByYear, "Year (newest first)", rowsByYear); err != nil {
 		return err
 	}
-	fmt.Printf("wrote to file: %s\n", readmeFileByYear)
 	if err := writeReadmeFile(readmeFileByStars, "GitHub Stars (highest first)", rowsByStars); err != nil {
 		return err
 	}
-	fmt.Printf("wrote to file: %s\n", readmeFileByStars)
 	if err := writeReadmeFile(readmeFileBySize, "Size in MB (smallest first)", rowsBySize); err != nil {
 		return err
 	}
-	fmt.Printf("wrote to file: %s\n", readmeFileBySize)
-
+	fmt.Printf("wrote: %s\n", readmeFile)
 	return nil
 }
 
@@ -329,22 +320,27 @@ func sortBySize(rows []ReadmeRow) {
 }
 
 func writeReadmeFile(filename, currentSort string, rows []ReadmeRow) error {
-	file, err := os.Create(filename)
+	tmpFilename := filename + ".tmp"
+	file, err := os.Create(tmpFilename)
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	writer := bufio.NewWriter(file)
+	defer func() {
+		writer.Flush()
+		file.Close()
+	}()
 
 	// Build navigation links based on whether this is root README or tables/
 	isRoot := filename == readmeFile
-	perfLink := "README.md"
+	perfLink := "readme.md"
 	langLink := "results-by-language.md"
 	yearLink := "results-by-year.md"
 	starsLink := "results-by-stars.md"
 	sizeLink := "results-by-size.md"
 
 	if !isRoot {
-		perfLink = "../README.md"
+		perfLink = "../readme.md"
 	} else {
 		langLink = "tables/results-by-language.md"
 		yearLink = "tables/results-by-year.md"
@@ -353,17 +349,26 @@ func writeReadmeFile(filename, currentSort string, rows []ReadmeRow) error {
 	}
 
 	// Write navigation bar
-	fmt.Fprintf(file, "**View by:** | [Performance](%s) | [Language](%s) | [Year](%s) | [Stars](%s) | [Size](%s) |\n", perfLink, langLink, yearLink, starsLink, sizeLink)
-	fmt.Fprintln(file)
-	fmt.Fprintln(file, "| | Language | Runtime | Data Type | Exec Mode | Year | Stars | Size (MB) | IPS |")
-	fmt.Fprintln(file, "|---|---|---|---|---|---|---|---|---|")
+	fmt.Fprintf(writer, "**View by:** | [Performance](%s) | [Language](%s) | [Year](%s) | [Stars](%s) | [Size](%s) |\n", perfLink, langLink, yearLink, starsLink, sizeLink)
+	fmt.Fprintln(writer)
+	fmt.Fprintln(writer, "| | Language | Runtime | Data Type | Exec Mode | Year | Stars | Size (MB) | IPS |")
+	fmt.Fprintln(writer, "|---|---|---|---|---|---|---|---|---|")
 
 	// Write rows with index
 	for i, row := range rows {
 		line := formatMarkdownRow(row)
-		fmt.Fprintf(file, "| %d %s\n", i+1, line)
+		fmt.Fprintf(writer, "| %d %s\n", i+1, line)
 	}
 
+	if err := writer.Flush(); err != nil {
+		return fmt.Errorf("flush: %w", err)
+	}
+	if err := file.Close(); err != nil {
+		return fmt.Errorf("close temp: %w", err)
+	}
+	if err := os.Rename(tmpFilename, filename); err != nil {
+		return fmt.Errorf("finalize %s: %w", filename, err)
+	}
 	return nil
 }
 
