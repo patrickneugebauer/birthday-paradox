@@ -19,6 +19,23 @@ func ShouldRebuild(fileLastModified int64, imageLastCreated int64) bool {
 	return fileLastModified > imageLastCreated
 }
 
+func loadExistingBuildResults() map[string]BuildResult {
+	results := make(map[string]BuildResult)
+	file, err := os.Open(buildResultsFile)
+	if err != nil {
+		return results
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		var result BuildResult
+		if err := json.Unmarshal(scanner.Bytes(), &result); err == nil {
+			results[result.Tag] = result
+		}
+	}
+	return results
+}
+
 func Build() error {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
@@ -37,8 +54,11 @@ func Build() error {
 	resultsFile := writers[0]
 	defer CloseBufferedFiles(writers...)
 
+	existingResults := loadExistingBuildResults()
+	now := time.Now().Unix()
+
 	fmt.Print("build ")
-	ticker := time.NewTicker(10 * time.Second)
+	ticker := time.NewTicker(refreshInterval * time.Second)
 	defer ticker.Stop()
 
 	for scanner.Scan() {
@@ -95,8 +115,11 @@ func Build() error {
 			}
 		}
 
-		// Write result for all (built or skipped)
-		if err := resultsFile.Encode(BuildResult{Tag: tag}); err != nil {
+		lastBuiltAt := existingResults[tag].LastBuiltAt
+		if shouldRebuild {
+			lastBuiltAt = now
+		}
+		if err := resultsFile.Encode(BuildResult{Tag: tag, LastBuiltAt: lastBuiltAt}); err != nil {
 			return fmt.Errorf("encode result: %w", err)
 		}
 	}

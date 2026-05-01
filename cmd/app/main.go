@@ -25,6 +25,13 @@ func main() {
 		err = tasks.Weigh()
 	case "run":
 		err = tasks.Run()
+	case "run-all":
+		err = tasks.RunAll()
+	case "run-some":
+		if len(os.Args) < 3 {
+			log.Fatal("Usage: myapp run-some <search>")
+		}
+		err = tasks.RunSome(os.Args[2])
 	case "readme":
 		err = tasks.Readme()
 	case "all":

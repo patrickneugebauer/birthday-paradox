@@ -67,7 +67,19 @@ func loadExistingRunResults() map[string]RunResult {
 	return results
 }
 
+func RunAll() error {
+	return RunFn(true, nil)
+}
+
 func Run() error {
+	return RunFn(false, nil)
+}
+
+func RunSome(lang string) error {
+	return RunFn(false, &lang)
+}
+
+func RunFn(all bool, langs *string) error {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
@@ -95,7 +107,7 @@ func Run() error {
 	defer CloseBufferedFiles(writers...)
 
 	fmt.Print("run ")
-	ticker := time.NewTicker(10 * time.Second)
+	ticker := time.NewTicker(refreshInterval * time.Second)
 	defer ticker.Stop()
 
 	for scanner.Scan() {
@@ -120,13 +132,11 @@ func Run() error {
 		df, hasDockerfile := dockerfiles[buildResult.Tag]
 		existing := existingResults[buildResult.Tag]
 
-		// Check if we should skip based on image update time
-		shouldRun := true
-		if hasDockerfile && existing.LastRunAt > 0 && df.ImageLastCreated > existing.LastRunAt {
-			shouldRun = true
-		} else if existing.LastRunAt > 0 && hasDockerfile && df.ImageLastCreated <= existing.LastRunAt {
-			shouldRun = false
+		var contains bool
+		if langs != nil {
+			contains = strings.Contains(buildResult.Tag, *langs)
 		}
+		shouldRun := all || contains || buildResult.LastBuiltAt > existing.LastRunAt
 
 		var result RunResult
 		if shouldRun {
@@ -147,6 +157,10 @@ func Run() error {
 				}
 			} else {
 				result = parseOutput(string(output))
+				if df.Directory == "solutions" && result.Iterations != nil && *result.Seconds > 0 {
+					ips := int(float64(*result.Iterations) / *result.Seconds)
+					result.IPS = &ips
+				}
 				result.Tag = buildResult.Tag
 				result.LastRunAt = now
 				if hasDockerfile {
@@ -209,10 +223,6 @@ func parseOutput(raw string) RunResult {
 		case "seconds":
 			if v, err := strconv.ParseFloat(val, 64); err == nil {
 				res.Seconds = &v
-				if res.Iterations != nil && v > 0 {
-					ips := int(float64(*res.Iterations) / v)
-					res.IPS = &ips
-				}
 			}
 		}
 	}

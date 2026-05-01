@@ -8,9 +8,9 @@ const (
 	solutionsDir      = "./solutions"
 	scaffoldsDir      = "./scaffolds"
 	helloWorldsDir    = "./hello-worlds"
-	referenceDir      = "reference"
 	artifactDir       = "artifacts"
 	defaultIterations = 1000
+	refreshInterval   = 1
 )
 
 var (
@@ -70,7 +70,8 @@ type StarResult struct {
 }
 
 type BuildResult struct {
-	Tag string `json:"tag"`
+	Tag         string `json:"tag"`
+	LastBuiltAt int64  `json:"last_built_at"`
 }
 
 type WeighResult struct {

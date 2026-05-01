@@ -77,11 +77,7 @@ func Weigh() error {
 		df, hasDockerfile := dockerfiles[buildResult.Tag]
 		existing := existingResults[buildResult.Tag]
 
-		// Check if we should skip based on image update time
-		shouldWeigh := true
-		if existing.LastWeighAt > 0 && hasDockerfile && df.ImageLastCreated <= existing.LastWeighAt {
-			shouldWeigh = false
-		}
+		shouldWeigh := buildResult.LastBuiltAt > existing.LastWeighAt
 
 		var result WeighResult
 		if shouldWeigh {

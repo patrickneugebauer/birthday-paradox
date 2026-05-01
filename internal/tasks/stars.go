@@ -91,7 +91,7 @@ func Stars() error {
 	payloadIdx := 0
 
 	fmt.Print("stars ")
-	ticker := time.NewTicker(10 * time.Second)
+	ticker := time.NewTicker(refreshInterval * time.Second)
 	defer ticker.Stop()
 
 	for scanner.Scan() {
