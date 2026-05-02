@@ -42,6 +42,8 @@ var (
 	readmeFileByStars    = filepath.Join("tables", "results-by-stars.md")
 	readmeFileBySize     = filepath.Join("tables", "results-by-size.md")
 	readmeFileJavaScript = filepath.Join("tables", "javascript-readme.md")
+	dockerBuildReadme    = filepath.Join("tables", "docker-build-results.md")
+	dockerRunReadme      = filepath.Join("tables", "docker-run-results.md")
 )
 
 type DockerfileMap = map[string][]string

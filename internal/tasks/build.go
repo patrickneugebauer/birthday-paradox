@@ -59,7 +59,15 @@ func loadExistingBuildResults() map[string]BuildResult {
 	return results
 }
 
+func BuildAll() error {
+	return buildFn(true)
+}
+
 func Build() error {
+	return buildFn(false)
+}
+
+func buildFn(buildAll bool) error {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
@@ -78,7 +86,6 @@ func Build() error {
 	defer CloseBufferedFiles(writers...)
 
 	existingResults := loadExistingBuildResults()
-	now := time.Now().Unix()
 
 	// Try to get dockerd PID for stats collection
 	dockerdPID, _ := getDockerDPID()
@@ -108,7 +115,7 @@ func Build() error {
 
 		// Check will_rebuild flag (which was computed by map-files)
 		shouldRebuild := true
-		if dockerfile.WillRebuild != nil {
+		if buildAll != true && dockerfile.WillRebuild != nil {
 			shouldRebuild = *dockerfile.WillRebuild
 		}
 		// Or compute on the fly if needed
@@ -127,12 +134,13 @@ func Build() error {
 		dockerfilePath := filepath.Join(dir, dockerfile.Language, dockerfile.Filename)
 		solutionPath := filepath.Join(dir, dockerfile.Language)
 
-		buildResult := BuildResult{Tag: tag, LastBuiltAt: existingResults[tag].LastBuiltAt}
-
+		var buildResult BuildResult
 		if !shouldRebuild {
 			// Image is up-to-date, skip rebuild
+			buildResult = existingResults[tag]
 			fmt.Print(".")
 		} else {
+			buildResult = BuildResult{Tag: tag, LastBuiltAt: existingResults[tag].LastBuiltAt}
 			fmt.Print("*")
 
 			// Snapshot host stats before build
@@ -210,7 +218,7 @@ func Build() error {
 				buildResult.BlkWriteBytes = &blkWrite
 			}
 
-			buildResult.LastBuiltAt = now
+			buildResult.LastBuiltAt = buildStart.Unix()
 		}
 
 		if err := resultsFile.Encode(buildResult); err != nil {

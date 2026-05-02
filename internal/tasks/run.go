@@ -70,18 +70,18 @@ func loadExistingRunResults() map[string]RunResult {
 }
 
 func RunAll() error {
-	return RunFn(true, nil)
+	return runFn(true, nil)
 }
 
 func Run() error {
-	return RunFn(false, nil)
+	return runFn(false, nil)
 }
 
 func RunSome(lang string) error {
-	return RunFn(false, &lang)
+	return runFn(false, &lang)
 }
 
-func RunFn(all bool, langs *string) error {
+func runFn(all bool, langs *string) error {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 

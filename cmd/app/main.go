@@ -21,6 +21,8 @@ func main() {
 		err = tasks.Stars()
 	case "build":
 		err = tasks.Build()
+	case "build-all":
+		err = tasks.BuildAll()
 	case "weigh":
 		err = tasks.Weigh()
 	case "run":

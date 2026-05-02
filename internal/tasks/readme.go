@@ -273,6 +273,14 @@ func generateReadmeMarkdownFiles(rows []ReadmeRow) error {
 		return err
 	}
 
+	if err := generateBuildResultsReadme(); err != nil {
+		return err
+	}
+
+	if err := generateRunResultsReadme(); err != nil {
+		return err
+	}
+
 	fmt.Printf("wrote: %s\n", readmeFile)
 	return nil
 }
@@ -417,6 +425,209 @@ func extractWikiDisplay(wikiURL string) string {
 		return decoded
 	}
 	return ""
+}
+
+func generateBuildResultsReadme() error {
+	dockerfiles, err := loadJson[Dockerfile](dockerfileList)
+	if err != nil {
+		return err
+	}
+	builds, err := loadJson[BuildResult](buildResultsFile)
+	if err != nil {
+		return err
+	}
+	sizes, err := loadJson[WeighResult](weighResultsFile)
+	if err != nil {
+		return err
+	}
+
+	dockerfileMap := make(map[string]*Dockerfile)
+	for i := range dockerfiles {
+		dockerfileMap[dockerfiles[i].Tag] = &dockerfiles[i]
+	}
+
+	sizeMap := make(map[string]float64)
+	for _, size := range sizes {
+		sizeMap[size.Tag] = size.SizeMB
+	}
+
+	tmpFilename := dockerBuildReadme + ".tmp"
+	file, err := os.Create(tmpFilename)
+	if err != nil {
+		return err
+	}
+	writer := bufio.NewWriter(file)
+	defer func() {
+		writer.Flush()
+		file.Close()
+	}()
+
+	fmt.Fprintln(writer, "| | Language | Runtime | Exec Mode | Size (MB) | Build Time (s) | Net Activity (KB) | Disk Activity (KB) | CPU (s) |")
+	fmt.Fprintln(writer, "|---|---|---|---|---|---|---|---|---|")
+
+	for i, build := range builds {
+		df := dockerfileMap[build.Tag]
+		if df == nil {
+			continue
+		}
+
+		language := df.Language
+		runtime := "-"
+		if df.Runtime != nil {
+			runtime = *df.Runtime
+		}
+		execMode := "-"
+		if df.ExecutionMethod != nil {
+			execMode = *df.ExecutionMethod
+		}
+
+		size := "-"
+		if sizeMB, ok := sizeMap[build.Tag]; ok && sizeMB > 0 {
+			if sizeMB < 10 {
+				size = fmt.Sprintf("%.2f", sizeMB)
+			} else if sizeMB < 100 {
+				size = fmt.Sprintf("%.1f", sizeMB)
+			} else {
+				size = fmt.Sprintf("%.0f", sizeMB)
+			}
+		}
+
+		buildTime := "-"
+		if build.TotalS != nil && *build.TotalS > 0 {
+			buildTime = fmt.Sprintf("%.2f", *build.TotalS)
+		}
+
+		netActivity := "-"
+		if (build.NetRxBytes != nil && *build.NetRxBytes > 0) || (build.NetTxBytes != nil && *build.NetTxBytes > 0) {
+			total := int64(0)
+			if build.NetRxBytes != nil {
+				total += *build.NetRxBytes
+			}
+			if build.NetTxBytes != nil {
+				total += *build.NetTxBytes
+			}
+			netActivity = fmt.Sprintf("%.0f", float64(total)/1024)
+		}
+
+		diskActivity := "-"
+		if (build.BlkReadBytes != nil && *build.BlkReadBytes > 0) || (build.BlkWriteBytes != nil && *build.BlkWriteBytes > 0) {
+			total := int64(0)
+			if build.BlkReadBytes != nil {
+				total += *build.BlkReadBytes
+			}
+			if build.BlkWriteBytes != nil {
+				total += *build.BlkWriteBytes
+			}
+			diskActivity = fmt.Sprintf("%.0f", float64(total)/1024)
+		}
+
+		cpuTime := "-"
+		if build.CpuS != nil && *build.CpuS > 0 {
+			cpuTime = fmt.Sprintf("%.2f", *build.CpuS)
+		}
+
+		fmt.Fprintf(writer, "| %d | %s | %s | %s | %s | %s | %s | %s | %s |\n",
+			i+1, language, runtime, execMode, size, buildTime, netActivity, diskActivity, cpuTime)
+	}
+
+	if err := writer.Flush(); err != nil {
+		return fmt.Errorf("flush: %w", err)
+	}
+	if err := file.Close(); err != nil {
+		return fmt.Errorf("close temp: %w", err)
+	}
+	if err := os.Rename(tmpFilename, dockerBuildReadme); err != nil {
+		return fmt.Errorf("finalize %s: %w", dockerBuildReadme, err)
+	}
+	fmt.Printf("wrote: %s\n", dockerBuildReadme)
+	return nil
+}
+
+func generateRunResultsReadme() error {
+	dockerfiles, err := loadJson[Dockerfile](dockerfileList)
+	if err != nil {
+		return err
+	}
+	runs, err := loadJson[RunResult](runResultsFile)
+	if err != nil {
+		return err
+	}
+
+	dockerfileMap := make(map[string]*Dockerfile)
+	for i := range dockerfiles {
+		dockerfileMap[dockerfiles[i].Tag] = &dockerfiles[i]
+	}
+
+	tmpFilename := dockerRunReadme + ".tmp"
+	file, err := os.Create(tmpFilename)
+	if err != nil {
+		return err
+	}
+	writer := bufio.NewWriter(file)
+	defer func() {
+		writer.Flush()
+		file.Close()
+	}()
+
+	fmt.Fprintln(writer, "| | Language | Runtime | Data Structure | Exec Mode | Seconds | Runtime (s) | Peak RAM (MB) | CPU (s) |")
+	fmt.Fprintln(writer, "|---|---|---|---|---|---|---|---|---|")
+
+	for i, run := range runs {
+		df := dockerfileMap[run.Tag]
+		if df == nil {
+			continue
+		}
+
+		language := df.Language
+		runtime := "-"
+		if df.Runtime != nil {
+			runtime = *df.Runtime
+		}
+		dataStructure := "-"
+		if df.DataStructure != nil {
+			dataStructure = *df.DataStructure
+		}
+		execMode := "-"
+		if df.ExecutionMethod != nil {
+			execMode = *df.ExecutionMethod
+		}
+
+		seconds := "-"
+		if run.Seconds != nil && *run.Seconds > 0 {
+			seconds = fmt.Sprintf("%.4f", *run.Seconds)
+		}
+
+		runtimeS := "-"
+		if run.RuntimeS != nil && *run.RuntimeS > 0 {
+			runtimeS = fmt.Sprintf("%.4f", *run.RuntimeS)
+		}
+
+		peakRAM := "-"
+		if run.PeakRAMBytes != nil && *run.PeakRAMBytes > 0 {
+			mb := float64(*run.PeakRAMBytes) / (1024 * 1024)
+			peakRAM = fmt.Sprintf("%.2f", mb)
+		}
+
+		cpuS := "-"
+		if run.CpuS != nil && *run.CpuS > 0 {
+			cpuS = fmt.Sprintf("%.4f", *run.CpuS)
+		}
+
+		fmt.Fprintf(writer, "| %d | %s | %s | %s | %s | %s | %s | %s | %s |\n",
+			i+1, language, runtime, dataStructure, execMode, seconds, runtimeS, peakRAM, cpuS)
+	}
+
+	if err := writer.Flush(); err != nil {
+		return fmt.Errorf("flush: %w", err)
+	}
+	if err := file.Close(); err != nil {
+		return fmt.Errorf("close temp: %w", err)
+	}
+	if err := os.Rename(tmpFilename, dockerRunReadme); err != nil {
+		return fmt.Errorf("finalize %s: %w", dockerRunReadme, err)
+	}
+	fmt.Printf("wrote: %s\n", dockerRunReadme)
+	return nil
 }
 
 func formatMarkdownRow(row ReadmeRow) string {
