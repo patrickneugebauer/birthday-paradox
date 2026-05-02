@@ -2,10 +2,12 @@ package tasks
 
 import (
 	"bufio"
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 	"os"
 	"os/exec"
 	"os/signal"
@@ -146,9 +148,14 @@ func RunFn(all bool, langs *string) error {
 				iterations = prev
 			}
 
-			output, err := exec.CommandContext(ctx, "docker", "run", "--rm", buildResult.Tag, strconv.Itoa(iterations)).CombinedOutput()
-			if err != nil {
-				// fallback on error, use existing result with updated timestamps
+			name := fmt.Sprintf("bday-%d", time.Now().UnixNano())
+			var outBuf bytes.Buffer
+			cmd := exec.CommandContext(ctx, "docker", "run", "--rm", "--name", name, buildResult.Tag, strconv.Itoa(iterations))
+			cmd.Stdout = &outBuf
+			cmd.Stderr = &outBuf
+
+			start := time.Now()
+			if err := cmd.Start(); err != nil {
 				result = existing
 				result.Tag = buildResult.Tag
 				result.LastRunAt = now
@@ -156,15 +163,42 @@ func RunFn(all bool, langs *string) error {
 					result.ImageUpdatedAt = df.ImageLastCreated
 				}
 			} else {
-				result = parseOutput(string(output))
-				if df.Directory == "solutions" && result.Iterations != nil && *result.Seconds > 0 {
-					ips := int(float64(*result.Iterations) / *result.Seconds)
-					result.IPS = &ips
-				}
-				result.Tag = buildResult.Tag
-				result.LastRunAt = now
-				if hasDockerfile {
-					result.ImageUpdatedAt = df.ImageLastCreated
+				pollCtx, pollCancel := context.WithCancel(ctx)
+				statsCh := collectContainerStats(pollCtx, name)
+
+				runErr := cmd.Wait()
+				elapsed := time.Since(start)
+				pollCancel()
+				cs := <-statsCh
+
+				if runErr != nil {
+					result = existing
+					result.Tag = buildResult.Tag
+					result.LastRunAt = now
+					if hasDockerfile {
+						result.ImageUpdatedAt = df.ImageLastCreated
+					}
+				} else {
+					result = parseOutput(outBuf.String())
+					if df.Directory == "solutions" && result.Iterations != nil && *result.Seconds > 0 {
+						ips := int(float64(*result.Iterations) / *result.Seconds)
+						result.IPS = &ips
+					}
+					result.Tag = buildResult.Tag
+					result.LastRunAt = now
+					if hasDockerfile {
+						result.ImageUpdatedAt = df.ImageLastCreated
+					}
+					runtimeS := math.Round(elapsed.Seconds()*1e6) / 1e6
+					result.RuntimeS = &runtimeS
+					if cs.collected {
+						result.PeakRAMBytes = &cs.peakRAM
+						if cs.firstCPU > 0 && cs.lastCPU > cs.firstCPU {
+							cpuS := float64(cs.lastCPU-cs.firstCPU) / 1e9
+							result.CpuS = &cpuS
+						}
+						result.PollCount = &cs.pollCount
+					}
 				}
 			}
 		} else {

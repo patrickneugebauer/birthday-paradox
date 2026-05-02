@@ -5,12 +5,35 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math"
 	"os"
 	"os/exec"
 	"os/signal"
 	"path/filepath"
+	"strconv"
+	"strings"
 	"time"
 )
+
+func getDockerDPID() (int, error) {
+	// Try reading /var/run/docker.pid first
+	data, err := os.ReadFile("/var/run/docker.pid")
+	if err == nil {
+		pidStr := strings.TrimSpace(string(data))
+		if pid, err := strconv.Atoi(pidStr); err == nil && pid > 0 {
+			return pid, nil
+		}
+	}
+	// Fallback: use pidof
+	out, err := exec.Command("pidof", "dockerd").Output()
+	if err == nil {
+		pidStr := strings.TrimSpace(string(out))
+		if pid, err := strconv.Atoi(pidStr); err == nil && pid > 0 {
+			return pid, nil
+		}
+	}
+	return 0, fmt.Errorf("could not find dockerd PID")
+}
 
 func ShouldRebuild(fileLastModified int64, imageLastCreated int64) bool {
 	if imageLastCreated == 0 {
@@ -57,6 +80,9 @@ func Build() error {
 	existingResults := loadExistingBuildResults()
 	now := time.Now().Unix()
 
+	// Try to get dockerd PID for stats collection
+	dockerdPID, _ := getDockerDPID()
+
 	fmt.Print("build ")
 	ticker := time.NewTicker(refreshInterval * time.Second)
 	defer ticker.Stop()
@@ -101,25 +127,93 @@ func Build() error {
 		dockerfilePath := filepath.Join(dir, dockerfile.Language, dockerfile.Filename)
 		solutionPath := filepath.Join(dir, dockerfile.Language)
 
+		buildResult := BuildResult{Tag: tag, LastBuiltAt: existingResults[tag].LastBuiltAt}
+
 		if !shouldRebuild {
 			// Image is up-to-date, skip rebuild
 			fmt.Print(".")
 		} else {
 			fmt.Print("*")
-			// Run docker build
+
+			// Snapshot host stats before build
+			netRxBefore, netTxBefore := snapshotNetDev()
+			blkReadBefore, blkWriteBefore := snapshotDiskStats()
+
+			// Run docker build with stats collection
+			buildStart := time.Now()
 			buildCmd := exec.CommandContext(ctx, "docker", "build", "-t", tag, "-f", dockerfilePath, solutionPath)
 			buildCmd.Stdout = os.Stdout
 			buildCmd.Stderr = os.Stderr
+
+			// Collect stats during build if dockerd PID available
+			var statsCh chan buildStats
+			var pollCancel context.CancelFunc
+			if dockerdPID > 0 {
+				var pollCtx context.Context
+				pollCtx, pollCancel = context.WithCancel(ctx)
+				statsCh = collectBuildStats(pollCtx, dockerdPID)
+			}
+
 			if err := buildCmd.Run(); err != nil {
+				if pollCancel != nil {
+					pollCancel()
+				}
+				if statsCh != nil {
+					// Drain the channel
+					<-statsCh
+				}
 				return fmt.Errorf("docker build failed for %s: %w", tag, err)
 			}
+
+			// Stop stats collection
+			if pollCancel != nil {
+				pollCancel()
+			}
+
+			// Snapshot host stats after build
+			netRxAfter, netTxAfter := snapshotNetDev()
+			blkReadAfter, blkWriteAfter := snapshotDiskStats()
+
+			// Collect build stats
+			buildElapsed := time.Since(buildStart)
+			totalS := math.Round(buildElapsed.Seconds()*1e6) / 1e6
+			buildResult.TotalS = &totalS
+
+			if statsCh != nil {
+				bs := <-statsCh
+				if bs.peakRAM > 0 {
+					buildResult.PeakRAMBytes = &bs.peakRAM
+				}
+				if bs.firstCPU > 0 && bs.lastCPU > bs.firstCPU {
+					// Need to convert CPU ticks to seconds. Use CLK_TCK (typically 100)
+					cpuS := float64(bs.lastCPU-bs.firstCPU) / 100.0
+					buildResult.CpuS = &cpuS
+				}
+				buildResult.PollCount = &bs.pollCount
+			}
+
+			// Calculate deltas for disk/network
+			netRx := netRxAfter - netRxBefore
+			if netRx > 0 {
+				buildResult.NetRxBytes = &netRx
+			}
+			netTx := netTxAfter - netTxBefore
+			if netTx > 0 {
+				buildResult.NetTxBytes = &netTx
+			}
+			blkRead := blkReadAfter - blkReadBefore
+			if blkRead > 0 {
+				buildResult.BlkReadBytes = &blkRead
+			}
+			blkWrite := blkWriteAfter - blkWriteBefore
+			if blkWrite > 0 {
+				buildResult.BlkWriteBytes = &blkWrite
+			}
+
+			buildResult.LastBuiltAt = now
 		}
 
-		lastBuiltAt := existingResults[tag].LastBuiltAt
-		if shouldRebuild {
-			lastBuiltAt = now
-		}
-		if err := resultsFile.Encode(BuildResult{Tag: tag, LastBuiltAt: lastBuiltAt}); err != nil {
+		if err := resultsFile.Encode(buildResult); err != nil {
 			return fmt.Errorf("encode result: %w", err)
 		}
 	}

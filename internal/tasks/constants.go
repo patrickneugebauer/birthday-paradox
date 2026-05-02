@@ -41,6 +41,7 @@ var (
 	readmeFileByYear     = filepath.Join("tables", "results-by-year.md")
 	readmeFileByStars    = filepath.Join("tables", "results-by-stars.md")
 	readmeFileBySize     = filepath.Join("tables", "results-by-size.md")
+	readmeFileJavaScript = filepath.Join("tables", "javascript-readme.md")
 )
 
 type DockerfileMap = map[string][]string
@@ -70,8 +71,16 @@ type StarResult struct {
 }
 
 type BuildResult struct {
-	Tag         string `json:"tag"`
-	LastBuiltAt int64  `json:"last_built_at"`
+	Tag           string   `json:"tag"`
+	LastBuiltAt   int64    `json:"last_built_at"`
+	TotalS        *float64 `json:"total_s,omitempty"`
+	PeakRAMBytes  *int64   `json:"peak_ram_bytes,omitempty"`
+	CpuS          *float64 `json:"cpu_s,omitempty"`
+	NetRxBytes    *int64   `json:"net_rx_bytes,omitempty"` // receive
+	NetTxBytes    *int64   `json:"net_tx_bytes,omitempty"` // transmit
+	BlkReadBytes  *int64   `json:"blk_read_bytes,omitempty"`
+	BlkWriteBytes *int64   `json:"blk_write_bytes,omitempty"`
+	PollCount     *int64   `json:"poll_count,omitempty"`
 }
 
 type WeighResult struct {
@@ -91,6 +100,10 @@ type RunResult struct {
 	IPS            *int     `json:"ips"`
 	ImageUpdatedAt int64    `json:"image_updated_at"`
 	LastRunAt      int64    `json:"last_run_at"`
+	RuntimeS       *float64 `json:"runtime_s,omitempty"`
+	PeakRAMBytes   *int64   `json:"peak_ram_bytes,omitempty"`
+	CpuS           *float64 `json:"cpu_s,omitempty"` // cpu time consumed
+	PollCount      *int64   `json:"poll_count,omitempty"`
 }
 
 type GithubRepo struct {

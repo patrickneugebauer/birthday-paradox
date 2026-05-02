@@ -267,6 +267,12 @@ func generateReadmeMarkdownFiles(rows []ReadmeRow) error {
 	if err := writeReadmeFile(readmeFileBySize, "Size in MB (smallest first)", rowsBySize); err != nil {
 		return err
 	}
+
+	jsRows := filterByLanguageAndRuntime(rows, "javascript", "node")
+	if err := writeLanguageReadmeFile(readmeFileJavaScript, "JavaScript", jsRows); err != nil {
+		return err
+	}
+
 	fmt.Printf("wrote: %s\n", readmeFile)
 	return nil
 }
@@ -338,6 +344,7 @@ func writeReadmeFile(filename, currentSort string, rows []ReadmeRow) error {
 	yearLink := "results-by-year.md"
 	starsLink := "results-by-stars.md"
 	sizeLink := "results-by-size.md"
+	jsLink := ""
 
 	if !isRoot {
 		perfLink = "../readme.md"
@@ -346,10 +353,15 @@ func writeReadmeFile(filename, currentSort string, rows []ReadmeRow) error {
 		yearLink = "tables/results-by-year.md"
 		starsLink = "tables/results-by-stars.md"
 		sizeLink = "tables/results-by-size.md"
+		jsLink = "tables/javascript-readme.md"
 	}
 
 	// Write navigation bar
-	fmt.Fprintf(writer, "**View by:** | [Performance](%s) | [Language](%s) | [Year](%s) | [Stars](%s) | [Size](%s) |\n", perfLink, langLink, yearLink, starsLink, sizeLink)
+	nav := fmt.Sprintf("**View by:** | [Performance](%s) | [Language](%s) | [Year](%s) | [Stars](%s) | [Size](%s) |", perfLink, langLink, yearLink, starsLink, sizeLink)
+	if jsLink != "" {
+		nav += fmt.Sprintf(" [JavaScript](%s) |", jsLink)
+	}
+	fmt.Fprintln(writer, nav)
 	fmt.Fprintln(writer)
 	fmt.Fprintln(writer, "| | Language | Runtime | Data Type | Exec Mode | Year | Stars | Size (MB) | IPS |")
 	fmt.Fprintln(writer, "|---|---|---|---|---|---|---|---|---|")
@@ -470,6 +482,47 @@ func loadLanguageInfo(path string) (map[string]LanguageInfo, error) {
 		}
 	}
 	return results, nil
+}
+
+func filterByLanguageAndRuntime(rows []ReadmeRow, language, runtime string) []ReadmeRow {
+	var filtered []ReadmeRow
+	for _, row := range rows {
+		if row.Language == language && row.Runtime != nil && *row.Runtime == runtime {
+			filtered = append(filtered, row)
+		}
+	}
+	return filtered
+}
+
+func writeLanguageReadmeFile(filename, language string, rows []ReadmeRow) error {
+	tmpFilename := filename + ".tmp"
+	file, err := os.Create(tmpFilename)
+	if err != nil {
+		return err
+	}
+	writer := bufio.NewWriter(file)
+	defer func() {
+		writer.Flush()
+		file.Close()
+	}()
+
+	fmt.Fprintf(writer, "**[← All languages](../../readme.md)**\n\n")
+	fmt.Fprintf(writer, "# %s\n\n", language)
+	fmt.Fprintln(writer, "| | Data Type | IPS |")
+	fmt.Fprintln(writer, "|---|---|---|")
+
+	for i, row := range rows {
+		fmt.Fprintf(writer, "| %d | %s | %s |\n",
+			i+1, row.FormattedDataType, row.FormattedIPS)
+	}
+
+	if err := writer.Flush(); err != nil {
+		return fmt.Errorf("flush: %w", err)
+	}
+	if err := file.Close(); err != nil {
+		return fmt.Errorf("close temp: %w", err)
+	}
+	return os.Rename(tmpFilename, filename)
 }
 
 func loadJson[T any](path string) ([]T, error) {
