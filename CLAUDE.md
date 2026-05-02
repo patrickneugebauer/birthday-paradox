@@ -1,37 +1,69 @@
 # Claude Code Instructions
 
 ## Project
-See [docs/STRUCTURE.md](docs/STRUCTURE.md) for full layout.
-See [docs/PHILOSOPHY.md](docs/PHILOSOPHY.md) for guiding principles on data collection and resource efficiency.
 `cmd/app/` — Go CLI orchestrating Docker builds and benchmark runs.
 Build: `go build ./cmd/app/`
 
-## Plans
-When you plan, write plans to markdown files in root instead of output in terminal and before implementing. Never describe a plan only in chat. Write the file, then stop — don't prompt or ask to proceed.
-
-Update [STRUCTURE.md](STRUCTURE.md) whenever plans or code changes affect project layout or architecture.
-
-When important philosophical decisions emerge during planning or implementation, prompt to add them to [PHILOSOPHY.md](PHILOSOPHY.md).
-
 ## Go
-Write idiomatic Go.
+Write idiomatic Go. Write idiomatic code, structure code in idiomatic patterns, reach for idiomatic solutions.
 
 ## Responses
-Terse. Lead with the result. Keep this file minimal.
-
-## Models
-Choose lowest cost model for each task unless specified.
-
-## Dockerfiles
-Comment any time you work around unexpected behavior or version constraints (e.g., version that doesn't exist, library incompatibilities, base image limitations, unusual command syntax). Document gotchas so future changes aren't made in ignorance of why the current approach exists.
-
-**Approach:** Make it work first (full build environment, no cleanup), then optimize for size incrementally.
-
-**Before creating a Dockerfile:** Always check the official installation instructions:
-1. **GitHub README first** — check `projects/*/README.md` or repo root README.md for build/install instructions
-2. **GitHub website** — some projects have installation sections in their README
-3. **Official website** — find via GitHub API: run `./app stars`, look up language in `artifacts/star-raw-payloads.jsonl`, check the `homepage` field from the GitHub API response
-4. Only then try to build from source or use package managers
+Terse. Lead with the result.
 
 ## Security
-Never download repos or arbitrary files directly to the filesystem. For testing tarballs or releases, extract and inspect only within Docker containers.
+Never download repos or arbitrary files directly to the filesystem or install libraries. For testing tarballs or releases, extract and inspect only within Docker containers.
+
+# Project Structure
+
+## Top-Level Directories
+
+| Path | Contents |
+|---|---|
+| `hello-worlds/` | New solutions start here.  One folder per language — each contains Dockerfiles and hello world source code |
+| `scaffolds` | 2nd step for new solutions. More refined than hello-worlds, contains most strucutre, missing middle data portion |
+| `solutions/` | Final place for new solutions. |
+| `cmd/app/` | Go CLI entry point (`main.go`) — dispatches commands: `map-files`, `stars`, `build`, `weigh`, `run`, `readme` |
+| `internal/tasks/` | Go task implementations |
+| `tables/` | Generated sorted README views |
+| `artifacts/` | Generated output files (git-ignored): JSONL results, `.sh` command logs |
+
+## Key Files
+
+| File | creator | consumer |
+|---|---|---|
+| `language-info.csv` | source of information for languages | Readme |
+| `artifacts/dockerfiles.jsonl` | MapFiles | Build, Readme |
+| `artifacts/build-results.jsonl` | Build | Weigh, Run |
+| `artifacts/weigh-results.jsonl` | Weigh | Readme |
+| `artifacts/run-results.jsonl` | Run | Readme |
+| `artifacts/star-results.jsonl` | Star | Readme |
+| `artifacts/star-raw-payloads.jsonl` | Star | - |
+| `readme.md` | Readme| - |
+
+## Dockerfile Naming Convention
+
+- Dockerfiles name pattern: `Dockerfile[.{runtime}][.{data_structure}][.{execution_method}]`
+- tag pattern: `bday/{language}:{runtime}[.{data_structure}][.{execution_method}]` all lowercase
+
+Examples:
+- `bday/bash:bash.associative-array`
+- `bday/c:clang.array`
+- `bday/csharp:dotnet.array.build`
+- `bday/chapel:chapel` (when data_structure = `-`)
+
+## Guiding Principles
+- avoid external dependencies when possible
+- fail loudly
+- write to named tempfiles during execution, move over to final file after
+
+## Dockerfile Best Practices
+- Minimize size of final image.
+- Single stage builds.
+- base: Use official image if it exists, if not, build from alpine/debian-slim/node, etc. Choose the slimmest sensible base image: don't fight to get alpine working if it will work on debian slim without a fight.
+
+## Dockerfile sections
+- link at top to where the installation instructions came from
+- from, workdir app (or use what base recommends), run (install), copy, run (compile), entrypoint
+
+## Source code Sections:
+each starts with a comment: vars, data, calcs, format, output

@@ -34,7 +34,7 @@ var (
 	runResultsFile     = filepath.Join(artifactDir, "run-results.jsonl")
 	// readme results
 	readmeResultsFile          = filepath.Join(artifactDir, "readme-results.jsonl")
-	formattedReadmeResultsFile = filepath.Join(artifactDir, "formatted-readme-results.jsonl")
+	formattedReadmeResultsFile = filepath.Join(artifactDir, "readme-formatted-results.jsonl")
 	// readmes
 	readmeFile           = "readme.md"
 	readmeFileByLanguage = filepath.Join("tables", "results-by-language.md")
