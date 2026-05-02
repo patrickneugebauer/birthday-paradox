@@ -558,6 +558,21 @@ func generateRunResultsReadme() error {
 		dockerfileMap[dockerfiles[i].Tag] = &dockerfiles[i]
 	}
 
+	sort.Slice(runs, func(i, j int) bool {
+		ramI := int64(0)
+		if runs[i].PeakRAMBytes != nil {
+			ramI = *runs[i].PeakRAMBytes
+		}
+		ramJ := int64(0)
+		if runs[j].PeakRAMBytes != nil {
+			ramJ = *runs[j].PeakRAMBytes
+		}
+		if ramI == ramJ {
+			return strings.ToLower(dockerfileMap[runs[i].Tag].Language) < strings.ToLower(dockerfileMap[runs[j].Tag].Language)
+		}
+		return ramI < ramJ
+	})
+
 	tmpFilename := dockerRunReadme + ".tmp"
 	file, err := os.Create(tmpFilename)
 	if err != nil {
