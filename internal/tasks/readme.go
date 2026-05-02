@@ -462,7 +462,7 @@ func generateBuildResultsReadme() error {
 		file.Close()
 	}()
 
-	fmt.Fprintln(writer, "| | Language | Runtime | Exec Mode | Size (MB) | Build Time (s) | Net Activity (KB) | Disk Activity (KB) | CPU (s) |")
+	fmt.Fprintln(writer, "| | Language | Runtime | Exec Mode | Size (MB) | Build Time (s) | Net Activity (MB) | Disk Activity (MB) | CPU (s) |")
 	fmt.Fprintln(writer, "|---|---|---|---|---|---|---|---|---|")
 
 	for i, build := range builds {
@@ -506,7 +506,7 @@ func generateBuildResultsReadme() error {
 			if build.NetTxBytes != nil {
 				total += *build.NetTxBytes
 			}
-			netActivity = fmt.Sprintf("%.0f", float64(total)/1024)
+			netActivity = fmt.Sprintf("%.0f", float64(total)/(1024*1024))
 		}
 
 		diskActivity := "-"
@@ -518,7 +518,7 @@ func generateBuildResultsReadme() error {
 			if build.BlkWriteBytes != nil {
 				total += *build.BlkWriteBytes
 			}
-			diskActivity = fmt.Sprintf("%.0f", float64(total)/1024)
+			diskActivity = fmt.Sprintf("%.0f", float64(total)/(1024*1024))
 		}
 
 		cpuTime := "-"
@@ -569,8 +569,8 @@ func generateRunResultsReadme() error {
 		file.Close()
 	}()
 
-	fmt.Fprintln(writer, "| | Language | Runtime | Data Structure | Exec Mode | Seconds | Runtime (s) | Peak RAM (MB) | CPU (s) |")
-	fmt.Fprintln(writer, "|---|---|---|---|---|---|---|---|---|")
+	fmt.Fprintln(writer, "| | Language | Runtime | Data Structure | Exec Mode | Seconds | Runtime (s) | Infra (s) | Peak RAM (MB) | CPU (s) |")
+	fmt.Fprintln(writer, "|---|---|---|---|---|---|---|---|---|---|")
 
 	for i, run := range runs {
 		df := dockerfileMap[run.Tag]
@@ -594,12 +594,18 @@ func generateRunResultsReadme() error {
 
 		seconds := "-"
 		if run.Seconds != nil && *run.Seconds > 0 {
-			seconds = fmt.Sprintf("%.4f", *run.Seconds)
+			seconds = fmt.Sprintf("%.1f", *run.Seconds)
 		}
 
 		runtimeS := "-"
 		if run.RuntimeS != nil && *run.RuntimeS > 0 {
-			runtimeS = fmt.Sprintf("%.4f", *run.RuntimeS)
+			runtimeS = fmt.Sprintf("%.1f", *run.RuntimeS)
+		}
+
+		infraTime := "-"
+		if run.RuntimeS != nil && run.Seconds != nil && *run.RuntimeS > 0 && *run.Seconds > 0 {
+			infra := *run.RuntimeS - *run.Seconds
+			infraTime = fmt.Sprintf("%.1f", infra)
 		}
 
 		peakRAM := "-"
@@ -610,11 +616,11 @@ func generateRunResultsReadme() error {
 
 		cpuS := "-"
 		if run.CpuS != nil && *run.CpuS > 0 {
-			cpuS = fmt.Sprintf("%.4f", *run.CpuS)
+			cpuS = fmt.Sprintf("%.2f", *run.CpuS)
 		}
 
-		fmt.Fprintf(writer, "| %d | %s | %s | %s | %s | %s | %s | %s | %s |\n",
-			i+1, language, runtime, dataStructure, execMode, seconds, runtimeS, peakRAM, cpuS)
+		fmt.Fprintf(writer, "| %d | %s | %s | %s | %s | %s | %s | %s | %s | %s |\n",
+			i+1, language, runtime, dataStructure, execMode, seconds, runtimeS, infraTime, peakRAM, cpuS)
 	}
 
 	if err := writer.Flush(); err != nil {

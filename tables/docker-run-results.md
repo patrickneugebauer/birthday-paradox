@@ -1,108 +1,108 @@
-| | Language | Runtime | Data Structure | Exec Mode | Seconds | Runtime (s) | Peak RAM (MB) | CPU (s) |
-|---|---|---|---|---|---|---|---|---|
-| 1 | bash | bash | associative-array | - | 1.0553 | 1.8857 | 4.14 | 1.0621 |
-| 2 | c | clang | array | - | 1.1432 | 1.8609 | 0.36 | 1.1189 |
-| 3 | c | gcc | array | - | 1.0556 | 1.7676 | 0.38 | 1.0332 |
-| 4 | clojure | jvm | vector | - | 0.7800 | 3.2496 | 282.40 | 5.1094 |
-| 5 | coffeescript | node | Array | - | 0.7588 | 1.7381 | 60.89 | 0.8231 |
-| 6 | common-lisp | sbcl | list | - | 1.1650 | 2.0634 | 258.75 | 1.1826 |
-| 7 | cpp | clang | array | - | 1.2109 | 1.9201 | 0.36 | 1.1864 |
-| 8 | cpp | gcc | array | - | 1.1322 | 1.8492 | 0.38 | 1.1084 |
-| 9 | crystal | crystal | Array | - | 1.2384 | 1.9939 | 2.30 | 1.2401 |
-| 10 | csharp | dotnet | array | build | 0.4632 | 1.3876 | 36.58 | 0.5175 |
-| 11 | csharp | dotnet | array | publish | 0.2170 | 1.1516 | 24.85 | 0.3325 |
-| 12 | csharp | dotnet | array | run | 0.8603 | 11.2933 | 309.10 | 13.5913 |
-| 13 | d | dmd | array | - | 1.2580 | 2.0270 | 4.71 | 1.2629 |
-| 14 | d | ldc | array | - | 1.2584 | 2.0350 | 2.49 | 1.2599 |
-| 15 | dart | dart | List | - | 1.1042 | 2.4359 | 166.03 | 1.8415 |
-| 16 | elixir | beam | list | mix-build | 1.0920 | 2.3961 | 208.48 | 1.8546 |
-| 17 | elixir | beam | list | script | 1.2077 | 3.0097 | 234.27 | 2.5993 |
-| 18 | erlang | beam | list | - | 1.1098 | 3.1722 | 140.16 | 1.5810 |
-| 19 | fish | fish | array | - | 0.7777 | 1.5802 | 6.98 | 0.8212 |
-| 20 | fsharp | dotnet | Set | - | 0.5635 | 1.4357 | 11.14 | 0.6301 |
-| 21 | gambas | gambas | - | - | 1.3458 | 2.1205 | 4.03 | 1.3475 |
-| 22 | go | gc | array | - | 1.1002 | 1.8365 | 3.30 | 1.1084 |
-| 23 | go | gc | array | run | 1.1646 | 9.6805 | 358.58 | 23.0017 |
-| 24 | groovy | groovy | array | - | 0.5190 | 4.0659 | 193.56 | 6.4176 |
-| 25 | hack | hhvm | array | - | 1.0466 | 3.8099 | 173.94 | 2.4689 |
-| 26 | haskell | ghc | IntSet | - | 1.0870 | 1.8907 | 7.73 | 1.0898 |
-| 27 | java | jvm | array | - | 0.2570 | 1.0742 | 120.04 | 0.3711 |
-| 28 | javascript | bun | Array | - | 0.8882 | 1.8770 | 43.66 | 0.9822 |
-| 29 | javascript | deno | Array | - | 0.9728 | 2.2361 | 86.94 | 1.1258 |
-| 30 | javascript | node | Array-dense | - | 1.0420 | 2.1545 | 67.16 | 1.1703 |
-| 31 | javascript | node | Array-packed | - | 0.9241 | 1.7030 | 12.29 | 0.9685 |
-| 32 | javascript | node | Array-sparse | - | 0.8987 | 1.6699 | 12.28 | 0.9355 |
-| 33 | javascript | node | Arrays-dense | - | 0.8968 | 1.6797 | 14.59 | 0.9375 |
-| 34 | javascript | node | Arrays-packed | - | 0.9002 | 1.7022 | 12.75 | 0.9580 |
-| 35 | javascript | node | Arrays-sparse | - | 0.9072 | 1.6898 | 14.84 | 0.9448 |
-| 36 | javascript | node | List-index | - | 0.9167 | 1.7095 | 12.36 | 0.9622 |
-| 37 | javascript | node | List-push | - | 0.9455 | 1.7322 | 12.58 | 0.9839 |
-| 38 | javascript | node | Lists | - | 0.8915 | 1.6976 | 12.55 | 0.9342 |
-| 39 | javascript | node | Map | - | 0.9508 | 1.7226 | 12.20 | 0.9977 |
-| 40 | javascript | node | Map-clear | - | 0.9115 | 1.7498 | 12.28 | 0.9730 |
-| 41 | javascript | node | Maps | - | 0.9155 | 1.7033 | 12.25 | 0.9570 |
-| 42 | javascript | node | Object | - | 0.9317 | 1.7447 | 12.24 | 0.9836 |
-| 43 | javascript | node | Objects | - | 0.8635 | 1.6720 | 14.57 | 0.9098 |
-| 44 | javascript | node | Set | - | 0.9192 | 1.6984 | 12.29 | 0.9653 |
-| 45 | javascript | node | Sets | - | 0.9196 | 1.6721 | 12.21 | 0.9603 |
-| 46 | javascript | node | TypedArray | - | 0.8954 | 1.6864 | 12.27 | 0.9335 |
-| 47 | javascript | node | TypedArray-fill | - | 0.9509 | 1.7303 | 12.43 | 0.9948 |
-| 48 | javascript | node | TypedArray-list-fill | - | 0.8984 | 1.7283 | 12.20 | 0.9345 |
-| 49 | javascript | node | TypedArray-list-set | - | 0.8952 | 1.7188 | 12.20 | 0.9520 |
-| 50 | javascript | node | TypedArray-set | - | 0.8649 | 1.6835 | 12.25 | 0.9008 |
-| 51 | javascript | node | TypedArrays | - | 0.9438 | 1.7279 | 13.54 | 1.3020 |
-| 52 | javascript | node | TypedArrays-lists | - | 0.9109 | 1.7011 | 12.42 | 0.9575 |
-| 53 | javascript | txiki | Array | - | 0.9340 | 1.7969 | 8.85 | 0.9500 |
-| 54 | julia | julia | array | - | 0.2955 | 3.4282 | 353.35 | 2.1179 |
-| 55 | kotlin | jvm | IntArray | - | 0.4368 | 1.5551 | 182.95 | 0.7451 |
-| 56 | lua | lua | table | - | 1.2115 | 1.9533 | 1.60 | 1.2142 |
-| 57 | nim | nim | array | - | 1.1148 | 1.8866 | 3.14 | 1.1165 |
-| 58 | ocaml | ocaml | list | ocamlopt | 1.0892 | 1.8483 | 8.18 | 1.0906 |
-| 59 | ocaml | ocaml | list | opam-exec | 0.8927 | 2.3953 | 157.75 | 1.4732 |
-| 60 | octave | octave | matrix | - | 1.2340 | 2.4533 | 65.16 | 1.4961 |
-| 61 | pascal | fpc | array | - | 1.0681 | 1.7980 | 1.05 | 1.0544 |
-| 62 | perl | perl | array | - | 1.3541 | 2.1540 | 5.25 | 1.3754 |
-| 63 | php | php | array | - | 1.0602 | 1.9638 | 22.46 | 1.1184 |
-| 64 | powershell | dotnet | array | - | 1.3518 | 3.9935 | 84.55 | 3.9988 |
-| 65 | python | cpython | set | - | 1.2237 | 2.2634 | 12.14 | 1.3796 |
-| 66 | r | r | vector | - | 1.2834 | 2.6658 | 89.50 | 2.2601 |
-| 67 | racket | racket | list | - | 1.1590 | 2.8741 | 198.17 | 1.9029 |
-| 68 | raku | rakudo | array | - | 1.1672 | 2.7382 | 167.34 | 1.9550 |
-| 69 | rescript | node | list | - | 0.8850 | 1.7682 | 251.77 | 1.1367 |
-| 70 | ruby | ruby | Array | - | 1.2848 | 2.2606 | 30.16 | 1.4347 |
-| 71 | rust | rustc | array | - | 1.1418 | 1.9083 | 1.66 | 1.1410 |
-| 72 | scala | jvm | Seq | - | 0.3610 | 1.9779 | 149.67 | 1.8048 |
-| 73 | scheme | scheme | list | - | 1.1310 | 2.0199 | 152.54 | 1.2348 |
-| 74 | smalltalk | smalltalk | Array | - | 1.2408 | 2.1212 | 10.70 | 1.2634 |
-| 75 | swift | swift | Array | - | 1.2426 | 2.1407 | 21.67 | 1.2756 |
-| 76 | typescript | node | Array | - | 0.9253 | 1.7159 | 14.72 | 0.9572 |
-| 77 | typescript | node | Array | ts-node | 0.8803 | 4.1864 | 290.04 | 5.5773 |
-| 78 | v | v | array | - | 1.1401 | 1.9085 | 1.57 | 1.1394 |
-| 79 | vala | gcc | array | - | 1.2191 | 1.9969 | 2.32 | 1.2218 |
-| 80 | vbnet | dotnet | array | - | 0.5488 | 1.3749 | 7.87 | 0.5961 |
-| 81 | clojurescript | node | vector | - | 0.0000 | 1.3438 | 77.95 | 0.3963 |
-| 82 | berry | berry | - | - | - | 0.7637 | - | - |
-| 83 | chapel | chapel | - | - | - | - | - | - |
-| 84 | dash | dash | - | - | - | 0.7453 | - | - |
-| 85 | elvish | elvish | - | - | - | 0.8138 | 12.45 | 0.0168 |
-| 86 | fennel | fennel | - | - | - | - | - | - |
-| 87 | fortran | gfortran | - | - | - | 0.7544 | 1.18 | - |
-| 88 | freebasic | freebasic | - | - | - | 0.7511 | 2.99 | 0.0020 |
-| 89 | gleam | gleam | - | - | - | - | - | - |
-| 90 | haxe | - | - | - | - | 0.9959 | 44.04 | 0.0948 |
-| 91 | hilbish | hilbish | - | - | - | 0.8814 | 15.47 | 0.0425 |
-| 92 | ion | ion | - | - | - | 0.7628 | 4.16 | 0.0052 |
-| 93 | livescript | node | - | - | - | 0.7823 | 11.60 | 0.0648 |
-| 94 | luau | luau | - | - | - | - | - | - |
-| 95 | moonscript | moonscript | - | - | - | 0.7988 | 3.91 | 0.0519 |
-| 96 | murex | murex | - | - | - | 0.9232 | 24.79 | 0.0808 |
-| 97 | nushell | nushell | - | - | - | 0.8382 | 20.77 | 0.0349 |
-| 98 | odin | odin | - | - | - | 2.3329 | 559.10 | 2.6517 |
-| 99 | oil | oil | - | - | - | 0.8245 | 5.64 | 0.0115 |
-| 100 | pharo | pharo | - | - | - | 1.5466 | 165.73 | 0.5388 |
-| 101 | squirrel | squirrel | - | - | - | 0.7849 | - | - |
-| 102 | teal | teal | - | - | - | 0.8048 | 5.23 | 0.0862 |
-| 103 | wren | wren | - | - | - | 0.7060 | 0.75 | - |
-| 104 | xonsh | python | - | - | - | 1.5299 | 55.96 | 0.5156 |
-| 105 | zig | zig | - | - | - | 0.7470 | 1.70 | 0.0005 |
-| 106 | zsh | zsh | - | - | - | 0.7626 | 1.57 | 0.0056 |
+| | Language | Runtime | Data Structure | Exec Mode | Seconds | Runtime (s) | Infra (s) | Peak RAM (MB) | CPU (s) |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | bash | bash | associative-array | - | 1.1 | 1.9 | 0.8 | 4.14 | 1.06 |
+| 2 | c | clang | array | - | 1.1 | 1.9 | 0.7 | 0.36 | 1.12 |
+| 3 | c | gcc | array | - | 1.1 | 1.8 | 0.7 | 0.38 | 1.03 |
+| 4 | clojure | jvm | vector | - | 0.8 | 3.2 | 2.5 | 282.40 | 5.11 |
+| 5 | coffeescript | node | Array | - | 0.8 | 1.7 | 1.0 | 60.89 | 0.82 |
+| 6 | common-lisp | sbcl | list | - | 1.2 | 2.1 | 0.9 | 258.75 | 1.18 |
+| 7 | cpp | clang | array | - | 1.2 | 1.9 | 0.7 | 0.36 | 1.19 |
+| 8 | cpp | gcc | array | - | 1.1 | 1.8 | 0.7 | 0.38 | 1.11 |
+| 9 | crystal | crystal | Array | - | 1.2 | 2.0 | 0.8 | 2.30 | 1.24 |
+| 10 | csharp | dotnet | array | build | 0.5 | 1.4 | 0.9 | 36.58 | 0.52 |
+| 11 | csharp | dotnet | array | publish | 0.2 | 1.2 | 0.9 | 24.85 | 0.33 |
+| 12 | csharp | dotnet | array | run | 0.9 | 11.3 | 10.4 | 309.10 | 13.59 |
+| 13 | d | dmd | array | - | 1.3 | 2.0 | 0.8 | 4.71 | 1.26 |
+| 14 | d | ldc | array | - | 1.3 | 2.0 | 0.8 | 2.49 | 1.26 |
+| 15 | dart | dart | List | - | 1.1 | 2.4 | 1.3 | 166.03 | 1.84 |
+| 16 | elixir | beam | list | mix-build | 1.1 | 2.4 | 1.3 | 208.48 | 1.85 |
+| 17 | elixir | beam | list | script | 1.2 | 3.0 | 1.8 | 234.27 | 2.60 |
+| 18 | erlang | beam | list | - | 1.1 | 3.2 | 2.1 | 140.16 | 1.58 |
+| 19 | fish | fish | array | - | 0.8 | 1.6 | 0.8 | 6.98 | 0.82 |
+| 20 | fsharp | dotnet | Set | - | 0.6 | 1.4 | 0.9 | 11.14 | 0.63 |
+| 21 | gambas | gambas | - | - | 1.3 | 2.1 | 0.8 | 4.03 | 1.35 |
+| 22 | go | gc | array | - | 1.1 | 1.8 | 0.7 | 3.30 | 1.11 |
+| 23 | go | gc | array | run | 1.2 | 9.7 | 8.5 | 358.58 | 23.00 |
+| 24 | groovy | groovy | array | - | 0.5 | 4.1 | 3.5 | 193.56 | 6.42 |
+| 25 | hack | hhvm | array | - | 1.0 | 3.8 | 2.8 | 173.94 | 2.47 |
+| 26 | haskell | ghc | IntSet | - | 1.1 | 1.9 | 0.8 | 7.73 | 1.09 |
+| 27 | java | jvm | array | - | 0.3 | 1.1 | 0.8 | 120.04 | 0.37 |
+| 28 | javascript | bun | Array | - | 0.9 | 1.9 | 1.0 | 43.66 | 0.98 |
+| 29 | javascript | deno | Array | - | 1.0 | 2.2 | 1.3 | 86.94 | 1.13 |
+| 30 | javascript | node | Array-dense | - | 1.0 | 2.2 | 1.1 | 67.16 | 1.17 |
+| 31 | javascript | node | Array-packed | - | 0.9 | 1.7 | 0.8 | 12.29 | 0.97 |
+| 32 | javascript | node | Array-sparse | - | 0.9 | 1.7 | 0.8 | 12.28 | 0.94 |
+| 33 | javascript | node | Arrays-dense | - | 0.9 | 1.7 | 0.8 | 14.59 | 0.94 |
+| 34 | javascript | node | Arrays-packed | - | 0.9 | 1.7 | 0.8 | 12.75 | 0.96 |
+| 35 | javascript | node | Arrays-sparse | - | 0.9 | 1.7 | 0.8 | 14.84 | 0.94 |
+| 36 | javascript | node | List-index | - | 0.9 | 1.7 | 0.8 | 12.36 | 0.96 |
+| 37 | javascript | node | List-push | - | 0.9 | 1.7 | 0.8 | 12.58 | 0.98 |
+| 38 | javascript | node | Lists | - | 0.9 | 1.7 | 0.8 | 12.55 | 0.93 |
+| 39 | javascript | node | Map | - | 1.0 | 1.7 | 0.8 | 12.20 | 1.00 |
+| 40 | javascript | node | Map-clear | - | 0.9 | 1.7 | 0.8 | 12.28 | 0.97 |
+| 41 | javascript | node | Maps | - | 0.9 | 1.7 | 0.8 | 12.25 | 0.96 |
+| 42 | javascript | node | Object | - | 0.9 | 1.7 | 0.8 | 12.24 | 0.98 |
+| 43 | javascript | node | Objects | - | 0.9 | 1.7 | 0.8 | 14.57 | 0.91 |
+| 44 | javascript | node | Set | - | 0.9 | 1.7 | 0.8 | 12.29 | 0.97 |
+| 45 | javascript | node | Sets | - | 0.9 | 1.7 | 0.8 | 12.21 | 0.96 |
+| 46 | javascript | node | TypedArray | - | 0.9 | 1.7 | 0.8 | 12.27 | 0.93 |
+| 47 | javascript | node | TypedArray-fill | - | 1.0 | 1.7 | 0.8 | 12.43 | 0.99 |
+| 48 | javascript | node | TypedArray-list-fill | - | 0.9 | 1.7 | 0.8 | 12.20 | 0.93 |
+| 49 | javascript | node | TypedArray-list-set | - | 0.9 | 1.7 | 0.8 | 12.20 | 0.95 |
+| 50 | javascript | node | TypedArray-set | - | 0.9 | 1.7 | 0.8 | 12.25 | 0.90 |
+| 51 | javascript | node | TypedArrays | - | 0.9 | 1.7 | 0.8 | 13.54 | 1.30 |
+| 52 | javascript | node | TypedArrays-lists | - | 0.9 | 1.7 | 0.8 | 12.42 | 0.96 |
+| 53 | javascript | txiki | Array | - | 0.9 | 1.8 | 0.9 | 8.85 | 0.95 |
+| 54 | julia | julia | array | - | 0.3 | 3.4 | 3.1 | 353.35 | 2.12 |
+| 55 | kotlin | jvm | IntArray | - | 0.4 | 1.6 | 1.1 | 182.95 | 0.75 |
+| 56 | lua | lua | table | - | 1.2 | 2.0 | 0.7 | 1.60 | 1.21 |
+| 57 | nim | nim | array | - | 1.1 | 1.9 | 0.8 | 3.14 | 1.12 |
+| 58 | ocaml | ocaml | list | ocamlopt | 1.1 | 1.8 | 0.8 | 8.18 | 1.09 |
+| 59 | ocaml | ocaml | list | opam-exec | 0.9 | 2.4 | 1.5 | 157.75 | 1.47 |
+| 60 | octave | octave | matrix | - | 1.2 | 2.5 | 1.2 | 65.16 | 1.50 |
+| 61 | pascal | fpc | array | - | 1.1 | 1.8 | 0.7 | 1.05 | 1.05 |
+| 62 | perl | perl | array | - | 1.4 | 2.2 | 0.8 | 5.25 | 1.38 |
+| 63 | php | php | array | - | 1.1 | 2.0 | 0.9 | 22.46 | 1.12 |
+| 64 | powershell | dotnet | array | - | 1.4 | 4.0 | 2.6 | 84.55 | 4.00 |
+| 65 | python | cpython | set | - | 1.2 | 2.3 | 1.0 | 12.14 | 1.38 |
+| 66 | r | r | vector | - | 1.3 | 2.7 | 1.4 | 89.50 | 2.26 |
+| 67 | racket | racket | list | - | 1.2 | 2.9 | 1.7 | 198.17 | 1.90 |
+| 68 | raku | rakudo | array | - | 1.2 | 2.7 | 1.6 | 167.34 | 1.95 |
+| 69 | rescript | node | list | - | 0.9 | 1.8 | 0.9 | 251.77 | 1.14 |
+| 70 | ruby | ruby | Array | - | 1.3 | 2.3 | 1.0 | 30.16 | 1.43 |
+| 71 | rust | rustc | array | - | 1.1 | 1.9 | 0.8 | 1.66 | 1.14 |
+| 72 | scala | jvm | Seq | - | 0.4 | 2.0 | 1.6 | 149.67 | 1.80 |
+| 73 | scheme | scheme | list | - | 1.1 | 2.0 | 0.9 | 152.54 | 1.23 |
+| 74 | smalltalk | smalltalk | Array | - | 1.2 | 2.1 | 0.9 | 10.70 | 1.26 |
+| 75 | swift | swift | Array | - | 1.2 | 2.1 | 0.9 | 21.67 | 1.28 |
+| 76 | typescript | node | Array | - | 0.9 | 1.7 | 0.8 | 14.72 | 0.96 |
+| 77 | typescript | node | Array | ts-node | 0.9 | 4.2 | 3.3 | 290.04 | 5.58 |
+| 78 | v | v | array | - | 1.1 | 1.9 | 0.8 | 1.57 | 1.14 |
+| 79 | vala | gcc | array | - | 1.2 | 2.0 | 0.8 | 2.32 | 1.22 |
+| 80 | vbnet | dotnet | array | - | 0.5 | 1.4 | 0.8 | 7.87 | 0.60 |
+| 81 | clojurescript | node | vector | - | 0.0 | 1.3 | 1.3 | 77.95 | 0.40 |
+| 82 | berry | berry | - | - | - | 0.8 | - | - | - |
+| 83 | chapel | chapel | - | - | - | - | - | - | - |
+| 84 | dash | dash | - | - | - | 0.7 | - | - | - |
+| 85 | elvish | elvish | - | - | - | 0.8 | - | 12.45 | 0.02 |
+| 86 | fennel | fennel | - | - | - | - | - | - | - |
+| 87 | fortran | gfortran | - | - | - | 0.8 | - | 1.18 | - |
+| 88 | freebasic | freebasic | - | - | - | 0.8 | - | 2.99 | 0.00 |
+| 89 | gleam | gleam | - | - | - | - | - | - | - |
+| 90 | haxe | - | - | - | - | 1.0 | - | 44.04 | 0.09 |
+| 91 | hilbish | hilbish | - | - | - | 0.9 | - | 15.47 | 0.04 |
+| 92 | ion | ion | - | - | - | 0.8 | - | 4.16 | 0.01 |
+| 93 | livescript | node | - | - | - | 0.8 | - | 11.60 | 0.06 |
+| 94 | luau | luau | - | - | - | - | - | - | - |
+| 95 | moonscript | moonscript | - | - | - | 0.8 | - | 3.91 | 0.05 |
+| 96 | murex | murex | - | - | - | 0.9 | - | 24.79 | 0.08 |
+| 97 | nushell | nushell | - | - | - | 0.8 | - | 20.77 | 0.03 |
+| 98 | odin | odin | - | - | - | 2.3 | - | 559.10 | 2.65 |
+| 99 | oil | oil | - | - | - | 0.8 | - | 5.64 | 0.01 |
+| 100 | pharo | pharo | - | - | - | 1.5 | - | 165.73 | 0.54 |
+| 101 | squirrel | squirrel | - | - | - | 0.8 | - | - | - |
+| 102 | teal | teal | - | - | - | 0.8 | - | 5.23 | 0.09 |
+| 103 | wren | wren | - | - | - | 0.7 | - | 0.75 | - |
+| 104 | xonsh | python | - | - | - | 1.5 | - | 55.96 | 0.52 |
+| 105 | zig | zig | - | - | - | 0.7 | - | 1.70 | 0.00 |
+| 106 | zsh | zsh | - | - | - | 0.8 | - | 1.57 | 0.01 |
