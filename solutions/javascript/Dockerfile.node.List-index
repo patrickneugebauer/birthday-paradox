@@ -1,0 +1,6 @@
+FROM node:alpine
+WORKDIR /app
+
+COPY loops-list-index.js .
+
+ENTRYPOINT ["node", "loops-list-index.js"]

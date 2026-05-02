@@ -1,0 +1,6 @@
+FROM node:alpine
+WORKDIR /app
+
+COPY loops-arrays-packed.js .
+
+ENTRYPOINT ["node", "loops-arrays-packed.js"]

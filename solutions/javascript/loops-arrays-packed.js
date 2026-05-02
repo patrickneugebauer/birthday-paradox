@@ -7,7 +7,7 @@ function simulate() {
   let count = 0
   // loop
   for (let i = 0; i < iterations; i++) {
-    const arr = new Int8Array(365);
+    const arr = new Array(365).fill(-1)
     for (let j = 0; j < sampleSize; j++) {
       const rand = Math.floor(Math.random() * 365)
       if (arr[rand] === 1) {

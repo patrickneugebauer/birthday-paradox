@@ -1,0 +1,6 @@
+FROM node:alpine
+WORKDIR /app
+
+COPY loops-arrays-sparse.js .
+
+ENTRYPOINT ["node", "loops-arrays-sparse.js"]

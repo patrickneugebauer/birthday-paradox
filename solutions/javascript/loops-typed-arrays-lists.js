@@ -7,14 +7,14 @@ function simulate() {
   let count = 0
   // loop
   for (let i = 0; i < iterations; i++) {
-    const arr = new Int8Array(365);
+    const list = new Int16Array(sampleSize);
     for (let j = 0; j < sampleSize; j++) {
       const rand = Math.floor(Math.random() * 365)
-      if (arr[rand] === 1) {
+      if (list.includes(rand)) {
         count++
         break
       } else {
-        arr[rand] = 1
+        list[j] = rand
       }
     }
   }

@@ -1,0 +1,6 @@
+FROM node:alpine
+WORKDIR /app
+
+COPY loops-arrays-dense.js .
+
+ENTRYPOINT ["node", "loops-arrays-dense.js"]

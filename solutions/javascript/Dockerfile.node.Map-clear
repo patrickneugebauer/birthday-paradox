@@ -1,0 +1,6 @@
+FROM node:alpine
+WORKDIR /app
+
+COPY loops-map-clear.js .
+
+ENTRYPOINT ["node", "loops-map-clear.js"]
