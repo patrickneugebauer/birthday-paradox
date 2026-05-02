@@ -506,7 +506,7 @@ func generateBuildResultsReadme() error {
 			if build.NetTxBytes != nil {
 				total += *build.NetTxBytes
 			}
-			netActivity = fmt.Sprintf("%.0f", float64(total)/(1024*1024))
+			netActivity = fmt.Sprintf("%.2f", float64(total)/(1024*1024))
 		}
 
 		diskActivity := "-"
