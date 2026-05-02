@@ -353,15 +353,21 @@ func writeReadmeFile(filename, currentSort string, rows []ReadmeRow) error {
 	starsLink := "results-by-stars.md"
 	sizeLink := "results-by-size.md"
 	jsLink := ""
+	buildLink := ""
+	runLink := ""
 
 	if !isRoot {
 		perfLink = "../readme.md"
+		buildLink = "docker-build-results.md"
+		runLink = "docker-run-results.md"
 	} else {
 		langLink = "tables/results-by-language.md"
 		yearLink = "tables/results-by-year.md"
 		starsLink = "tables/results-by-stars.md"
 		sizeLink = "tables/results-by-size.md"
 		jsLink = "tables/javascript-readme.md"
+		buildLink = "tables/docker-build-results.md"
+		runLink = "tables/docker-run-results.md"
 	}
 
 	// Write navigation bar
@@ -369,6 +375,7 @@ func writeReadmeFile(filename, currentSort string, rows []ReadmeRow) error {
 	if jsLink != "" {
 		nav += fmt.Sprintf(" [JavaScript](%s) |", jsLink)
 	}
+	nav += fmt.Sprintf(" [Build Stats](%s) | [Run Stats](%s) |", buildLink, runLink)
 	fmt.Fprintln(writer, nav)
 	fmt.Fprintln(writer)
 	fmt.Fprintln(writer, "| | Language | Runtime | Data Type | Exec Mode | Year | Stars | Size (MB) | IPS |")
@@ -451,6 +458,15 @@ func generateBuildResultsReadme() error {
 		sizeMap[size.Tag] = size.SizeMB
 	}
 
+	sort.Slice(builds, func(i, j int) bool {
+		sizeI := sizeMap[builds[i].Tag]
+		sizeJ := sizeMap[builds[j].Tag]
+		if sizeI == sizeJ {
+			return strings.ToLower(dockerfileMap[builds[i].Tag].Language) < strings.ToLower(dockerfileMap[builds[j].Tag].Language)
+		}
+		return sizeI < sizeJ
+	})
+
 	tmpFilename := dockerBuildReadme + ".tmp"
 	file, err := os.Create(tmpFilename)
 	if err != nil {
@@ -461,6 +477,11 @@ func generateBuildResultsReadme() error {
 		writer.Flush()
 		file.Close()
 	}()
+
+	// Write navigation bar
+	nav := "**View by:** | [Performance](../readme.md) | [Language](results-by-language.md) | [Year](results-by-year.md) | [Stars](results-by-stars.md) | [Size](results-by-size.md) | [Build Stats](docker-build-results.md) | [Run Stats](docker-run-results.md) |"
+	fmt.Fprintln(writer, nav)
+	fmt.Fprintln(writer)
 
 	fmt.Fprintln(writer, "| | Language | Runtime | Exec Mode | Size (MB) | Build Time (s) | Net Activity (MB) | Disk Activity (MB) | CPU (s) |")
 	fmt.Fprintln(writer, "|---|---|---|---|---|---|---|---|---|")
@@ -493,12 +514,12 @@ func generateBuildResultsReadme() error {
 		}
 
 		buildTime := "-"
-		if build.TotalS != nil && *build.TotalS > 0 {
+		if build.TotalS != nil {
 			buildTime = fmt.Sprintf("%.2f", *build.TotalS)
 		}
 
 		netActivity := "-"
-		if (build.NetRxBytes != nil && *build.NetRxBytes > 0) || (build.NetTxBytes != nil && *build.NetTxBytes > 0) {
+		if build.NetRxBytes != nil || build.NetTxBytes != nil {
 			total := int64(0)
 			if build.NetRxBytes != nil {
 				total += *build.NetRxBytes
@@ -510,7 +531,7 @@ func generateBuildResultsReadme() error {
 		}
 
 		diskActivity := "-"
-		if (build.BlkReadBytes != nil && *build.BlkReadBytes > 0) || (build.BlkWriteBytes != nil && *build.BlkWriteBytes > 0) {
+		if build.BlkReadBytes != nil || build.BlkWriteBytes != nil {
 			total := int64(0)
 			if build.BlkReadBytes != nil {
 				total += *build.BlkReadBytes
@@ -522,7 +543,7 @@ func generateBuildResultsReadme() error {
 		}
 
 		cpuTime := "-"
-		if build.CpuS != nil && *build.CpuS > 0 {
+		if build.CpuS != nil {
 			cpuTime = fmt.Sprintf("%.2f", *build.CpuS)
 		}
 
@@ -584,6 +605,11 @@ func generateRunResultsReadme() error {
 		file.Close()
 	}()
 
+	// Write navigation bar
+	nav := "**View by:** | [Performance](../readme.md) | [Language](results-by-language.md) | [Year](results-by-year.md) | [Stars](results-by-stars.md) | [Size](results-by-size.md) | [Build Stats](docker-build-results.md) | [Run Stats](docker-run-results.md) |"
+	fmt.Fprintln(writer, nav)
+	fmt.Fprintln(writer)
+
 	fmt.Fprintln(writer, "| | Language | Runtime | Data Structure | Exec Mode | Seconds | Runtime (s) | Infra (s) | Peak RAM (MB) | CPU (s) |")
 	fmt.Fprintln(writer, "|---|---|---|---|---|---|---|---|---|---|")
 
@@ -608,29 +634,29 @@ func generateRunResultsReadme() error {
 		}
 
 		seconds := "-"
-		if run.Seconds != nil && *run.Seconds > 0 {
+		if run.Seconds != nil {
 			seconds = fmt.Sprintf("%.1f", *run.Seconds)
 		}
 
 		runtimeS := "-"
-		if run.RuntimeS != nil && *run.RuntimeS > 0 {
+		if run.RuntimeS != nil {
 			runtimeS = fmt.Sprintf("%.1f", *run.RuntimeS)
 		}
 
 		infraTime := "-"
-		if run.RuntimeS != nil && run.Seconds != nil && *run.RuntimeS > 0 && *run.Seconds > 0 {
+		if run.RuntimeS != nil && run.Seconds != nil {
 			infra := *run.RuntimeS - *run.Seconds
 			infraTime = fmt.Sprintf("%.1f", infra)
 		}
 
 		peakRAM := "-"
-		if run.PeakRAMBytes != nil && *run.PeakRAMBytes > 0 {
+		if run.PeakRAMBytes != nil {
 			mb := float64(*run.PeakRAMBytes) / (1024 * 1024)
 			peakRAM = fmt.Sprintf("%.2f", mb)
 		}
 
 		cpuS := "-"
-		if run.CpuS != nil && *run.CpuS > 0 {
+		if run.CpuS != nil {
 			cpuS = fmt.Sprintf("%.2f", *run.CpuS)
 		}
 

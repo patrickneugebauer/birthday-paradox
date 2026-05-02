@@ -73,16 +73,16 @@ type StarResult struct {
 }
 
 type BuildResult struct {
-	Tag           string   `json:"tag"`
-	LastBuiltAt   int64    `json:"last_built_at"`
-	TotalS        *float64 `json:"total_s,omitempty"`
-	PeakRAMBytes  *int64   `json:"peak_ram_bytes,omitempty"`
-	CpuS          *float64 `json:"cpu_s,omitempty"`
-	NetRxBytes    *int64   `json:"net_rx_bytes,omitempty"` // receive
-	NetTxBytes    *int64   `json:"net_tx_bytes,omitempty"` // transmit
-	BlkReadBytes  *int64   `json:"blk_read_bytes,omitempty"`
-	BlkWriteBytes *int64   `json:"blk_write_bytes,omitempty"`
-	PollCount     *int64   `json:"poll_count,omitempty"`
+	Tag             string   `json:"tag"`
+	LastBuiltAt     int64    `json:"last_built_at"`
+	TotalS          *float64 `json:"total_s"`
+	PeakRAMBytes    *int64   `json:"peak_ram_bytes"`
+	CpuS            *float64 `json:"cpu_s"`
+	NetRxBytes      *int64   `json:"net_rx_bytes"` // receive
+	NetTxBytes      *int64   `json:"net_tx_bytes"` // transmit
+	BlkReadBytes    *int64   `json:"blk_read_bytes"`
+	BlkWriteBytes   *int64   `json:"blk_write_bytes"`
+	CpuRamPollCount *int64   `json:"cpu_ram_poll_count"`
 }
 
 type WeighResult struct {
@@ -94,18 +94,18 @@ type WeighResult struct {
 }
 
 type RunResult struct {
-	Tag            string   `json:"image"`
-	Iterations     *int     `json:"iterations"`
-	SampleSize     *int     `json:"sample_size"`
-	Percent        *float64 `json:"percent"`
-	Seconds        *float64 `json:"seconds"`
-	IPS            *int     `json:"ips"`
-	ImageUpdatedAt int64    `json:"image_updated_at"`
-	LastRunAt      int64    `json:"last_run_at"`
-	RuntimeS       *float64 `json:"runtime_s,omitempty"`
-	PeakRAMBytes   *int64   `json:"peak_ram_bytes,omitempty"`
-	CpuS           *float64 `json:"cpu_s,omitempty"` // cpu time consumed
-	PollCount      *int64   `json:"poll_count,omitempty"`
+	Tag              string   `json:"image"`
+	Iterations       *int     `json:"iterations"`
+	SampleSize       *int     `json:"sample_size"`
+	Percent          *float64 `json:"percent"`
+	Seconds          *float64 `json:"seconds"`
+	IPS              *int     `json:"ips"`
+	ImageUpdatedAt   int64    `json:"image_updated_at"`
+	LastRunAt        int64    `json:"last_run_at"`
+	RuntimeS         *float64 `json:"runtime_s"`
+	PeakRAMBytes     *int64   `json:"peak_ram_bytes"`
+	CpuS             *float64 `json:"cpu_s"` // cpu time consumed
+	CpuRamPollCount  *int64   `json:"cpu_ram_poll_count"`
 }
 
 type GithubRepo struct {

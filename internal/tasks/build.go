@@ -87,8 +87,11 @@ func buildFn(buildAll bool) error {
 
 	existingResults := loadExistingBuildResults()
 
-	// Try to get dockerd PID for stats collection
-	dockerdPID, _ := getDockerDPID()
+	// Get dockerd PID for stats collection
+	dockerdPID, err := getDockerDPID()
+	if err != nil {
+		return fmt.Errorf("get dockerd PID: %w", err)
+	}
 
 	fmt.Print("build ")
 	ticker := time.NewTicker(refreshInterval * time.Second)
@@ -144,8 +147,14 @@ func buildFn(buildAll bool) error {
 			fmt.Print("*")
 
 			// Snapshot host stats before build
-			netRxBefore, netTxBefore := snapshotNetDev()
-			blkReadBefore, blkWriteBefore := snapshotDiskStats()
+			netRxBefore, netTxBefore, err := snapshotNetDev()
+			if err != nil {
+				return fmt.Errorf("snapshot net before build for %s: %w", tag, err)
+			}
+			blkReadBefore, blkWriteBefore, err := snapshotDiskStats()
+			if err != nil {
+				return fmt.Errorf("snapshot disk before build for %s: %w", tag, err)
+			}
 
 			// Run docker build with stats collection
 			buildStart := time.Now()
@@ -179,8 +188,14 @@ func buildFn(buildAll bool) error {
 			}
 
 			// Snapshot host stats after build
-			netRxAfter, netTxAfter := snapshotNetDev()
-			blkReadAfter, blkWriteAfter := snapshotDiskStats()
+			netRxAfter, netTxAfter, err := snapshotNetDev()
+			if err != nil {
+				return fmt.Errorf("snapshot net after build for %s: %w", tag, err)
+			}
+			blkReadAfter, blkWriteAfter, err := snapshotDiskStats()
+			if err != nil {
+				return fmt.Errorf("snapshot disk after build for %s: %w", tag, err)
+			}
 
 			// Collect build stats
 			buildElapsed := time.Since(buildStart)
@@ -189,34 +204,30 @@ func buildFn(buildAll bool) error {
 
 			if statsCh != nil {
 				bs := <-statsCh
-				if bs.peakRAM > 0 {
-					buildResult.PeakRAMBytes = &bs.peakRAM
+				if bs.collectError != nil {
+					return fmt.Errorf("collect CPU/RAM stats for %s: %w", tag, bs.collectError)
 				}
-				if bs.firstCPU > 0 && bs.lastCPU > bs.firstCPU {
-					// Need to convert CPU ticks to seconds. Use CLK_TCK (typically 100)
-					cpuS := float64(bs.lastCPU-bs.firstCPU) / 100.0
+				buildResult.PeakRAMBytes = &bs.peakRAM
+				if bs.firstCPU > 0 || bs.cpuRamPollCount > 0 {
+					cpuDelta := bs.lastCPU - bs.firstCPU
+					if cpuDelta < 0 {
+						cpuDelta = 0
+					}
+					cpuS := float64(cpuDelta) / 100.0
 					buildResult.CpuS = &cpuS
 				}
-				buildResult.PollCount = &bs.pollCount
+				buildResult.CpuRamPollCount = &bs.cpuRamPollCount
 			}
 
 			// Calculate deltas for disk/network
 			netRx := netRxAfter - netRxBefore
-			if netRx > 0 {
-				buildResult.NetRxBytes = &netRx
-			}
+			buildResult.NetRxBytes = &netRx
 			netTx := netTxAfter - netTxBefore
-			if netTx > 0 {
-				buildResult.NetTxBytes = &netTx
-			}
+			buildResult.NetTxBytes = &netTx
 			blkRead := blkReadAfter - blkReadBefore
-			if blkRead > 0 {
-				buildResult.BlkReadBytes = &blkRead
-			}
+			buildResult.BlkReadBytes = &blkRead
 			blkWrite := blkWriteAfter - blkWriteBefore
-			if blkWrite > 0 {
-				buildResult.BlkWriteBytes = &blkWrite
-			}
+			buildResult.BlkWriteBytes = &blkWrite
 
 			buildResult.LastBuiltAt = buildStart.Unix()
 		}

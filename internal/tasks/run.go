@@ -192,12 +192,19 @@ func runFn(all bool, langs *string) error {
 					runtimeS := math.Round(elapsed.Seconds()*1e6) / 1e6
 					result.RuntimeS = &runtimeS
 					if cs.collected {
+						if cs.collectError != nil {
+							return fmt.Errorf("collect container stats for %s: %w", buildResult.Tag, cs.collectError)
+						}
 						result.PeakRAMBytes = &cs.peakRAM
-						if cs.firstCPU > 0 && cs.lastCPU > cs.firstCPU {
-							cpuS := float64(cs.lastCPU-cs.firstCPU) / 1e9
+						if cs.firstCPU > 0 || cs.cpuRamPollCount > 0 {
+							cpuDelta := cs.lastCPU - cs.firstCPU
+							if cpuDelta < 0 {
+								cpuDelta = 0
+							}
+							cpuS := float64(cpuDelta) / 1e9
 							result.CpuS = &cpuS
 						}
-						result.PollCount = &cs.pollCount
+						result.CpuRamPollCount = &cs.cpuRamPollCount
 					}
 				}
 			}

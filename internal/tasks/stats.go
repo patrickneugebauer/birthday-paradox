@@ -13,23 +13,25 @@ import (
 )
 
 type collectedStats struct {
-	collected  bool
-	peakRAM    int64
-	firstCPU   int64
-	lastCPU    int64
-	pollCount  int64
+	collected       bool
+	peakRAM         int64
+	firstCPU        int64
+	lastCPU         int64
+	cpuRamPollCount int64
+	collectError    error
 }
 
 type buildStats struct {
-	collected     bool
-	peakRAM       int64
-	firstCPU      int64
-	lastCPU       int64
-	netRxBytes    int64
-	netTxBytes    int64
-	blkReadBytes  int64
-	blkWriteBytes int64
-	pollCount     int64
+	collected       bool
+	peakRAM         int64
+	firstCPU        int64
+	lastCPU         int64
+	netRxBytes      int64
+	netTxBytes      int64
+	blkReadBytes    int64
+	blkWriteBytes   int64
+	cpuRamPollCount int64
+	collectError    error
 }
 
 type dockerStatsResp struct {
@@ -58,6 +60,7 @@ func collectContainerStats(ctx context.Context, name string) chan collectedStats
 	ch := make(chan collectedStats, 1)
 	go func() {
 		var cs collectedStats
+		cs.collected = true
 		for {
 			select {
 			case <-ctx.Done():
@@ -65,7 +68,7 @@ func collectContainerStats(ctx context.Context, name string) chan collectedStats
 				return
 			default:
 			}
-			cs.pollCount++
+			cs.cpuRamPollCount++
 			req, err := http.NewRequestWithContext(ctx, "GET",
 				fmt.Sprintf("http://localhost/containers/%s/stats?stream=false&one-shot=true", name), nil)
 			if err != nil {
@@ -90,15 +93,17 @@ func collectContainerStats(ctx context.Context, name string) chan collectedStats
 			}
 			resp.Body.Close()
 
-			if stats.MemoryStats.Usage > 0 {
-				cs.collected = true
+			if stats.MemoryStats.Usage >= 0 {
 				if stats.MemoryStats.Usage > cs.peakRAM {
 					cs.peakRAM = stats.MemoryStats.Usage
 				}
-				if cs.firstCPU == 0 {
-					cs.firstCPU = stats.CPUStats.CPUUsage.TotalUsage
+				currentCPU := stats.CPUStats.CPUUsage.TotalUsage
+				if cs.firstCPU == 0 || currentCPU < cs.firstCPU {
+					cs.firstCPU = currentCPU
 				}
-				cs.lastCPU = stats.CPUStats.CPUUsage.TotalUsage
+				if currentCPU > cs.lastCPU {
+					cs.lastCPU = currentCPU
+				}
 			}
 		}
 	}()
@@ -111,6 +116,7 @@ func collectBuildStats(ctx context.Context, dockerdPID int) chan buildStats {
 	ch := make(chan buildStats, 1)
 	go func() {
 		var bs buildStats
+		bs.collected = true
 		for {
 			select {
 			case <-ctx.Done():
@@ -118,9 +124,9 @@ func collectBuildStats(ctx context.Context, dockerdPID int) chan buildStats {
 				return
 			default:
 			}
-			bs.pollCount++
+			bs.cpuRamPollCount++
 			// Poll dockerd process stats for RAM and CPU
-			if ram, cpu := readProcStats(dockerdPID); ram > 0 {
+			if ram, cpu, err := readProcStats(dockerdPID); err == nil {
 				if ram > bs.peakRAM {
 					bs.peakRAM = ram
 				}
@@ -128,6 +134,8 @@ func collectBuildStats(ctx context.Context, dockerdPID int) chan buildStats {
 					bs.firstCPU = cpu
 				}
 				bs.lastCPU = cpu
+			} else if bs.collectError == nil {
+				bs.collectError = err
 			}
 		}
 	}()
@@ -135,21 +143,27 @@ func collectBuildStats(ctx context.Context, dockerdPID int) chan buildStats {
 }
 
 // readProcStats reads RAM (VmRSS) and CPU ticks from /proc/{pid}/status and /proc/{pid}/stat
-func readProcStats(pid int) (int64, int64) {
+func readProcStats(pid int) (int64, int64, error) {
 	// Read VmRSS from /proc/{pid}/status
-	ram := readVmRSS(pid)
+	ram, err := readVmRSS(pid)
+	if err != nil {
+		return 0, 0, err
+	}
 
 	// Read CPU ticks from /proc/{pid}/stat
-	cpu := readProcCPU(pid)
+	cpu, err := readProcCPU(pid)
+	if err != nil {
+		return 0, 0, err
+	}
 
-	return ram, cpu
+	return ram, cpu, nil
 }
 
 // readVmRSS parses /proc/{pid}/status for VmRSS (resident set size in KB)
-func readVmRSS(pid int) int64 {
+func readVmRSS(pid int) (int64, error) {
 	file, err := os.Open(fmt.Sprintf("/proc/%d/status", pid))
 	if err != nil {
-		return 0
+		return 0, fmt.Errorf("open /proc/%d/status: %w", pid, err)
 	}
 	defer file.Close()
 
@@ -161,19 +175,22 @@ func readVmRSS(pid int) int64 {
 			if len(parts) >= 2 {
 				val, err := strconv.ParseInt(parts[1], 10, 64)
 				if err == nil {
-					return val * 1024 // Convert KB to bytes
+					return val * 1024, nil // Convert KB to bytes
 				}
 			}
 		}
 	}
-	return 0
+	if err := scanner.Err(); err != nil {
+		return 0, fmt.Errorf("scan /proc/%d/status: %w", pid, err)
+	}
+	return 0, fmt.Errorf("VmRSS not found in /proc/%d/status", pid)
 }
 
 // readProcCPU reads CPU ticks from /proc/{pid}/stat (fields 14+15: utime+stime)
-func readProcCPU(pid int) int64 {
+func readProcCPU(pid int) (int64, error) {
 	file, err := os.Open(fmt.Sprintf("/proc/%d/stat", pid))
 	if err != nil {
-		return 0
+		return 0, fmt.Errorf("open /proc/%d/stat: %w", pid, err)
 	}
 	defer file.Close()
 
@@ -183,7 +200,7 @@ func readProcCPU(pid int) int64 {
 		// Find the end of comm (which is in parentheses)
 		closeParen := strings.LastIndex(line, ")")
 		if closeParen == -1 {
-			return 0
+			return 0, fmt.Errorf("malformed /proc/%d/stat: no closing paren", pid)
 		}
 		// Split remaining fields
 		fields := strings.Fields(line[closeParen+1:])
@@ -191,17 +208,21 @@ func readProcCPU(pid int) int64 {
 		if len(fields) > 14 {
 			utime, _ := strconv.ParseInt(fields[13], 10, 64)
 			stime, _ := strconv.ParseInt(fields[14], 10, 64)
-			return utime + stime
+			return utime + stime, nil
 		}
+		return 0, fmt.Errorf("not enough fields in /proc/%d/stat", pid)
 	}
-	return 0
+	if err := scanner.Err(); err != nil {
+		return 0, fmt.Errorf("scan /proc/%d/stat: %w", pid, err)
+	}
+	return 0, fmt.Errorf("no data in /proc/%d/stat", pid)
 }
 
 // snapshotNetDev reads /proc/net/dev and returns rx_bytes and tx_bytes summed across all interfaces (except lo)
-func snapshotNetDev() (int64, int64) {
+func snapshotNetDev() (int64, int64, error) {
 	file, err := os.Open("/proc/net/dev")
 	if err != nil {
-		return 0, 0
+		return 0, 0, fmt.Errorf("open /proc/net/dev: %w", err)
 	}
 	defer file.Close()
 
@@ -228,15 +249,18 @@ func snapshotNetDev() (int64, int64) {
 		rxBytes += rx
 		txBytes += tx
 	}
-	return rxBytes, txBytes
+	if err := scanner.Err(); err != nil {
+		return 0, 0, fmt.Errorf("scan /proc/net/dev: %w", err)
+	}
+	return rxBytes, txBytes, nil
 }
 
 // snapshotDiskStats reads /proc/diskstats and returns total sectors read and written
 // across all non-loop block devices, converted to bytes (sector = 512 bytes)
-func snapshotDiskStats() (int64, int64) {
+func snapshotDiskStats() (int64, int64, error) {
 	file, err := os.Open("/proc/diskstats")
 	if err != nil {
-		return 0, 0
+		return 0, 0, fmt.Errorf("open /proc/diskstats: %w", err)
 	}
 	defer file.Close()
 
@@ -259,5 +283,8 @@ func snapshotDiskStats() (int64, int64) {
 		blkRead += sectorsRead * 512
 		blkWrite += sectorsWrite * 512
 	}
-	return blkRead, blkWrite
+	if err := scanner.Err(); err != nil {
+		return 0, 0, fmt.Errorf("scan /proc/diskstats: %w", err)
+	}
+	return blkRead, blkWrite, nil
 }

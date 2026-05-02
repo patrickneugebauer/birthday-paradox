@@ -1,5 +1,8 @@
 # Claude Code Instructions
 
+## Git
+never commit or push unless explicitly askd to
+
 ## Project
 `cmd/app/` — Go CLI orchestrating Docker builds and benchmark runs.
 Build: `go build ./cmd/app/`
@@ -9,6 +12,9 @@ Write idiomatic Go. Write idiomatic code, structure code in idiomatic patterns, 
 
 ## Responses
 Terse. Lead with the result.
+
+## Explicit
+Do not show a dash for a zero value, only for a null or missing one.  Don't show a zero when something was null.
 
 ## Security
 Never download repos or arbitrary files directly to the filesystem or install libraries. For testing tarballs or releases, extract and inspect only within Docker containers.
