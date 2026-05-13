@@ -19,6 +19,12 @@ func main() {
 		err = tasks.MakeFileTree()
 	case "star", "stars":
 		err = tasks.Stars()
+	case "github-languages":
+		err = tasks.GithubLanguages()
+	case "wiki-languages":
+		err = tasks.WikiLanguages()
+	case "bitbucket-languages":
+		err = tasks.BitbucketLanguages()
 	case "build":
 		err = tasks.Build()
 	case "build-all":
