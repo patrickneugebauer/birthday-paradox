@@ -19,6 +19,9 @@ Do not show a dash for a zero value, only for a null or missing one.  Don't show
 ## Security
 Never download repos or arbitrary files directly to the filesystem or install libraries. For testing tarballs or releases, extract and inspect only within Docker containers.
 
+## Data Formats
+For structured data files, prefer JSON over TSV. JSON is much safer for editing (no column misalignment issues, self-describing fields, less prone to corruption). When working with language metadata, use `all-language-data.json` as the source of truth.
+
 # Project Structure
 
 ## Top-Level Directories

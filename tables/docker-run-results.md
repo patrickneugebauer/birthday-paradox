@@ -1,6 +1,6 @@
 **View by:** | [Performance](../readme.md) | [Language](results-by-language.md) | [Year](results-by-year.md) | [Stars](results-by-stars.md) | [Size](results-by-size.md) | [Build Stats](docker-build-results.md) | [Run Stats](docker-run-results.md) |
 
-| | Language | Runtime | Data Structure | Exec Mode | Seconds | Runtime (s) | Infra (s) | Peak RAM (MB) | CPU (s) |
+| | Language | Runtime | Data Structure | Exec Mode | Script (s) | Total (s) | Overhead (s) | Peak RAM (MB) | CPU (s) |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | berry | berry | - | - | - | 0.8 | - | 0.00 | 0.00 |
 | 2 | chapel | chapel | - | - | - | - | - | - | - |

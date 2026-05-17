@@ -15,6 +15,8 @@ func main() {
 	command := os.Args[1]
 	var err error
 	switch command {
+	case "schema":
+		err = tasks.ValidateSchema()
 	case "map", "files", "map-files":
 		err = tasks.MakeFileTree()
 	case "star", "stars":

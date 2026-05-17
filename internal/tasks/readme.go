@@ -610,7 +610,7 @@ func generateRunResultsReadme() error {
 	fmt.Fprintln(writer, nav)
 	fmt.Fprintln(writer)
 
-	fmt.Fprintln(writer, "| | Language | Runtime | Data Structure | Exec Mode | Seconds | Runtime (s) | Infra (s) | Peak RAM (MB) | CPU (s) |")
+	fmt.Fprintln(writer, "| | Language | Runtime | Data Structure | Exec Mode | Script (s) | Total (s) | Overhead (s) | Peak RAM (MB) | CPU (s) |")
 	fmt.Fprintln(writer, "|---|---|---|---|---|---|---|---|---|---|")
 
 	for i, run := range runs {
