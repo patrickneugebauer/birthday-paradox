@@ -89,14 +89,14 @@
                 previous : { key: null, dir: null }
             },
             columns: {
-                language: x => t(x.language),
-                runtime: x => t(x.runtime),
-                "data structure": x => t(x.data_structure),
-                "execution method": x => t(x.execution_method),
-                year: x => x.wiki_url ? a(x.wiki_url, x.year) : t(x.year),
-                stars: x => x.github_url ? a(x.github_url, x.stars.toLocaleString()) : null,
-                "side (mb)": x => t(x.size_mb.toLocaleString()),
-                ips: x => t(x.ips.toLocaleString()),
+                language: { display: 'language', createNode: x => t(x.language) },
+                data_structure: { display: 'data structure', createNode: x => t(x.data_structure) },
+                runtime: { display: 'runtime', createNode: x => t(x.runtime), },
+                execution_method: { display: 'execution method', createNode: x => t(x.execution_method) },
+                year: { display: 'year', createNode: x => x.wiki_url ? a(x.wiki_url, x.year) : t(x.year) },
+                stars: { display: 'stars', createNode: x => x.github_url ? a(x.github_url, x.stars.toLocaleString()) : null },
+                size_mb: { display: 'size (mb)', createNode: x => t(x.size_mb.toLocaleString()) },
+                ips: { display: 'ips', createNode: x => t(x.ips.toLocaleString()) }
             },
             tablePointers: {
                 thead: null,
@@ -147,7 +147,7 @@
                 const updateTable = global.functions.updateTable;
                 // ==============================
                 const start = new Date().getTime();
-                const newSortKey = this._headerKey;
+                const newSortKey = this._sortKey;
                 updateSort(newSortKey);
                 sortData();
                 updateTable();
@@ -217,12 +217,15 @@
                 const updown = global.arrows.updown;
                 const up = global.arrows.up;
                 const down = global.arrows.down;
+                const columns = global.columns;
                 // =========================
                 if (previousSortKey && previousSortKey !== sortKey) {
-                    theadCells[previousSortKey].data = `${previousSortKey} ${updown}`;
+                    const previousDisplay = columns[previousSortKey].display;
+                    theadCells[previousSortKey].data = `${previousDisplay} ${updown}`;
                 }
+                const currentDisplay = columns[sortKey].display;
                 const modifier = (sortDir === 'asc') ? up : down;
-                theadCells[sortKey].data = `${sortKey} ${modifier}`;
+                theadCells[sortKey].data = `${currentDisplay} ${modifier}`;
                 tbody.replaceChildren(...rows.map(x => x.ele));
             }
 
@@ -236,7 +239,7 @@
                 const localTbodyRows = global.tablePointers.tbodyRows;
                 const columnTransforms = global.columnTransforms;
                 const skipColumns = global.skipColumns;
-                const columns = global.columns;
+                const columns = Object.entries(global.columns);
                 // ========================================
                 const h = x => document.createElement(x);
                 const t = x => document.createTextNode(x);
@@ -246,12 +249,12 @@
                 const thead = h('thead');
                 setThead(thead);
                 const theadRow = h('tr');
-                for (const header of Object.keys(columns)) {
+                for (const [ key, { display }] of columns) {
                     const cell = h('th');
-                    const text = t(`${header} ⇅`);
-                    cell._headerKey = header;
+                    const text = t(`${display} ⇅`);
+                    cell._sortKey = key;
                     cell.addEventListener('click', handleSort);
-                    localTheadMap[header] = text;
+                    localTheadMap[key] = text;
                     cell.append(text);
                     theadRow.append(cell);
                 }
@@ -260,10 +263,9 @@
                 // body
                 const tbody = h('tbody');
                 setTbody(tbody);
-                const columnEntries = Object.entries(columns);
                 for (const dataRow of localData) {
                     const trow = h('tr');
-                    for (const [name, createNode] of columnEntries) {
+                    for (const [_, { createNode }] of columns) {
                         const cell = h('td');
                         const node = createNode(dataRow);
                         cell.append(node);
