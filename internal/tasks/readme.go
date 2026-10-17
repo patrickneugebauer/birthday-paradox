@@ -36,14 +36,20 @@ func Readme() error {
 	return nil
 }
 
+// need to call this from main to test it, language names likely don't map
 func buildRawReadmeResults() ([]ReadmeRow, error) {
 	// Load all data
-	dockerfiles, err := loadJson[Dockerfile](dockerfileList)
+	dockerfiles, err := loadJson[Dockerfile](dockerfileListFile)
 	if err != nil {
 		return nil, err
 	}
 
-	languageInfo, err := loadLanguageInfo(languageInfoFile)
+	// languageInfo, err := loadLanguageInfo(languageInfoFile)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	languageInfo := make(map[string]LanguageInfo)
+	err = GetLanguageInfoMap(languageInfo)
 	if err != nil {
 		return nil, err
 	}
@@ -435,7 +441,7 @@ func extractWikiDisplay(wikiURL string) string {
 }
 
 func generateBuildResultsReadme() error {
-	dockerfiles, err := loadJson[Dockerfile](dockerfileList)
+	dockerfiles, err := loadJson[Dockerfile](dockerfileListFile)
 	if err != nil {
 		return err
 	}
@@ -565,7 +571,7 @@ func generateBuildResultsReadme() error {
 }
 
 func generateRunResultsReadme() error {
-	dockerfiles, err := loadJson[Dockerfile](dockerfileList)
+	dockerfiles, err := loadJson[Dockerfile](dockerfileListFile)
 	if err != nil {
 		return err
 	}

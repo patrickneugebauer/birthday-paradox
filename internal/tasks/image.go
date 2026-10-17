@@ -8,8 +8,8 @@ import (
 	"time"
 )
 
-// GetImageUpdatedTimes fetches LastTagTime for all tags in parallel.
-func GetImageUpdatedTimes(tags []string) map[string]int64 {
+// getImageUpdatedTimes fetches LastTagTime for all tags in parallel.
+func getImageUpdatedTimes(tags []string) map[string]int64 {
 	times := make(map[string]int64, len(tags))
 	var mu sync.Mutex
 	var wg sync.WaitGroup

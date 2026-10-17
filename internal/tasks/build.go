@@ -35,7 +35,7 @@ func getDockerDPID() (int, error) {
 	return 0, fmt.Errorf("could not find dockerd PID")
 }
 
-func ShouldRebuild(fileLastModified int64, imageLastCreated int64) bool {
+func imageShouldRebuild(fileLastModified int64, imageLastCreated int64) bool {
 	if imageLastCreated == 0 {
 		return true
 	}
@@ -71,9 +71,9 @@ func buildFn(buildAll bool) error {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
-	infile, err := os.Open(dockerfileList)
+	infile, err := os.Open(dockerfileListFile)
 	if err != nil {
-		return fmt.Errorf("open %s: %w", dockerfileList, err)
+		return fmt.Errorf("open %s: %w", dockerfileListFile, err)
 	}
 	defer infile.Close()
 	scanner := bufio.NewScanner(infile)
@@ -123,7 +123,7 @@ func buildFn(buildAll bool) error {
 		}
 		// Or compute on the fly if needed
 		if !shouldRebuild {
-			shouldRebuild = ShouldRebuild(dockerfile.FileLastModified, dockerfile.ImageLastCreated)
+			shouldRebuild = imageShouldRebuild(dockerfile.FileLastModified, dockerfile.ImageLastCreated)
 		}
 
 		tag := dockerfile.Tag

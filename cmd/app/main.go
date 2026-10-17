@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/patrickneugebauer/birthday-paradox/internal/tasks"
 )
@@ -15,17 +17,51 @@ func main() {
 	command := os.Args[1]
 	var err error
 	switch command {
+	case "rows":
+		rows := make([]tasks.RawReadmeRow, 0, 128)
+		err = tasks.BuildReadmeRows(&rows)
+		fileData, err := json.MarshalIndent(rows, "", "    ")
+		if err != nil {
+			fmt.Printf("error %w", err)
+		}
+		err = os.WriteFile("_rows.json", fileData, 0644)
+	case "info":
+		start := time.Now()
+		info := make(map[string]tasks.LanguageInfo)
+		err = tasks.GetLanguageInfoMap(info)
+		diff := time.Since(start)
+		fmt.Printf("%.9f\n", diff.Seconds())
+		fileData, err := json.MarshalIndent(info, "", "    ")
+		if err != nil {
+			fmt.Printf("error %w", err)
+		}
+		fname := "_info.json"
+		err = os.WriteFile(fname, fileData, 0644)
+		fmt.Printf("%s\n", fname)
+	case "info2":
+		start := time.Now()
+		info := make(map[string]tasks.LanguageInfo)
+		err = tasks.GetLanguageInfoMap2(info)
+		diff := time.Since(start)
+		fmt.Printf("%.9f\n", diff.Seconds())
+		fileData, err := json.MarshalIndent(info, "", "    ")
+		if err != nil {
+			fmt.Printf("error %w", err)
+		}
+		fname := "_info.json"
+		err = os.WriteFile(fname, fileData, 0644)
+		fmt.Printf("%s\n", fname)
 	case "schema":
 		err = tasks.ValidateSchema()
 	case "map", "files", "map-files":
 		err = tasks.MakeFileTree()
 	case "star", "stars":
 		err = tasks.Stars()
-	case "github-languages":
+	case "github-languages", "github-langs", "gh-langs", "gh-languages":
 		err = tasks.GithubLanguages()
-	case "wiki-languages":
+	case "wiki-languages", "wiki-langs":
 		err = tasks.WikiLanguages()
-	case "bitbucket-languages":
+	case "bitbucket-languages", "bb-languages", "bitbucket-langs", "bb-langs":
 		err = tasks.BitbucketLanguages()
 	case "build":
 		err = tasks.Build()

@@ -13,7 +13,7 @@ import (
 
 func LoadDockerfileMap() map[string]Dockerfile {
 	dockerfiles := make(map[string]Dockerfile)
-	file, err := os.Open(dockerfileList)
+	file, err := os.Open(dockerfileListFile)
 	if err != nil {
 		return dockerfiles
 	}
@@ -29,6 +29,16 @@ func LoadDockerfileMap() map[string]Dockerfile {
 }
 
 func MakeFileTree() error {
+	// DEPENDENCIES
+	solutionDirs := []string{solutionsDir, scaffoldsDir, helloWorldsDir}
+	getDockerfileInfo := getRuntimeAndTag
+	getImageUpdatedAt := getImageUpdatedTimes
+	type df = Dockerfile
+	getFileUpdatedAt := getMaxFileModTime
+	shouldRebuild := imageShouldRebuild
+	dfListFile := dockerfileListFile
+	// ============
+
 	fmt.Print("map ")
 
 	// Pass 1: collect all dockerfile entries from disk.
@@ -43,7 +53,7 @@ func MakeFileTree() error {
 		executionMethod *string
 	}
 	var entries []entry
-	for _, dirName := range []string{solutionsDir, scaffoldsDir, helloWorldsDir} {
+	for _, dirName := range solutionDirs {
 		dirType := filepath.Base(dirName)
 		dirs, err := os.ReadDir(dirName)
 		if err != nil && !os.IsNotExist(err) {
@@ -59,7 +69,7 @@ func MakeFileTree() error {
 				if f.IsDir() || !strings.HasPrefix(f.Name(), "Dockerfile") {
 					continue
 				}
-				runtime, dataStructure, executionMethod, tag := getRuntimeAndTag(dir.Name(), f.Name())
+				runtime, dataStructure, executionMethod, tag := getDockerfileInfo(dir.Name(), f.Name())
 				entries = append(entries, entry{
 					language:        dir.Name(),
 					filename:        f.Name(),
@@ -79,16 +89,16 @@ func MakeFileTree() error {
 	for i, e := range entries {
 		tags[i] = e.tag
 	}
-	imageTimes := GetImageUpdatedTimes(tags)
+	imageTimes := getImageUpdatedAt(tags)
 	fmt.Println()
 
 	// Pass 3: build output rows.
-	var dockerfiles []Dockerfile
+	var dockerfiles []df
 	for _, e := range entries {
-		fileLastMod := getMaxFileModTime(e.dirPath)
+		fileLastMod := getFileUpdatedAt(e.dirPath)
 		imageLastUpdated := imageTimes[e.tag]
-		willRebuild := ShouldRebuild(fileLastMod, imageLastUpdated)
-		dockerfiles = append(dockerfiles, Dockerfile{
+		willRebuild := shouldRebuild(fileLastMod, imageLastUpdated)
+		dockerfiles = append(dockerfiles, df{
 			Language:         e.language,
 			Filename:         e.filename,
 			Runtime:          e.runtime,
@@ -109,10 +119,10 @@ func MakeFileTree() error {
 		buf.Write(jsonBytes)
 		buf.WriteByte('\n')
 	}
-	if err := os.WriteFile(dockerfileList, buf.Bytes(), 0644); err != nil {
+	if err := os.WriteFile(dfListFile, buf.Bytes(), 0644); err != nil {
 		return fmt.Errorf("write: %w", err)
 	}
-	fmt.Printf("wrote: %s\n", dockerfileList)
+	fmt.Printf("wrote: %s\n", dfListFile)
 	return nil
 }
 

@@ -67,16 +67,27 @@ func toGitHubAPIURL(url string) string {
 	return url
 }
 
+type GithubData struct {
+	Language   string  `json:"language"`
+	GithubLink *string `json:"github_link"`
+}
+
 func Stars() error {
+	langInfo := languageInfoFile
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
-	infile, err := os.Open(languageInfoFile)
+	infile, err := os.Open(langInfo)
 	if err != nil {
-		return fmt.Errorf("open %s: %w", languageInfoFile, err)
+		return fmt.Errorf("open %s: %w", langInfo, err)
 	}
 	defer infile.Close()
-	scanner := bufio.NewScanner(infile)
+	// scanner := bufio.NewScanner(infile)
+	decoder := json.NewDecoder(infile)
+	_, err = decoder.Token()
+	if err != nil {
+		return fmt.Errorf("error reading opening json array: %w", err)
+	}
 
 	writers, err := OpenBufferedFiles(starsTempResultsFile, starsTempRawPayloadsFile)
 	if err != nil {
@@ -94,7 +105,8 @@ func Stars() error {
 	ticker := time.NewTicker(refreshInterval * time.Second)
 	defer ticker.Stop()
 
-	for scanner.Scan() {
+	// for scanner.Scan() {
+	for decoder.More() {
 		select {
 		case <-ctx.Done():
 			fmt.Println("Interrupt received, stopping stars loop...")
@@ -108,27 +120,36 @@ func Stars() error {
 		default:
 		}
 
-		line := scanner.Text()
-		if line == "language,year,wiki,github,website" {
-			continue
+		// line := scanner.Text()
+		var ghData GithubData
+		err := decoder.Decode(&ghData)
+		if err != nil {
+			return fmt.Errorf("error reading item: %w", err)
 		}
-		parts := strings.SplitN(line, ",", 5)
-		if len(parts) < 4 {
-			continue
-		}
-		language := strings.TrimSpace(parts[0])
-		url := strings.TrimSpace(parts[3])
+		// if line == "language,year,wiki,github,website" {
+		// 	continue
+		// }
+		// parts := strings.SplitN(line, ",", 5)
+		// if len(parts) < 4 {
+		// 	continue
+		// }
+		language := ghData.Language
+		urlField := ghData.GithubLink
+		fmt.Printf("%s", language)
 
-		if url == "" {
-			return fmt.Errorf("empty github url for language: %s", language)
+		if urlField == nil {
+			fmt.Printf(" skip\n")
+			continue
 		}
+		url := *urlField
+		fmt.Printf(" fetch %s", url)
 
 		apiURL := toGitHubAPIURL(url)
 		existing := existingResults[language]
 
 		var result StarResult
 		if ShouldRefetchStars(now, existing.LastFetchedAt, existing.RepoCreatedAt) {
-			fmt.Print("*")
+			fmt.Print(" *\n")
 			repo, rawBody, err := getStarsWithRaw(apiURL)
 			if err != nil {
 				return fmt.Errorf("get stars for %s: %w", url, err)
@@ -162,11 +183,16 @@ func Stars() error {
 			return fmt.Errorf("encode result: %w", err)
 		}
 	}
+	_, err = decoder.Token()
+	if err != nil {
+		return fmt.Errorf("Error reading close bracket: %w", err)
+	}
+
 	fmt.Println()
 
-	if err := scanner.Err(); err != nil {
-		return fmt.Errorf("scanner: %w", err)
-	}
+	// if err := scanner.Err(); err != nil {
+	// 	return fmt.Errorf("scanner: %w", err)
+	// }
 	if err := CloseBufferedFiles(writers...); err != nil {
 		return fmt.Errorf("close files: %w", err)
 	}

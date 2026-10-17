@@ -5,19 +5,20 @@ import (
 )
 
 const (
-	solutionsDir      = "./solutions"
-	scaffoldsDir      = "./scaffolds"
-	helloWorldsDir    = "./hello-worlds"
+	solutionsDir      = "./solutions/complete"
+	scaffoldsDir      = "./solutions/scaffolds"
+	helloWorldsDir    = "./solutions/hello-worlds"
 	artifactDir       = "artifacts"
+	tablesDir         = "tables"
 	defaultIterations = 1000
 	refreshInterval   = 1
 )
 
 var (
 	// language info
-	languageInfoFile = "language-info.csv"
+	languageInfoFile = "all-language-data.json"
 	// solutions list
-	dockerfileList = filepath.Join(artifactDir, "dockerfiles.jsonl")
+	dockerfileListFile = filepath.Join(artifactDir, "dockerfiles.jsonl")
 	// stars
 	starsRawPayloadsFile     = filepath.Join(artifactDir, "star-raw-payloads.jsonl")
 	starsTempRawPayloadsFile = filepath.Join(artifactDir, "star-temp-raw-payloads.jsonl")
@@ -37,13 +38,13 @@ var (
 	formattedReadmeResultsFile = filepath.Join(artifactDir, "readme-formatted-results.jsonl")
 	// readmes
 	readmeFile           = "readme.md"
-	readmeFileByLanguage = filepath.Join("tables", "results-by-language.md")
-	readmeFileByYear     = filepath.Join("tables", "results-by-year.md")
-	readmeFileByStars    = filepath.Join("tables", "results-by-stars.md")
-	readmeFileBySize     = filepath.Join("tables", "results-by-size.md")
-	readmeFileJavaScript = filepath.Join("tables", "javascript-readme.md")
-	dockerBuildReadme    = filepath.Join("tables", "docker-build-results.md")
-	dockerRunReadme      = filepath.Join("tables", "docker-run-results.md")
+	readmeFileByLanguage = filepath.Join(tablesDir, "results-by-language.md")
+	readmeFileByYear     = filepath.Join(tablesDir, "results-by-year.md")
+	readmeFileByStars    = filepath.Join(tablesDir, "results-by-stars.md")
+	readmeFileBySize     = filepath.Join(tablesDir, "results-by-size.md")
+	readmeFileJavaScript = filepath.Join(tablesDir, "javascript-readme.md")
+	dockerBuildReadme    = filepath.Join(tablesDir, "docker-build-results.md")
+	dockerRunReadme      = filepath.Join(tablesDir, "docker-run-results.md")
 )
 
 type DockerfileMap = map[string][]string
@@ -94,18 +95,18 @@ type WeighResult struct {
 }
 
 type RunResult struct {
-	Tag              string   `json:"image"`
-	Iterations       *int     `json:"iterations"`
-	SampleSize       *int     `json:"sample_size"`
-	Percent          *float64 `json:"percent"`
-	Seconds          *float64 `json:"seconds"`
-	IPS              *int     `json:"ips"`
-	ImageUpdatedAt   int64    `json:"image_updated_at"`
-	LastRunAt        int64    `json:"last_run_at"`
-	RuntimeS         *float64 `json:"runtime_s"`
-	PeakRAMBytes     *int64   `json:"peak_ram_bytes"`
-	CpuS             *float64 `json:"cpu_s"` // cpu time consumed
-	CpuRamPollCount  *int64   `json:"cpu_ram_poll_count"`
+	Tag             string   `json:"image"`
+	Iterations      *int     `json:"iterations"`
+	SampleSize      *int     `json:"sample_size"`
+	Percent         *float64 `json:"percent"`
+	Seconds         *float64 `json:"seconds"`
+	IPS             *int     `json:"ips"`
+	ImageUpdatedAt  int64    `json:"image_updated_at"`
+	LastRunAt       int64    `json:"last_run_at"`
+	RuntimeS        *float64 `json:"runtime_s"`
+	PeakRAMBytes    *int64   `json:"peak_ram_bytes"`
+	CpuS            *float64 `json:"cpu_s"` // cpu time consumed
+	CpuRamPollCount *int64   `json:"cpu_ram_poll_count"`
 }
 
 type GithubRepo struct {
@@ -143,4 +144,20 @@ type ReadmeRow struct {
 	FormattedStars    string  `json:"formatted_stars"`
 	FormattedSizeMB   string  `json:"formatted_size_mb"`
 	FormattedIPS      string  `json:"formatted_ips"`
+}
+
+type RawReadmeRow struct {
+	Tag             string  `json:"tag"`
+	Language        string  `json:"language"`
+	Runtime         *string `json:"runtime"`
+	DataStructure   *string `json:"data_structure"`
+	ExecutionMethod *string `json:"execution_method"`
+	Year            int     `json:"year"`
+	WikiURL         string  `json:"wiki_url"`
+	WikiDisplay     string  `json:"wiki_display"`
+	GitHubURL       string  `json:"github_url"`
+	GitHubDisplay   string  `json:"github_display"`
+	Stars           int     `json:"stars"`
+	SizeMB          float64 `json:"size_mb"`
+	IPS             int     `json:"ips"`
 }

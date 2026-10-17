@@ -15,7 +15,7 @@ type LanguageData struct {
 	IsCompiled              *bool   `json:"is_compiled"`
 	TranspileTo             *string `json:"transpile_to"`
 	OfficialDockerImage     *string `json:"official_docker_image"`
-	IsStandalone            *string `json:"is_standalone"`
+	IsStandalone            *bool   `json:"is_standalone"`
 	OfficialDockerImageLink *string `json:"official_docker_image_link"`
 	LanguageYear            *int    `json:"language_year"`
 	RuntimeYear             *int    `json:"runtime_year"`
@@ -32,7 +32,7 @@ type LanguageData struct {
 }
 
 func ValidateSchema() error {
-	content, err := os.ReadFile("all-language-data.json")
+	content, err := os.ReadFile(languageInfoFile)
 	if err != nil {
 		return fmt.Errorf("error reading file: %v", err)
 	}
@@ -96,6 +96,6 @@ func ValidateSchema() error {
 	if len(validationErrors) > 0 {
 		return fmt.Errorf("Validation failed with %d errors:\n%s", len(validationErrors), strings.Join(validationErrors, "\n"))
 	}
-
+	fmt.Println("Validation successful")
 	return nil
 }
