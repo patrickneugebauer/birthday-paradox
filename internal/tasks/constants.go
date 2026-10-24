@@ -16,7 +16,9 @@ const (
 
 var (
 	// language info
-	languageInfoFile = "all-language-data.json"
+	languageInfoFile        = "all-language-data.json"
+	languageInfoTsvTempfile = "all-language-data.temp.tsv"
+	languageInfoTsv         = "all-language-data.tsv"
 	// solutions list
 	dockerfileListFile = filepath.Join(artifactDir, "dockerfiles.jsonl")
 	// stars

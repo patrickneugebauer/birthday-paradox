@@ -17,6 +17,10 @@ func main() {
 	command := os.Args[1]
 	var err error
 	switch command {
+	case "tsv":
+		err = tasks.JsonlToTsv()
+	case "jsonl":
+		err = tasks.TsvToJsonl()
 	case "rows":
 		rows := make([]tasks.RawReadmeRow, 0, 128)
 		err = tasks.BuildReadmeRows(&rows)
@@ -41,7 +45,7 @@ func main() {
 	case "info2":
 		start := time.Now()
 		info := make(map[string]tasks.LanguageInfo)
-		err = tasks.GetLanguageInfoMap2(info)
+		err = tasks.GetLanguageInfoMap(info)
 		diff := time.Since(start)
 		fmt.Printf("%.9f\n", diff.Seconds())
 		fileData, err := json.MarshalIndent(info, "", "    ")

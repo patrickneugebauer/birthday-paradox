@@ -1,4 +1,5 @@
 app
+!cmd/app
 artifacts
 roadmap.md
 plan.md
