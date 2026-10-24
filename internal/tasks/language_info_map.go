@@ -5,9 +5,17 @@ import (
 	"os"
 )
 
+type LanguageInfo struct {
+	Year   *int    `json:"language_year"`
+	Wiki   *string `json:"wiki_link"`
+	GitHub *string `json:"github_link"`
+}
+
 type LIStruct struct {
-	K string `json:"language"`
-	V LanguageInfo
+	Language string  `json:"dirname"`
+	Year     *int    `json:"language_year"`
+	Wiki     *string `json:"wiki_link"`
+	GitHub   *string `json:"github_link"`
 }
 
 // 25% faster
@@ -26,11 +34,15 @@ func GetLanguageInfoMap(results map[string]LanguageInfo) error {
 
 	for decoder.More() {
 		var v LIStruct
-		err := decoder.Decode(&v) // this is 25% faster than decoding and creating
+		err := decoder.Decode(&v)
 		if err != nil {
 			return err
 		}
-		results[v.K] = v.V
+		results[v.Language] = LanguageInfo{
+			Year:   v.Year,
+			Wiki:   v.Wiki,
+			GitHub: v.GitHub,
+		}
 	}
 	return nil
 }

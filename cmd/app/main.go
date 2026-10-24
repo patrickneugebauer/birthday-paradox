@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 
 	"github.com/patrickneugebauer/birthday-paradox/internal/tasks"
 )
@@ -28,33 +27,19 @@ func main() {
 		if err != nil {
 			fmt.Printf("error %w", err)
 		}
-		err = os.WriteFile("_rows.json", fileData, 0644)
+		fname := "data.json"
+		err = os.WriteFile(fname, fileData, 0644)
+		fmt.Printf("wrote: %s\n", fname)
 	case "info":
-		start := time.Now()
 		info := make(map[string]tasks.LanguageInfo)
 		err = tasks.GetLanguageInfoMap(info)
-		diff := time.Since(start)
-		fmt.Printf("%.9f\n", diff.Seconds())
 		fileData, err := json.MarshalIndent(info, "", "    ")
 		if err != nil {
 			fmt.Printf("error %w", err)
 		}
 		fname := "_info.json"
 		err = os.WriteFile(fname, fileData, 0644)
-		fmt.Printf("%s\n", fname)
-	case "info2":
-		start := time.Now()
-		info := make(map[string]tasks.LanguageInfo)
-		err = tasks.GetLanguageInfoMap(info)
-		diff := time.Since(start)
-		fmt.Printf("%.9f\n", diff.Seconds())
-		fileData, err := json.MarshalIndent(info, "", "    ")
-		if err != nil {
-			fmt.Printf("error %w", err)
-		}
-		fname := "_info.json"
-		err = os.WriteFile(fname, fileData, 0644)
-		fmt.Printf("%s\n", fname)
+		fmt.Printf("wrote: %s\n", fname)
 	case "schema":
 		err = tasks.ValidateSchema()
 	case "map", "files", "map-files":
@@ -82,8 +67,6 @@ func main() {
 			log.Fatal("Usage: myapp run-some <search>")
 		}
 		err = tasks.RunSome(os.Args[2])
-	case "readme":
-		err = tasks.Readme()
 	case "all":
 		if err = tasks.MakeFileTree(); err != nil {
 			break
@@ -105,7 +88,6 @@ func main() {
 			break
 		}
 		fmt.Println()
-		err = tasks.Readme()
 	default:
 		err = fmt.Errorf("unknown command: %s", command)
 	}

@@ -1,6 +1,13 @@
 package tasks
 
-import "fmt"
+import (
+	"bufio"
+	"encoding/json"
+	"fmt"
+	"net/url"
+	"os"
+	"strings"
+)
 
 func BuildReadmeRows(rows *[]RawReadmeRow) error {
 	// Load all data
@@ -43,21 +50,19 @@ func BuildReadmeRows(rows *[]RawReadmeRow) error {
 	}
 
 	// Build a map of language → stars for quick lookup
-	starMap := make(map[string]int)
+	starMap := make(map[string]*int)
 	for _, star := range stars {
-		starMap[star.Language] = star.Stars
+		starMap[star.Language] = &star.Stars
 	}
 
 	// Build readme rows from runs (the main dataset)
 	// var rows []ReadmeRow
 	for _, run := range runs {
 		tag := run.Tag
-		fmt.Printf("%v\n", run.Tag)
 
 		// Look up dockerfile/runtime
 		dockerfileInfo, ok := dockerfileMap[tag]
 		if !ok {
-			fmt.Println("no dockerfile, skip")
 			continue // skip if no dockerfile for this tag
 		}
 
@@ -97,6 +102,60 @@ func BuildReadmeRows(rows *[]RawReadmeRow) error {
 		}
 
 		*rows = append(*rows, row)
+	}
+	return nil
+}
+
+func loadJson[T any](path string) ([]T, error) {
+	results := make([]T, 0, 100)
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		bytes := scanner.Bytes()
+		var result T
+		if err := json.Unmarshal(bytes, &result); err != nil {
+			return nil, fmt.Errorf("Error decoding line: %v", err)
+		}
+		results = append(results, result)
+	}
+	return results, nil
+}
+
+func extractGitHubDisplay(url *string) *string {
+	if url == nil {
+		return nil
+	}
+	parts := strings.Split(*url, "github.com/")
+	if len(parts) > 1 {
+		return &parts[1]
+	}
+	return nil
+}
+
+func extractWikiDisplay(wikiURL *string) *string {
+	if wikiURL == nil {
+		return nil
+	}
+	parts := strings.Split(*wikiURL, "/wiki/")
+	if len(parts) > 1 {
+		display := parts[1]
+		decoded, err := url.QueryUnescape(display)
+		if err != nil {
+			return &display
+		}
+		// Remove _(programming_language) suffix, handling fragments like #ReScript
+		if idx := strings.Index(decoded, "#"); idx != -1 {
+			beforeHash := decoded[:idx]
+			beforeHash = strings.TrimSuffix(beforeHash, "_(programming_language)")
+			decoded = beforeHash + decoded[idx:]
+		} else {
+			decoded = strings.TrimSuffix(decoded, "_(programming_language)")
+		}
+		return &decoded
 	}
 	return nil
 }

@@ -9,7 +9,6 @@ const (
 	scaffoldsDir      = "./solutions/scaffolds"
 	helloWorldsDir    = "./solutions/hello-worlds"
 	artifactDir       = "artifacts"
-	tablesDir         = "tables"
 	defaultIterations = 1000
 	refreshInterval   = 1
 )
@@ -35,18 +34,6 @@ var (
 	// run
 	runTempResultsFile = filepath.Join(artifactDir, "run-temp-results.jsonl")
 	runResultsFile     = filepath.Join(artifactDir, "run-results.jsonl")
-	// readme results
-	readmeResultsFile          = filepath.Join(artifactDir, "readme-results.jsonl")
-	formattedReadmeResultsFile = filepath.Join(artifactDir, "readme-formatted-results.jsonl")
-	// readmes
-	readmeFile           = "readme.md"
-	readmeFileByLanguage = filepath.Join(tablesDir, "results-by-language.md")
-	readmeFileByYear     = filepath.Join(tablesDir, "results-by-year.md")
-	readmeFileByStars    = filepath.Join(tablesDir, "results-by-stars.md")
-	readmeFileBySize     = filepath.Join(tablesDir, "results-by-size.md")
-	readmeFileJavaScript = filepath.Join(tablesDir, "javascript-readme.md")
-	dockerBuildReadme    = filepath.Join(tablesDir, "docker-build-results.md")
-	dockerRunReadme      = filepath.Join(tablesDir, "docker-run-results.md")
 )
 
 type DockerfileMap = map[string][]string
@@ -154,12 +141,12 @@ type RawReadmeRow struct {
 	Runtime         *string `json:"runtime"`
 	DataStructure   *string `json:"data_structure"`
 	ExecutionMethod *string `json:"execution_method"`
-	Year            int     `json:"year"`
-	WikiURL         string  `json:"wiki_url"`
-	WikiDisplay     string  `json:"wiki_display"`
-	GitHubURL       string  `json:"github_url"`
-	GitHubDisplay   string  `json:"github_display"`
-	Stars           int     `json:"stars"`
+	Year            *int    `json:"year"`
+	WikiURL         *string `json:"wiki_url"`
+	WikiDisplay     *string `json:"wiki_display"`
+	GitHubURL       *string `json:"github_url"`
+	GitHubDisplay   *string `json:"github_display"`
+	Stars           *int    `json:"stars"`
 	SizeMB          float64 `json:"size_mb"`
 	IPS             int     `json:"ips"`
 }
