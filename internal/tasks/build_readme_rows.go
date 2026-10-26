@@ -52,7 +52,7 @@ func BuildReadmeRows(rows *[]RawReadmeRow) error {
 	// Build a map of language → stars for quick lookup
 	starMap := make(map[string]*int)
 	for _, star := range stars {
-		starMap[star.Language] = &star.Stars
+		starMap[*star.Dirname] = &star.Stars
 	}
 
 	// Build readme rows from runs (the main dataset)
@@ -80,25 +80,27 @@ func BuildReadmeRows(rows *[]RawReadmeRow) error {
 		// Look up size
 		sizeMB := sizeMap[tag]
 
-		ips := 0
-		if run.IPS != nil {
-			ips = *run.IPS
+		if run.IPS == nil {
+			continue
+		}
+		ramB := run.PeakRAMBytes
+		var ramKB float64
+		if ramB != nil {
+			ramKB = float64(*ramB) / 1024
 		}
 
 		row := RawReadmeRow{
-			Tag:             tag,
-			Language:        language,
-			Runtime:         dockerfileInfo.Runtime,
-			DataStructure:   dockerfileInfo.DataStructure,
-			ExecutionMethod: dockerfileInfo.ExecutionMethod,
-			Year:            year,
-			WikiURL:         wikiURL,
-			WikiDisplay:     extractWikiDisplay(wikiURL),
-			GitHubURL:       githubURL,
-			GitHubDisplay:   extractGitHubDisplay(githubURL),
-			Stars:           starsCount,
-			SizeMB:          sizeMB,
-			IPS:             ips,
+			Tag:           tag,
+			Language:      language,
+			Year:          year,
+			WikiURL:       wikiURL,
+			WikiDisplay:   extractWikiDisplay(wikiURL),
+			GitHubURL:     githubURL,
+			GitHubDisplay: extractGitHubDisplay(githubURL),
+			Stars:         starsCount,
+			SizeMB:        sizeMB,
+			RamKB:         ramKB,
+			IPS:           *run.IPS,
 		}
 
 		*rows = append(*rows, row)

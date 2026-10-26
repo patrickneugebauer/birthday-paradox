@@ -92,7 +92,6 @@ func runFn(all bool, langs *string) error {
 
 	existingResults := loadExistingRunResults()
 	dockerfiles := LoadDockerfileMap()
-	now := time.Now().Unix()
 
 	infile, err := os.Open(buildResultsFile)
 	if err != nil {
@@ -158,9 +157,9 @@ func runFn(all bool, langs *string) error {
 			if err := cmd.Start(); err != nil {
 				result = existing
 				result.Tag = buildResult.Tag
-				result.LastRunAt = now
+				result.LastRunAt = time.Now().Format(timeFormat)
 				if hasDockerfile {
-					result.ImageUpdatedAt = df.ImageLastCreated
+					result.ImageUpdatedAt = *df.ImageLastCreated
 				}
 			} else {
 				pollCtx, pollCancel := context.WithCancel(ctx)
@@ -174,20 +173,20 @@ func runFn(all bool, langs *string) error {
 				if runErr != nil {
 					result = existing
 					result.Tag = buildResult.Tag
-					result.LastRunAt = now
+					result.LastRunAt = time.Now().Format(timeFormat)
 					if hasDockerfile {
-						result.ImageUpdatedAt = df.ImageLastCreated
+						result.ImageUpdatedAt = *df.ImageLastCreated
 					}
 				} else {
 					result = parseOutput(outBuf.String())
-					if df.Directory == "solutions" && result.Iterations != nil && *result.Seconds > 0 {
+					if result.Iterations != nil && *result.Seconds > 0 {
 						ips := int(float64(*result.Iterations) / *result.Seconds)
 						result.IPS = &ips
 					}
 					result.Tag = buildResult.Tag
-					result.LastRunAt = now
+					result.LastRunAt = time.Now().Format(timeFormat)
 					if hasDockerfile {
-						result.ImageUpdatedAt = df.ImageLastCreated
+						result.ImageUpdatedAt = *df.ImageLastCreated
 					}
 					runtimeS := math.Round(elapsed.Seconds()*1e6) / 1e6
 					result.RuntimeS = &runtimeS
@@ -213,9 +212,9 @@ func runFn(all bool, langs *string) error {
 			// Use cached result, update last_run_at
 			result = existing
 			result.Tag = buildResult.Tag
-			result.LastRunAt = now
+			result.LastRunAt = time.Now().Format(timeFormat)
 			if hasDockerfile {
-				result.ImageUpdatedAt = df.ImageLastCreated
+				result.ImageUpdatedAt = *df.ImageLastCreated
 			}
 		}
 

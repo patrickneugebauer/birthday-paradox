@@ -27,7 +27,7 @@ func main() {
 		if err != nil {
 			fmt.Printf("error %w", err)
 		}
-		fname := "data.json"
+		fname := "src/data.json"
 		err = os.WriteFile(fname, fileData, 0644)
 		fmt.Printf("wrote: %s\n", fname)
 	case "info":

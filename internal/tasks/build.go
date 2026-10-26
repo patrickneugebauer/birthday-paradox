@@ -35,18 +35,11 @@ func getDockerDPID() (int, error) {
 	return 0, fmt.Errorf("could not find dockerd PID")
 }
 
-func imageShouldRebuild(fileLastModified int64, imageLastCreated int64) bool {
-	if imageLastCreated == 0 {
-		return true
-	}
-	return fileLastModified > imageLastCreated
-}
-
-func loadExistingBuildResults() map[string]BuildResult {
+func loadExistingBuildResults() (map[string]BuildResult, error) {
 	results := make(map[string]BuildResult)
 	file, err := os.Open(buildResultsFile)
 	if err != nil {
-		return results
+		return results, nil
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
@@ -54,9 +47,11 @@ func loadExistingBuildResults() map[string]BuildResult {
 		var result BuildResult
 		if err := json.Unmarshal(scanner.Bytes(), &result); err == nil {
 			results[result.Tag] = result
+		} else {
+			return results, err
 		}
 	}
-	return results
+	return results, nil
 }
 
 func BuildAll() error {
@@ -85,7 +80,10 @@ func buildFn(buildAll bool) error {
 	resultsFile := writers[0]
 	defer CloseBufferedFiles(writers...)
 
-	existingResults := loadExistingBuildResults()
+	existingResults, err := loadExistingBuildResults()
+	if err != nil {
+		return err
+	}
 
 	// Get dockerd PID for stats collection
 	dockerdPID, err := getDockerDPID()
@@ -121,20 +119,10 @@ func buildFn(buildAll bool) error {
 		if buildAll != true && dockerfile.WillRebuild != nil {
 			shouldRebuild = *dockerfile.WillRebuild
 		}
-		// Or compute on the fly if needed
-		if !shouldRebuild {
-			shouldRebuild = imageShouldRebuild(dockerfile.FileLastModified, dockerfile.ImageLastCreated)
-		}
 
 		tag := dockerfile.Tag
 		dir := solutionsDir
-		switch dockerfile.Directory {
-		case "scaffolds":
-			dir = scaffoldsDir
-		case "hello-worlds":
-			dir = helloWorldsDir
-		}
-		dockerfilePath := filepath.Join(dir, dockerfile.Language, dockerfile.Filename)
+		dockerfilePath := filepath.Join(dir, dockerfile.Language, "Dockerfile")
 		solutionPath := filepath.Join(dir, dockerfile.Language)
 
 		var buildResult BuildResult
@@ -229,7 +217,7 @@ func buildFn(buildAll bool) error {
 			blkWrite := blkWriteAfter - blkWriteBefore
 			buildResult.BlkWriteBytes = &blkWrite
 
-			buildResult.LastBuiltAt = buildStart.Unix()
+			buildResult.LastBuiltAt = buildStart.Format(timeFormat)
 		}
 
 		if err := resultsFile.Encode(buildResult); err != nil {

@@ -1,0 +1,23 @@
+{
+  "name": "bday",
+  "version": "1.0.0",
+  "description": "Birthday Paradox in multiple languages",
+  "main": "index.html",
+  "scripts": {
+    "build": "npx tsc && cp src/index.html dist/ && cp src/style.css dist/ && cp src/data.json dist/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patrickneugebauer/birthday-paradox.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/patrickneugebauer/birthday-paradox/issues"
+  },
+  "homepage": "https://github.com/patrickneugebauer/birthday-paradox#readme",
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}

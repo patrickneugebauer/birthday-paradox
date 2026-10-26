@@ -7,8 +7,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
-	"unicode"
+	"time"
 )
 
 func LoadDockerfileMap() map[string]Dockerfile {
@@ -30,57 +29,44 @@ func LoadDockerfileMap() map[string]Dockerfile {
 
 func MakeFileTree() error {
 	// DEPENDENCIES
-	solutionDirs := []string{solutionsDir, scaffoldsDir, helloWorldsDir}
-	getDockerfileInfo := getRuntimeAndTag
+	solutionsDirName := solutionsDir
 	getImageUpdatedAt := getImageUpdatedTimes
 	type df = Dockerfile
 	getFileUpdatedAt := getMaxFileModTime
-	shouldRebuild := imageShouldRebuild
 	dfListFile := dockerfileListFile
 	// ============
 
-	fmt.Print("map ")
+	fmt.Print("map\n")
 
 	// Pass 1: collect all dockerfile entries from disk.
 	type entry struct {
-		language        string
-		filename        string
-		dirPath         string
-		dirType         string
-		tag             string
-		runtime         *string
-		dataStructure   *string
-		executionMethod *string
+		language string
+		filename string
+		dirPath  string
+		tag      string
 	}
 	var entries []entry
-	for _, dirName := range solutionDirs {
-		dirType := filepath.Base(dirName)
-		dirs, err := os.ReadDir(dirName)
-		if err != nil && !os.IsNotExist(err) {
-			return err
+	dirs, err := os.ReadDir(solutionsDirName)
+	if err != nil && !os.IsNotExist(err) {
+		return err
+	}
+	for _, dir := range dirs {
+		if !dir.IsDir() {
+			continue
 		}
-		for _, dir := range dirs {
-			if !dir.IsDir() {
+		dirPath := filepath.Join(solutionsDirName, dir.Name())
+		files, _ := os.ReadDir(dirPath)
+		for _, f := range files {
+			if f.IsDir() || f.Name() != "Dockerfile" {
 				continue
 			}
-			dirPath := filepath.Join(dirName, dir.Name())
-			files, _ := os.ReadDir(dirPath)
-			for _, f := range files {
-				if f.IsDir() || !strings.HasPrefix(f.Name(), "Dockerfile") {
-					continue
-				}
-				runtime, dataStructure, executionMethod, tag := getDockerfileInfo(dir.Name(), f.Name())
-				entries = append(entries, entry{
-					language:        dir.Name(),
-					filename:        f.Name(),
-					dirPath:         dirPath,
-					dirType:         dirType,
-					tag:             tag,
-					runtime:         runtime,
-					dataStructure:   dataStructure,
-					executionMethod: executionMethod,
-				})
-			}
+			tag := "bday/" + dir.Name()
+			entries = append(entries, entry{
+				language: dir.Name(),
+				filename: f.Name(),
+				dirPath:  dirPath,
+				tag:      tag,
+			})
 		}
 	}
 
@@ -97,18 +83,23 @@ func MakeFileTree() error {
 	for _, e := range entries {
 		fileLastMod := getFileUpdatedAt(e.dirPath)
 		imageLastUpdated := imageTimes[e.tag]
-		willRebuild := shouldRebuild(fileLastMod, imageLastUpdated)
+
+		var imageWillRebuild bool
+		if fileLastMod == nil || imageLastUpdated == nil || (*fileLastMod).After(*imageLastUpdated) {
+			imageWillRebuild = true
+		}
+
+		var imageLastUpdatedAt *string
+		if imageLastUpdated != nil {
+			lastUpdatedString := (*imageLastUpdated).Local().Format(timeFormat)
+			imageLastUpdatedAt = &lastUpdatedString
+		}
 		dockerfiles = append(dockerfiles, df{
 			Language:         e.language,
-			Filename:         e.filename,
-			Runtime:          e.runtime,
-			DataStructure:    e.dataStructure,
-			ExecutionMethod:  e.executionMethod,
 			Tag:              e.tag,
-			Directory:        e.dirType,
-			FileLastModified: fileLastMod,
-			ImageLastCreated: imageLastUpdated,
-			WillRebuild:      &willRebuild,
+			FileLastModified: fileLastMod.Local().Format(timeFormat),
+			ImageLastCreated: *&imageLastUpdatedAt,
+			WillRebuild:      &imageWillRebuild,
 		})
 	}
 
@@ -126,52 +117,16 @@ func MakeFileTree() error {
 	return nil
 }
 
-func toLower(s string) string {
-	return strings.Map(func(r rune) rune {
-		if unicode.IsUpper(r) {
-			return unicode.ToLower(r)
-		}
-		return r
-	}, s)
-}
-
-func getRuntimeAndTag(dir string, filename string) (*string, *string, *string, string) {
-	var runtime, dataStructure, executionMethod *string
-	tag := "bday/" + dir
-
-	parts := strings.Split(filename, ".")
-	if len(parts) == 1 {
-		return runtime, dataStructure, executionMethod, tag
-	}
-
-	if len(parts) >= 2 {
-		runtime = &parts[1]
-		tag += ":" + toLower(*runtime)
-	}
-	if len(parts) >= 3 {
-		dataStructure = &parts[2]
-		if *dataStructure != "-" {
-			tag += "." + toLower(*dataStructure)
-		}
-	}
-	if len(parts) >= 4 {
-		executionMethod = &parts[3]
-		tag += "." + toLower(*executionMethod)
-	}
-
-	return runtime, dataStructure, executionMethod, tag
-}
-
-func getMaxFileModTime(dirPath string) int64 {
-	var maxTime int64
+func getMaxFileModTime(dirPath string) *time.Time {
+	var maxTime *time.Time
 	filepath.Walk(dirPath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return nil
 		}
 		if !info.IsDir() {
-			modTime := info.ModTime().Unix()
-			if modTime > maxTime {
-				maxTime = modTime
+			modTime := info.ModTime()
+			if maxTime == nil || modTime.After(*maxTime) {
+				maxTime = &modTime
 			}
 		}
 		return nil

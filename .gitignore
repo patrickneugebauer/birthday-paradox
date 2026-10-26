@@ -3,3 +3,7 @@ app
 artifacts
 roadmap.md
 plan.md
+package-lock.json
+all-language-data.jsonl
+all-language-data.tsv
+node_modules

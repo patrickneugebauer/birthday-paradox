@@ -1,0 +1,62 @@
+/* 1. Global Page Reset & Dark Theme Background */
+body {
+    background-color: #0d1117;
+    color: #ffffff; /* Sets all text outside the table to clean white */
+    font-family: sans-serif;
+    margin: 0;
+    padding: 20px; /* Clean buffer padding around your screen contents */
+}
+
+/* 2. Structured Layout Containers */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Merges borders into a single crisp line */
+    background-color: #0d1117; /* Base dark background for odd rows */
+    color: #f3f4f6; /* Off-white readable text inside table cells */
+    font-size: 14px;
+    margin-top: 15px; /* Adds space beneath your top navigation text links */
+}
+
+/* 3. Grid Lines & Cell Spacing */
+th, td {
+    border: 1px solid #21262d; /* Subtle dark gray grid border lines */
+    padding: 10px 14px; /* Internal cell padding */
+    text-align: left;
+}
+
+/* 4. Table Header Configurations */
+th {
+    font-weight: bold;
+    text-transform: lowercase; /* Matches the lowercase style in your image */
+    user-select: none; /* Prevents accidental blue text highlights when clicking */
+}
+
+/* 5. Seamless Sort Button Architecture */
+th button {
+    background: none !important; /* Forces removal of the clunky white boxes */
+    border: none !important;     /* Eliminates default button borders */
+    color: inherit;              /* Forces sorting icon to match your white text */
+    font: inherit;               /* Maintains clean, consistent typography */
+    cursor: pointer;
+    padding: 0;
+    margin-left: 6px;            /* Spaces the button icon away from column text */
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
+/* Softly highlights the sorting icon when hovered */
+th button:hover {
+    color: #58a6ff; /* Changes icon to your theme's signature light blue */
+}
+
+/* 6. Dynamic Alternating Row Customizations */
+tbody tr:nth-child(even) {
+    background-color: #161b22; /* Applies the slightly lighter gray row zebra stripe */
+}
+
+/* 7. Hyperlink Layout Aesthetics */
+a {
+    color: #58a6ff; /* Vibrant light blue interactive link color */
+    text-decoration: underline;
+}

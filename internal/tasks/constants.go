@@ -2,15 +2,15 @@ package tasks
 
 import (
 	"path/filepath"
+	"time"
 )
 
 const (
 	solutionsDir      = "./solutions/complete"
-	scaffoldsDir      = "./solutions/scaffolds"
-	helloWorldsDir    = "./solutions/hello-worlds"
 	artifactDir       = "artifacts"
 	defaultIterations = 1000
 	refreshInterval   = 1
+	timeFormat        = time.RFC3339
 )
 
 var (
@@ -39,14 +39,9 @@ var (
 type DockerfileMap = map[string][]string
 type Dockerfile struct {
 	Language         string  `json:"language"`
-	Filename         string  `json:"dockerfile"`
-	Runtime          *string `json:"runtime"`
-	DataStructure    *string `json:"data_structure"`
-	ExecutionMethod  *string `json:"execution_method"`
 	Tag              string  `json:"tag"`
-	Directory        string  `json:"directory"`
-	FileLastModified int64   `json:"file_last_modified"`
-	ImageLastCreated int64   `json:"image_last_created"`
+	FileLastModified string  `json:"file_last_modified"`
+	ImageLastCreated *string `json:"image_last_created"`
 	WillRebuild      *bool   `json:"will_rebuild"`
 }
 
@@ -56,15 +51,16 @@ type Command struct {
 }
 
 type StarResult struct {
-	Language      string `json:"language"`
-	Stars         int    `json:"stars"`
-	RepoCreatedAt int64  `json:"repo_created_at"`
-	LastFetchedAt int64  `json:"last_fetched_at"`
+	Language      string  `json:"language"`
+	Dirname       *string `json:"dirname"`
+	Stars         int     `json:"stars"`
+	RepoCreatedAt string  `json:"repo_created_at"`
+	LastFetchedAt string  `json:"last_fetched_at"`
 }
 
 type BuildResult struct {
 	Tag             string   `json:"tag"`
-	LastBuiltAt     int64    `json:"last_built_at"`
+	LastBuiltAt     string   `json:"last_built_at"`
 	TotalS          *float64 `json:"total_s"`
 	PeakRAMBytes    *int64   `json:"peak_ram_bytes"`
 	CpuS            *float64 `json:"cpu_s"`
@@ -79,8 +75,8 @@ type WeighResult struct {
 	Tag            string  `json:"tag"`
 	SizeMB         float64 `json:"size_mb"`
 	SizeBytes      int64   `json:"size_bytes"`
-	ImageUpdatedAt int64   `json:"image_updated_at"`
-	LastWeighAt    int64   `json:"last_weigh_at"`
+	ImageUpdatedAt string  `json:"image_updated_at"`
+	LastWeighAt    string  `json:"last_weigh_at"`
 }
 
 type RunResult struct {
@@ -90,8 +86,8 @@ type RunResult struct {
 	Percent         *float64 `json:"percent"`
 	Seconds         *float64 `json:"seconds"`
 	IPS             *int     `json:"ips"`
-	ImageUpdatedAt  int64    `json:"image_updated_at"`
-	LastRunAt       int64    `json:"last_run_at"`
+	ImageUpdatedAt  string   `json:"image_updated_at"`
+	LastRunAt       string   `json:"last_run_at"`
 	RuntimeS        *float64 `json:"runtime_s"`
 	PeakRAMBytes    *int64   `json:"peak_ram_bytes"`
 	CpuS            *float64 `json:"cpu_s"` // cpu time consumed
@@ -136,17 +132,15 @@ type ReadmeRow struct {
 }
 
 type RawReadmeRow struct {
-	Tag             string  `json:"tag"`
-	Language        string  `json:"language"`
-	Runtime         *string `json:"runtime"`
-	DataStructure   *string `json:"data_structure"`
-	ExecutionMethod *string `json:"execution_method"`
-	Year            *int    `json:"year"`
-	WikiURL         *string `json:"wiki_url"`
-	WikiDisplay     *string `json:"wiki_display"`
-	GitHubURL       *string `json:"github_url"`
-	GitHubDisplay   *string `json:"github_display"`
-	Stars           *int    `json:"stars"`
-	SizeMB          float64 `json:"size_mb"`
-	IPS             int     `json:"ips"`
+	Tag           string  `json:"tag"`
+	Language      string  `json:"language"`
+	Year          *int    `json:"year"`
+	WikiURL       *string `json:"wiki_url"`
+	WikiDisplay   *string `json:"wiki_display"`
+	GitHubURL     *string `json:"github_url"`
+	GitHubDisplay *string `json:"github_display"`
+	Stars         *int    `json:"stars"`
+	SizeMB        float64 `json:"size_mb"`
+	RamKB         float64 `json:"ram_kb"`
+	IPS           int     `json:"ips"`
 }

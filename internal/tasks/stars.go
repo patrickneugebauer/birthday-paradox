@@ -13,19 +13,6 @@ import (
 	"time"
 )
 
-func ShouldRefetchStars(now int64, lastFetched int64, createdAt int64) bool {
-	if lastFetched == 0 || createdAt == 0 {
-		return true
-	}
-	repoAge := now - createdAt
-	if repoAge <= 0 {
-		return true
-	}
-	timeSinceLastFetch := now - lastFetched
-	ratio := float64(timeSinceLastFetch) / float64(repoAge)
-	return ratio > 0.01
-}
-
 func loadExistingRawPayloads() [][]byte {
 	var payloads [][]byte
 	file, err := os.Open(starsRawPayloadsFile)
@@ -69,11 +56,16 @@ func toGitHubAPIURL(url string) string {
 
 type GithubData struct {
 	Language   string  `json:"language"`
+	Dirname    string  `json:"dirname"`
 	GithubLink *string `json:"github_link"`
 }
 
 func Stars() error {
+	// externals
 	langInfo := languageInfoFile
+	starsTempFile := starsTempResultsFile
+	starsTempRawFile := starsTempRawPayloadsFile
+	// ========================================
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 
@@ -82,14 +74,13 @@ func Stars() error {
 		return fmt.Errorf("open %s: %w", langInfo, err)
 	}
 	defer infile.Close()
-	// scanner := bufio.NewScanner(infile)
 	decoder := json.NewDecoder(infile)
 	_, err = decoder.Token()
 	if err != nil {
 		return fmt.Errorf("error reading opening json array: %w", err)
 	}
 
-	writers, err := OpenBufferedFiles(starsTempResultsFile, starsTempRawPayloadsFile)
+	writers, err := OpenBufferedFiles(starsTempFile, starsTempRawFile)
 	if err != nil {
 		return err
 	}
@@ -98,14 +89,12 @@ func Stars() error {
 
 	existingResults := loadExistingStarResults()
 	existingRawPayloads := loadExistingRawPayloads()
-	now := time.Now().Unix()
 	payloadIdx := 0
 
-	fmt.Print("stars ")
+	fmt.Print("stars\n")
 	ticker := time.NewTicker(refreshInterval * time.Second)
 	defer ticker.Stop()
 
-	// for scanner.Scan() {
 	for decoder.More() {
 		select {
 		case <-ctx.Done():
@@ -120,35 +109,37 @@ func Stars() error {
 		default:
 		}
 
-		// line := scanner.Text()
 		var ghData GithubData
 		err := decoder.Decode(&ghData)
 		if err != nil {
 			return fmt.Errorf("error reading item: %w", err)
 		}
-		// if line == "language,year,wiki,github,website" {
-		// 	continue
-		// }
-		// parts := strings.SplitN(line, ",", 5)
-		// if len(parts) < 4 {
-		// 	continue
-		// }
 		language := ghData.Language
 		urlField := ghData.GithubLink
-		fmt.Printf("%s", language)
 
 		if urlField == nil {
-			fmt.Printf(" skip\n")
 			continue
 		}
 		url := *urlField
-		fmt.Printf(" fetch %s", url)
 
 		apiURL := toGitHubAPIURL(url)
-		existing := existingResults[language]
+		var existing *StarResult
+		var lastFetchedAt *time.Time
+		val, ok := existingResults[language]
+		if ok {
+			existing = &val
+			lastFetched, err := time.Parse(timeFormat, val.LastFetchedAt)
+			if err != nil {
+				return err
+			}
+			lastFetchedAt = &lastFetched
+		} else {
+			existing = nil
+			fmt.Printf("%s\n", language)
+		}
 
 		var result StarResult
-		if ShouldRefetchStars(now, existing.LastFetchedAt, existing.RepoCreatedAt) {
+		if existing == nil || (*lastFetchedAt).AddDate(0, 1, 0).Before(time.Now()) {
 			fmt.Print(" *\n")
 			repo, rawBody, err := getStarsWithRaw(apiURL)
 			if err != nil {
@@ -161,9 +152,10 @@ func Stars() error {
 			createdTime, _ := time.Parse(time.RFC3339, repo.CreatedAt)
 			result = StarResult{
 				Language:      language,
+				Dirname:       &ghData.Dirname,
 				Stars:         repo.StargazersCount,
-				RepoCreatedAt: createdTime.Unix(),
-				LastFetchedAt: now,
+				RepoCreatedAt: createdTime.Format(timeFormat),
+				LastFetchedAt: time.Now().Format(timeFormat),
 			}
 		} else {
 			fmt.Print(".")
@@ -174,8 +166,8 @@ func Stars() error {
 					return fmt.Errorf("write raw payload: %w", err)
 				}
 			}
-			result = existing
-			result.LastFetchedAt = now
+			result = *existing
+			result.LastFetchedAt = time.Now().Format(timeFormat)
 		}
 		payloadIdx++
 
@@ -183,16 +175,12 @@ func Stars() error {
 			return fmt.Errorf("encode result: %w", err)
 		}
 	}
+
 	_, err = decoder.Token()
 	if err != nil {
 		return fmt.Errorf("Error reading close bracket: %w", err)
 	}
-
 	fmt.Println()
-
-	// if err := scanner.Err(); err != nil {
-	// 	return fmt.Errorf("scanner: %w", err)
-	// }
 	if err := CloseBufferedFiles(writers...); err != nil {
 		return fmt.Errorf("close files: %w", err)
 	}

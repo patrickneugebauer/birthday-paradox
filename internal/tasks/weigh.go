@@ -58,7 +58,7 @@ func Weigh() error {
 
 	existingResults := loadExistingWeighResults()
 	dockerfiles := LoadDockerfileMap()
-	now := time.Now().Unix()
+	now := time.Now()
 
 	fmt.Print("weigh ")
 	for scanner.Scan() {
@@ -75,9 +75,26 @@ func Weigh() error {
 		}
 
 		df, hasDockerfile := dockerfiles[buildResult.Tag]
-		existing := existingResults[buildResult.Tag]
+		var existing *WeighResult
+		var lastWeighAt *time.Time
+		existingResult, ok := existingResults[buildResult.Tag]
+		if ok {
+			existing = &existingResult
+			lastWeigh, err := time.Parse(timeFormat, existing.LastWeighAt)
+			if err != nil {
+				return err
+			}
+			lastWeighAt = &lastWeigh
+		}
+		lastBuiltAt, err := time.Parse(timeFormat, buildResult.LastBuiltAt)
+		if err != nil {
+			return err
+		}
 
-		shouldWeigh := buildResult.LastBuiltAt > existing.LastWeighAt
+		var shouldWeigh bool
+		if lastWeighAt == nil || lastBuiltAt.After(*lastWeighAt) {
+			shouldWeigh = true
+		}
 
 		var result WeighResult
 		if shouldWeigh {
@@ -91,15 +108,15 @@ func Weigh() error {
 			if err != nil {
 				return fmt.Errorf("parse size: %w", err)
 			}
-			result = WeighResult{Tag: buildResult.Tag, SizeMB: sizeMB, SizeBytes: sizeBytes, LastWeighAt: now}
-			if hasDockerfile {
-				result.ImageUpdatedAt = df.ImageLastCreated
+			result = WeighResult{Tag: buildResult.Tag, SizeMB: sizeMB, SizeBytes: sizeBytes, LastWeighAt: now.Format(timeFormat)}
+			if hasDockerfile && df.ImageLastCreated != nil {
+				result.ImageUpdatedAt = *df.ImageLastCreated
 			}
 		} else {
 			fmt.Print(".")
 			// Use cached result, update last_weigh_at
-			result = existing
-			result.LastWeighAt = now
+			result = *existing
+			result.LastWeighAt = now.Format(timeFormat)
 		}
 
 		// Write result for all (weighed or skipped)
