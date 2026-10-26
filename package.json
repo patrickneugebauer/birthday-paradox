@@ -4,7 +4,7 @@
   "description": "Birthday Paradox in multiple languages",
   "main": "index.html",
   "scripts": {
-    "build": "npx tsc && cp src/index.html dist/ && cp src/style.css dist/ && cp src/data.json dist/"
+    "build": "npx tsc && cp src/index.html docs/ && cp src/style.css docs/ && cp src/data.json docs/"
   },
   "repository": {
     "type": "git",
