@@ -61,8 +61,8 @@
         "github_display": "sbcl/sbcl",
         "stars": 2160,
         "size_mb": 370.641,
-        "ram_kb": 242056,
-        "ips": 307872
+        "ram_kb": 57372,
+        "ips": 950189
     },
     {
         "tag": "bday/cpp",

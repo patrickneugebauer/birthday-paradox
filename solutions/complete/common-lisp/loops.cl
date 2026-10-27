@@ -5,17 +5,22 @@
 
 ;; generate data
 (defun random-day () (random 365))
-(defun generate-sample ()
-  (loop repeat sample-size collect (random-day)))
+(defvar duplicates 0)
+
+(defun generate-sample (data)
+  (declare (type (array integer 1) data))
+  (loop repeat sample-size do
+    (let ((index (random-day)))
+      (if (eql (aref data index) 1)
+          (progn (incf duplicates)
+                 (loop-finish))
+          (setf (aref data index) 1)))))
+
 (defun generate-samples ()
-  (loop repeat iterations collect (generate-sample)))
-(defun has-duplicates (x)
-  (= (list-length (remove-duplicates x)) (list-length x)))
-(defvar duplicates
-  (list-length
-    (remove-if
-      #'has-duplicates
-      (generate-samples))))
+  (loop repeat iterations do
+    (generate-sample (make-array 365 :element-type 'integer))))
+
+(generate-samples)
 
 ;; calcs
 (defvar percent (* (/ duplicates iterations) 100))

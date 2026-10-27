@@ -75,11 +75,9 @@ window.global = global;
         const sortData = global.functions.sortData;
         const updateTable = global.functions.updateTable;
         // ==============================
-        const start = new Date().getTime();
         updateSort(newSortKey);
         sortData();
         updateTable();
-        console.log(`table sorted in ${new Date().getTime() - start} ms`);
     }
     function updateSort(newSortKey) {
         // externals
@@ -161,7 +159,6 @@ window.global = global;
         tbody.replaceChildren(...rows.map(x => x.ele));
     }
     function renderTable() {
-        const start = new Date().getTime();
         // externals
         const localData = global.data;
         const setThead = (x) => global.tablePointers.thead = x;
@@ -206,7 +203,6 @@ window.global = global;
         table.append(tbody);
         // append
         document.getElementById('table-container').replaceChildren(table);
-        console.log(`table rendered in ${new Date().getTime() - start} ms`);
     }
 })();
 export {};
