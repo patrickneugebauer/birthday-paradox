@@ -39,6 +39,19 @@
         "ips": 108991
     },
     {
+        "tag": "bday/clojurescript",
+        "language": "clojurescript",
+        "year": 2011,
+        "wiki_url": "https://en.wikipedia.org/wiki/Clojure#ClojureScript",
+        "wiki_display": "Clojure#ClojureScript",
+        "github_url": "https://github.com/clojure/clojurescript",
+        "github_display": "clojure/clojurescript",
+        "stars": 9393,
+        "size_mb": 421.453,
+        "ram_kb": 37264,
+        "ips": 91116
+    },
+    {
         "tag": "bday/coffeescript",
         "language": "coffeescript",
         "year": 2009,
@@ -60,7 +73,7 @@
         "github_url": "https://github.com/sbcl/sbcl",
         "github_display": "sbcl/sbcl",
         "stars": 2160,
-        "size_mb": 370.641,
+        "size_mb": 370.642,
         "ram_kb": 4564,
         "ips": 1347753
     },
