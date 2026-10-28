@@ -5,25 +5,25 @@
 
 ;; generate data
 (defun random-day () (random 365))
-(defvar counter 0)
+(defvar duplicates 0)
+(defvar calendar (make-array 365 :element-type 'integer))
 
-(defun generate-sample (data)
-  (declare (type (array integer 1) data))
+(defun generate-sample (i)
+  (declare (type (array integer 1) calendar))
   (loop repeat sample-size do
     (let ((index (random-day)))
-      (if (eql (aref data index) 1)
-          (progn (incf counter)
+      (if (eql (aref calendar index) i)
+          (progn (incf duplicates)
                  (loop-finish))
-          (setf (aref data index) 1)))))
+          (setf (aref calendar index) i)))))
 
 (defun generate-samples ()
-  (loop repeat iterations do
-    (generate-sample (make-array 365 :element-type 'integer))))
+  (loop repeat iterations for i from 0 do (generate-sample i)))
 
 (generate-samples)
 
 ;; calcs
-(defvar percent (* (/ counter iterations) 100))
+(defvar percent (* (/ duplicates iterations) 100))
 (defvar finish (get-internal-real-time))
 (defvar seconds (/ (- finish start) internal-time-units-per-second))
 
