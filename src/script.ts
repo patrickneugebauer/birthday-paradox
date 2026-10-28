@@ -28,207 +28,152 @@ type nullSort = {
     key: null;
     dir: null;
 }
-const global = {
-    fileName: './data.json',
-    data: null as readmeRow[] | null,
-    sort: {
-        current: { key: null, dir: null } as sort | nullSort,
-        previous : { key: null, dir: null } as sort | nullSort
-    },
-    columns: {
-        language: { display: 'language', createNode: (x: readmeRow) => t(x.language) },
-        year: { display: 'year', createNode: (x: readmeRow) => x.wiki_url ? a(x.wiki_url, x.year.toString()) : t(x.year.toString()) },
-        stars: { display: 'stars', createNode: (x: readmeRow) => x.github_url ? a(x.github_url, x.stars.toLocaleString()) : t("") },
-        size_mb: { display: 'size (mb)', createNode: (x: readmeRow) => t(Math.round(x.size_mb).toLocaleString()) },
-        ram_kb: { display: 'ram (kb)', createNode: (x: readmeRow) => t(Math.round(x.ram_kb).toLocaleString()) },
-        ips: { display: 'ips', createNode: (x: readmeRow) => t(x.ips.toLocaleString()) }
-    },
-    tablePointers: {
-        thead: null as HTMLElement | null,
-        theadCells: {} as { [x: string]: Text },
-        tbody: null as HTMLElement | null,
-        tbodyRows: [] as { ele: HTMLElement, data: readmeRow }[],
-    },
-    arrows: {
-        updown: '⇅',
-        up: '▲',
-        down: '▼',
-    },
-    functions: {
-        getData: null as Function | null,
-        handleSort: null as Function | null,
-        updateSort: null as Function | null,
-        sortData: null as Function | null,
-        updateTable: null as Function | null,
-        renderTable: null as Function | null,
-    }
+const DATA_URL = './data.json'
+const sort = {
+    current: { key: null, dir: null } as sort | nullSort,
+    previous : { key: null, dir: null } as sort | nullSort
+}
+const tablePointers = {
+    thead: null as HTMLElement | null,
+    theadCells: {} as { [x: string]: Text },
+    tbody: null as HTMLElement | null,
+    tbodyRows: [] as { ele: HTMLElement, data: readmeRow, idxCellText: Text }[],
 };
+const arrows = {
+    updown: '⇅',
+    up: '▲',
+    down: '▼',
+};
+const columns = {
+    '': '#',
+    language: 'language',
+    year: 'year',
+    stars: 'stars',
+    size_mb: 'size (mb)',
+    ram_kb: 'ram (kb)',
+    ips: 'iter/sec',
+};
+let data: readmeRow[];
 
-declare global {
-  interface Window {
-    global: any;
-  }
+const response = fetch(DATA_URL);
+const json = response.then(x => x.json());
+json.then(x => {
+    data = x;
+    renderTable();
+});
+
+function handleSort(newSortKey: string) {
+    updateSort!(newSortKey);
+    sortData!();
+    updateTable!();
 }
 
-window.global = global;
-// initialization
-(function fetchData() {
-    //
-    Object.assign(global.functions, { getData, handleSort, updateSort, sortData, updateTable, renderTable });
-    // externals
-    const setData = (x: readmeRow[]) => global.data = x;
-    // ========================================
-    const response = fetch('./data.json');
-    const json = response.then(x => x.json());
-    json.then(x => {
-        setData(x);
-        renderTable();
-    });
-
-    // functions
-    function getData() {
-        // externals
-        const fileName = global.fileName
-        const setData = (x: readmeRow[]) => global.data = x;
-        // ========================================
-        const response = fetch(fileName);
-        const json = response.then(x => x.json());
-        return json.then(x => {
-            setData(x);
-            renderTable();
-        });
-    }
-
-    function handleSort(newSortKey: string) {
-        // externals
-        const updateSort = global.functions.updateSort;
-        const sortData = global.functions.sortData;
-        const updateTable = global.functions.updateTable;
-        // ==============================
-        updateSort!(newSortKey);
-        sortData!();
-        updateTable!();
-    }
-
-    function updateSort(newSortKey: string) {
-        // externals
-        const oldSortKey = global.sort.current.key;
-        const oldSortDir = global.sort.current.dir;
-        const setSortKey = (x: string) => global.sort.current.key = x;
-        const setSortDir = (x: string) => global.sort.current.dir = x;
-        const setPreviousSort = ({ key, dir }: sort | nullSort) => {
-            global.sort.previous.key = key;
-            global.sort.previous.dir = dir;
-        }
-        // ==============================
-        // calculate new sort
-        let newSortDir = null;
-        if (oldSortKey !== newSortKey) {
-            newSortDir = 'asc';
+function updateSort(newSortKey: string) {
+    // calculate new sort
+    let newSortDir = null;
+    if (sort.current.key !== newSortKey) {
+        newSortDir = 'asc';
+    } else {
+        if (sort.current.dir === 'asc') {
+            newSortDir = 'desc';
         } else {
-            if (oldSortDir === 'asc') {
-                newSortDir = 'desc';
-            } else {
-                newSortDir = 'asc';
-            }
+            newSortDir = 'asc';
         }
-        // update sort
-        setPreviousSort({ key: oldSortKey, dir: oldSortDir } as sort | nullSort);
-        setSortKey(newSortKey);
-        setSortDir(newSortDir);
     }
+    // update sort
+    sort.previous.key = sort.current.key;
+    sort.previous.dir = sort.current.dir;
+    sort.current.key = newSortKey;
+    sort.current.dir = newSortDir;
+}
 
-    function sortData() {
-        // externals
-        const sortKey = global.sort.current.key;
-        const sortDir = global.sort.current.dir;
-        const sortable = global.tablePointers.tbodyRows;
-        // ========================================
-        if (!sortKey) return;
-        sortable.sort((a, b) => {
-            const first = a.data[sortKey as keyof readmeRow];
-            const second = b.data[sortKey as keyof readmeRow];
-            if (first === second) {
-                return 0;
-            } else if (!first) {
-                return 1;
-            } else if (!second) {
-                return -1;
-            } else if (first < second) {
-                return (sortDir === 'asc') ? -1 : 1;
-            } else {
-                return (sortDir === 'asc') ? 1 : -1;
-            }
-        });
-    }
-
-    function updateTable() {
-        // externals
-        const previousSortKey = global.sort.previous.key;
-        const sortKey = global.sort.current.key;
-        const sortDir = global.sort.current.dir;
-        const tbody = global.tablePointers.tbody;
-        const rows = global.tablePointers.tbodyRows;
-        const theadCells = global.tablePointers.theadCells;
-        const updown = global.arrows.updown;
-        const up = global.arrows.up;
-        const down = global.arrows.down;
-        const columns = global.columns;
-        // =========================
-        if (previousSortKey && previousSortKey !== sortKey) {
-            const previousDisplay = columns[previousSortKey as keyof typeof columns].display;
-            (theadCells[previousSortKey] as Text).data = `${previousDisplay} ${updown}`;
+function sortData() {
+    const sortKey = sort.current.key;
+    const sortDir = sort.current.dir;
+    if (!sortKey) return;
+    tablePointers.tbodyRows.sort((a, b) => {
+        const first = a.data[sortKey as keyof readmeRow];
+        const second = b.data[sortKey as keyof readmeRow];
+        if (first === second) {
+            return 0;
+        } else if (!first) {
+            return 1;
+        } else if (!second) {
+            return -1;
+        } else if (first < second) {
+            return (sortDir === 'asc') ? -1 : 1;
+        } else {
+            return (sortDir === 'asc') ? 1 : -1;
         }
-        const currentDisplay = columns[sortKey as keyof typeof columns].display;
-        const modifier = (sortDir === 'asc') ? up : down;
-        (theadCells[sortKey as keyof typeof theadCells] as Text).data = `${currentDisplay} ${modifier}`;
-        (tbody as HTMLElement).replaceChildren(...rows.map(x => x.ele));
-    }
+    });
+}
 
-    function renderTable() {
-        // externals
-        const localData = global.data;
-        const setThead = (x: HTMLElement) => global.tablePointers.thead = x;
-        const setTbody = (x: HTMLElement) => global.tablePointers.tbody = x;
-        const localTheadMap = global.tablePointers.theadCells;
-        const localTbodyRows = global.tablePointers.tbodyRows;
-        const columns = Object.entries(global.columns);
-        // ========================================
-        const h = (x: string) => document.createElement(x);
-        const t = (x: string) => document.createTextNode(x);
-        if (!localData || !localData.length) return;
-        const table = h('table');
-        // head
-        const thead = h('thead');
-        setThead(thead);
-        const theadRow = h('tr');
-        for (const [ key, { display }] of columns) {
-            const cell = h('th');
-            const text = t(`${display} ⇅`);
-            cell.addEventListener('click', () => handleSort(key));
-            localTheadMap[key] = text;
-            cell.append(text);
-            theadRow.append(cell);
-        }
-        thead.append(theadRow);
-        table.append(thead);
-        // body
-        const tbody = h('tbody');
-        setTbody(tbody);
-        for (const dataRow of localData) {
-            const trow = h('tr');
-            for (const [_, { createNode }] of columns) {
-                const cell = h('td');
-                const node = createNode(dataRow);
-                cell.append(node);
-                trow.append(cell);
-            }
-            localTbodyRows.push({ ele: trow, data: dataRow });
-            tbody.append(trow);
-        }
-        table.append(tbody);
-        // append
-        (document.getElementById('table-container') as HTMLElement).replaceChildren(table);
+function updateTable() {
+    const previousSortKey = sort.previous.key;
+    const sortKey = sort.current.key;
+    const sortDir = sort.current.dir;
+    const theadCells = tablePointers.theadCells;
+    // =========================
+    // clear previous header
+    if (previousSortKey && previousSortKey !== sortKey) {
+        const previousDisplay = columns[previousSortKey as keyof typeof columns];
+        (theadCells[previousSortKey] as Text).data = `${previousDisplay} ${arrows.updown}`;
     }
+    // set current header
+    const currentDisplay = columns[sortKey as keyof typeof columns];
+    const modifier = (sortDir === 'asc') ? arrows.up : arrows.down;
+    (theadCells[sortKey as keyof typeof theadCells] as Text).data = `${currentDisplay} ${modifier}`;
+    // update index column
+    for (const [i, row] of tablePointers.tbodyRows.entries()) {
+        row.idxCellText.data = (i + 1).toString();
+    }
+    // update table
+    (tablePointers.tbody as HTMLElement).replaceChildren(...tablePointers.tbodyRows.map(x => x.ele));
+}
 
-})()
+function renderTable() {
+    if (!data || !data.length) return;
+    const table = h('table');
+    // head
+    const thead = h('thead');
+    tablePointers.thead = thead;
+    const theadRow = h('tr');
+    for (const [name, display] of Object.entries(columns)) {
+        console.log(name, display)
+        const cell = h('th');
+        const text = name ? t(`${display} ⇅`) : t(display);
+        if (name) {
+            cell.addEventListener('click', () => handleSort(name));
+        }
+        tablePointers.theadCells[name] = text;
+        cell.append(text);
+        theadRow.append(cell);
+    }
+    thead.append(theadRow);
+    table.append(thead);
+    // body
+    const tbody = h('tbody');
+    tablePointers.tbody = tbody;
+    for (const [i, x] of data.entries()) {
+        const trow = h('tr');
+        const cellContents = [
+            t((i + 1).toString()),
+            t(x.language),
+            x.wiki_url ? a(x.wiki_url, x.year.toString()) : t(x.year.toString()),
+            x.github_url ? a(x.github_url, x.stars.toLocaleString()) : t(""),
+            t(Math.round(x.size_mb).toLocaleString()),
+            t(Math.round(x.ram_kb).toLocaleString()),
+            t(x.ips.toLocaleString())
+        ];
+        for (const inner of cellContents) {
+            const cell = h('td');
+            cell.append(inner);
+            trow.append(cell);
+        }
+        tablePointers.tbodyRows.push({ ele: trow, data: x, idxCellText: cellContents[0] as Text });
+        tbody.append(trow);
+    }
+    table.append(tbody);
+    // append
+    (document.getElementById('table-container') as HTMLElement).replaceChildren(table);
+}
